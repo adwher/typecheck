@@ -37,8 +37,3 @@ export function isError<E extends Error = Error>(value: unknown): value is E {
 
 /** Allow to merge two elements from `L` to `R`. */
 export type Override<L, R> = Omit<L, keyof R> & R;
-
-/** Allow to intersect two elements from `L` to `R`. */
-export type Intersect<L, R> = {
-  [K in keyof L & keyof R]: L[K] | R[K];
-};
