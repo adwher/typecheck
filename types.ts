@@ -28,8 +28,6 @@ export function isArr<T = unknown>(value: unknown): value is T[] {
   return Array.isArray(value);
 }
 
-export type Instanciable = abstract new () => void;
-
 /** Check the `value` as an extension (or instance) of `Error`. */
 export function isError<E extends Error = Error>(value: unknown): value is E {
   return value instanceof Error;
