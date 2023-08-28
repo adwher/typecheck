@@ -1,7 +1,11 @@
-import { SchemaPipe } from "../pipes.ts";
-
 interface Options {
+  /**
+   * @default true
+   */
   leading?: boolean;
+  /**
+   * @default true
+   */
   trailing?: boolean;
 }
 
@@ -14,15 +18,18 @@ interface Options {
  * const NameSchema = string(toTrimmed({ leading: true }));
  * ```
  */
-export function toTrimmed(options?: Options): SchemaPipe<string> {
-  return function (value) {
+export function toTrimmed(options?: Options) {
+  const leading = options?.leading ?? true;
+  const trailing = options?.trailing ?? true;
+
+  return function (value: string) {
     let final = value;
 
-    if (!options || options?.leading === true) {
+    if (leading) {
       final = final.trimStart();
     }
 
-    if (!options || options?.trailing === true) {
+    if (trailing) {
       final = final.trimEnd();
     }
 

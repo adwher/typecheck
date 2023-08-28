@@ -2,6 +2,7 @@ import { SchemaContext } from "../context.ts";
 import { error } from "../errors.ts";
 import { pipeline, SchemaPipes } from "../pipes.ts";
 import { Schema } from "../schema.ts";
+import { isBool } from "../types.ts";
 
 export class SchemaBoolean extends Schema<boolean> {
   constructor(private pipes: SchemaPipes<boolean>) {
@@ -9,7 +10,7 @@ export class SchemaBoolean extends Schema<boolean> {
   }
 
   check(value: unknown, context: SchemaContext) {
-    if (typeof value === "boolean") {
+    if (isBool(value)) {
       return pipeline(value, context, this.pipes);
     }
 

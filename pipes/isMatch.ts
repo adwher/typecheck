@@ -1,7 +1,5 @@
+import { SchemaContext } from "../context.ts";
 import { error } from "../errors.ts";
-import { SchemaPipe } from "../pipes.ts";
-
-const ERROR_MESSAGE = "Must match with the given regular expression";
 
 /**
  * Create a pipe that validates the `value` as the specified regular expression.
@@ -11,9 +9,9 @@ const ERROR_MESSAGE = "Must match with the given regular expression";
  */
 export function isMatch(
   regex: RegExp,
-  message = ERROR_MESSAGE,
-): SchemaPipe<string> {
-  return function (value, context) {
+  message = `Must match with "${regex}" expression`,
+) {
+  return function (value: string, context: SchemaContext) {
     if (regex.test(value)) {
       return value;
     }

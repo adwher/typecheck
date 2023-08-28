@@ -55,10 +55,7 @@ export class SchemaRecord<
     }
 
     if (issues.length > 0) {
-      return error(context, {
-        message: "Must have the given key-value structure",
-        issues,
-      });
+      return error(context, { issues });
     }
 
     return final as R;

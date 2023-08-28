@@ -15,6 +15,14 @@ export class SchemaError extends Error {
 
     this.issues = [issue];
   }
+
+  /**
+   * Flatten the stack of issues by returning the non-nested ones.
+   * @returns Summarized array of issues.
+   */
+  flatten() {
+    return flatten(this.issues);
+  }
 }
 
 export function error(
@@ -22,4 +30,17 @@ export function error(
   descriptor?: Omit<SchemaIssue, keyof SchemaContext>,
 ) {
   return new SchemaError({ ...context, ...descriptor });
+}
+
+/** Flatten a stack of issues by returning the non-nested ones. */
+function flatten(issues: SchemaIssue[]): SchemaIssue[] {
+  return issues.flatMap((issue) => {
+    const stack = issue.issues ?? [];
+
+    if (stack.length > 0) {
+      return flatten(stack);
+    }
+
+    return issue;
+  });
 }

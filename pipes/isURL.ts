@@ -1,5 +1,5 @@
+import { SchemaContext } from "../context.ts";
 import { error } from "../errors.ts";
-import { SchemaPipe } from "../pipes.ts";
 
 const ERROR_MESSAGE = "Must be a valid URL";
 
@@ -9,8 +9,8 @@ const ERROR_MESSAGE = "Must be a valid URL";
  * const SourceSchema = string(isURL());
  * ```
  */
-export function isURL(message = ERROR_MESSAGE): SchemaPipe<string> {
-  return function (value, context) {
+export function isURL(message = ERROR_MESSAGE) {
+  return function (value: string, context: SchemaContext) {
     if (URL.canParse(value)) {
       return value;
     }

@@ -1,5 +1,4 @@
-import { SchemaShape } from "../schema.ts";
-import { SchemaObject } from "./object.ts";
+import { SchemaObject, SchemaShape } from "./object.ts";
 import { Override } from "../types.ts";
 
 /**

@@ -1,11 +1,16 @@
 import { SchemaContext } from "../context.ts";
 import { error, SchemaError, SchemaIssue } from "../errors.ts";
-import { Schema, SchemaInfer, SchemaShape } from "../schema.ts";
+import { Infer, Schema } from "../schema.ts";
 import { isObj } from "../types.ts";
+
+/** Defines an record of `keys` and their schemas, useful for objects. */
+export interface SchemaShape {
+  [key: string | number | symbol]: Schema;
+}
 
 export class SchemaObject<
   S extends SchemaShape = SchemaShape,
-  R extends object = SchemaInfer<S>,
+  R extends object = Infer<S>,
 > extends Schema<R> {
   /**
    * Create a new schema with the shape of an `object`.
@@ -50,21 +55,19 @@ export class SchemaObject<
     }
 
     if (issues.length > 0) {
-      return error(context, {
-        message: "Must have the given structure",
-        issues,
-      });
+      return error(context, { issues });
     }
 
     return final as R;
   }
 
-  get keys() {
+  /** List all the keys of the current `shape`. */
+  get keys(): readonly string[] {
     return Object.keys(this.shape);
   }
 }
 
-/** Creates a new `object` schema using a `SchemaShape`. */
+/** Creates a new `object` schema using a `ObjectShape`. */
 export function object<S extends SchemaShape>(shape: S) {
   return new SchemaObject(shape);
 }

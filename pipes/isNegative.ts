@@ -1,5 +1,5 @@
+import { SchemaContext } from "../context.ts";
 import { error } from "../errors.ts";
-import { SchemaPipe } from "../pipes.ts";
 
 const ERROR_MESSAGE = "Must be a negative number";
 
@@ -9,8 +9,8 @@ const ERROR_MESSAGE = "Must be a negative number";
  * const NegativeSchema = number(isNegative());
  * ```
  */
-export function isNegative(message = ERROR_MESSAGE): SchemaPipe<number> {
-  return function (value, context) {
+export function isNegative(message = ERROR_MESSAGE) {
+  return function (value: number, context: SchemaContext) {
     if (value < 0) {
       return value;
     }

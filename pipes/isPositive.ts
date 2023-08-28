@@ -1,5 +1,5 @@
+import { SchemaContext } from "../context.ts";
 import { error } from "../errors.ts";
-import { SchemaPipe } from "../pipes.ts";
 
 const ERROR_MESSAGE = "Must be a positive number";
 
@@ -9,9 +9,9 @@ const ERROR_MESSAGE = "Must be a positive number";
  * const PositiveSchema = number(isPositive());
  * ```
  */
-export function isPositive(message = ERROR_MESSAGE): SchemaPipe<number> {
-  return function (value, context) {
-    if (value > 0) {
+export function isPositive(message = ERROR_MESSAGE) {
+  return function (value: number, context: SchemaContext) {
+    if (value >= 0) {
       return value;
     }
 

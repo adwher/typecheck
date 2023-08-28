@@ -1,5 +1,5 @@
+import { SchemaContext } from "../context.ts";
 import { error } from "../errors.ts";
-import { SchemaPipe } from "../pipes.ts";
 
 const ERROR_MESSAGE = "Must be a integer number";
 
@@ -9,8 +9,8 @@ const ERROR_MESSAGE = "Must be a integer number";
  * const CountSchema = number(isInteger());
  * ```
  */
-export function isInteger(message = ERROR_MESSAGE): SchemaPipe<number> {
-  return function (value, context) {
+export function isInteger(message = ERROR_MESSAGE) {
+  return function (value: number, context: SchemaContext) {
     if (Number.isInteger(value)) {
       return value;
     }

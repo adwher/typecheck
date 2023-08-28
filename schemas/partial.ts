@@ -1,6 +1,10 @@
-import { SchemaInfer, SchemaShape } from "../schema.ts";
-import { SchemaObject } from "./object.ts";
-import { optional } from "./optional.ts";
+import { SchemaObject, SchemaShape } from "./object.ts";
+import { optional, SchemaOptional } from "./optional.ts";
+
+/** Transform the `S` object's shape into partial. */
+export type SchemaShapeOptional<S extends SchemaShape> = {
+  [K in keyof S]: SchemaOptional<S[K]>;
+};
 
 /**
  * Creates a new `SchemaObject` transforming all the fields into `optionals` of their own type.
@@ -11,7 +15,7 @@ import { optional } from "./optional.ts";
  */
 export function partial<
   S extends SchemaShape,
-  R extends object = Partial<SchemaInfer<S>>,
+  R extends SchemaShape = SchemaShapeOptional<S>,
 >(schema: SchemaObject<S>) {
   const shape: SchemaShape = {};
 

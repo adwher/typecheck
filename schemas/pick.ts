@@ -1,5 +1,4 @@
-import { SchemaShape } from "../schema.ts";
-import { SchemaObject } from "./object.ts";
+import { SchemaObject, SchemaShape } from "./object.ts";
 
 /** Pick only the given `K` keys in the `S` object's shape. */
 export type SchemaShapePick<

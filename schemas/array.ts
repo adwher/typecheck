@@ -31,7 +31,7 @@ export class SchemaArray<T> extends Schema<T[]> {
       const field = value[key];
 
       const scope: SchemaContext = {
-        path: [...context.path, String(key)],
+        path: [...context.path, key],
       };
 
       const output = this.schema.check(field, scope);
@@ -45,10 +45,7 @@ export class SchemaArray<T> extends Schema<T[]> {
     }
 
     if (issues.length > 0) {
-      return error(context, {
-        message: "Must have the given structure",
-        issues,
-      });
+      return error(context, { issues });
     }
 
     return pipeline(value, context, this.pipes);

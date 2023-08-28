@@ -8,7 +8,10 @@ export type SchemaValidation = (
 ) => SchemaError | boolean;
 
 export class SchemaCustom<T> extends Schema<T> {
-  /** Create a new `SchemaCustom` that only accepts values that satisfies the `validation`. */
+  /**
+   * Create a new `SchemaCustom` that only accepts values that satisfies the `validation`.
+   * @param validation Checks the given `value`.
+   */
   constructor(private validation: SchemaValidation) {
     super();
   }
@@ -28,7 +31,13 @@ export class SchemaCustom<T> extends Schema<T> {
   }
 }
 
-/** Create a new `SchemaCustom` that only accepts values that satisfies the `validation`. */
+/**
+ * Create a new `SchemaCustom` that only accepts values that satisfies the `validation`.
+ * @param validation Checks the given `value`.
+ * @example ```
+ * const FileSchema = custom<File>((value) => value instanceof File);
+ * ```
+ */
 export function custom<T>(validation: SchemaValidation) {
   return new SchemaCustom<T>(validation);
 }

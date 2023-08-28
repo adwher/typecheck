@@ -1,5 +1,3 @@
-import { SchemaPipe } from "../pipes.ts";
-
 const WORD_REGEX = /(^\w{1})|(\s+\w{1})/g;
 
 /**
@@ -8,8 +6,8 @@ const WORD_REGEX = /(^\w{1})|(\s+\w{1})/g;
  * const NameSchema = string(toCapitalize());
  * ```
  */
-export function toCapitalize(): SchemaPipe<string> {
-  return function (value) {
+export function toCapitalize() {
+  return function (value: string) {
     return value.replace(WORD_REGEX, (letter) => letter.toUpperCase());
   };
 }

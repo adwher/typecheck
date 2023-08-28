@@ -1,27 +1,27 @@
 import { SchemaContext } from "../context.ts";
 import { SchemaError } from "../errors.ts";
-import { Schema, SchemaInfer } from "../schema.ts";
+import { Infer, Schema } from "../schema.ts";
 
 /** Generate (lazly) the schema in parsed-time. */
-export type SchemaGenerator<R, I = unknown> = (
-  value: I,
+export type SchemaLazly<S extends Schema> = (
+  value: unknown,
   context: SchemaContext,
-) => SchemaError | R;
+) => S | SchemaError;
 
 export class SchemaLazy<
   S extends Schema,
-  R = SchemaInfer<S>,
+  R = Infer<S>,
 > extends Schema<R> {
   /**
    * Create a new schema that can generate (lazly) the schema in parsed-time.
-   * @param action Generate the right schema on-demand.
+   * @param getter Generate the right schema on-demand.
    */
-  constructor(private action: SchemaGenerator<S>) {
+  constructor(private getter: SchemaLazly<S>) {
     super();
   }
 
   check(value: unknown, context: SchemaContext): SchemaError | R {
-    const output = this.action(value, context);
+    const output = this.getter(value, context);
 
     if (output instanceof Schema) {
       return output.check(value, context);
@@ -33,9 +33,13 @@ export class SchemaLazy<
 
 /**
  * Create a new schema that can generate (lazly) the schema in parsed-time.
- * @param action Generate the right schema on-demand.
+ * The language does not like recursive inferences, so you must define the type staticaly in recursive cases.
+ * Use `SchemaDescribe` and a defined type to use `recursive` schemas.
  * @returns A new `SchemaLazy` with the type of all possible schemas.
  */
-export function lazy<S extends Schema>(action: SchemaGenerator<S>) {
-  return new SchemaLazy<S>(action);
+export function lazy<S extends Schema>(getter: SchemaLazly<S>) {
+  return new SchemaLazy(getter);
 }
+
+/** Alias of {@link lazy}. */
+export const recursive = lazy;

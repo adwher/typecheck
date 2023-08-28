@@ -1,13 +1,12 @@
-import { SchemaShape } from "../schema.ts";
-import { SchemaObject } from "./object.ts";
+import { SchemaObject, SchemaShape } from "./object.ts";
 import { Override } from "../types.ts";
 
-type Shape<T> = T extends SchemaShape ? T
+type Unwrap<T> = T extends SchemaShape ? T
   : T extends SchemaObject<infer S> ? S
   : never;
 
-export type SchemaShapeMerge<A> = A extends [infer F] ? Shape<F>
-  : A extends [infer F, ...infer R] ? Override<Shape<F>, SchemaShapeMerge<R>>
+export type SchemaShapeMerge<A> = A extends [infer F] ? Unwrap<F>
+  : A extends [infer F, ...infer R] ? Override<Unwrap<F>, SchemaShapeMerge<R>>
   : never;
 
 /**
@@ -21,10 +20,10 @@ export type SchemaShapeMerge<A> = A extends [infer F] ? Shape<F>
  * ```
  */
 export function merge<
-  A extends SchemaShape,
+  A extends SchemaObject,
   B extends SchemaObject[],
   S extends SchemaShape = SchemaShapeMerge<[A, ...B]>,
->(initial: SchemaObject<A>, ...extensions: B) {
+>(initial: A, ...extensions: B) {
   const shape = extensions.reduce(reduce, initial.shape);
   return new SchemaObject(shape as S);
 }

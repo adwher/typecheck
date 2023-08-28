@@ -1,10 +1,10 @@
 import { SchemaContext } from "../context.ts";
 import { error, SchemaError, SchemaIssue } from "../errors.ts";
-import { Schema, SchemaInfer } from "../schema.ts";
+import { Infer, Schema } from "../schema.ts";
 
-export class SchemaUnion<
+export class SchemaEither<
   S extends [...Schema[]],
-  R = SchemaInfer<S[number]>,
+  R = Infer<S[number]>,
 > extends Schema<R> {
   /**
    * Create a new schema that receives any of the given schemas.
@@ -36,9 +36,9 @@ export class SchemaUnion<
   }
 
   /** Transform the array of schemas applying the `flatten` strategy. */
-  flatten(): Schema[] {
+  private flatten(): Schema[] {
     return this.schemas.flatMap((schema) => {
-      if (schema instanceof SchemaUnion) {
+      if (schema instanceof SchemaEither) {
         return schema.flatten();
       }
 
@@ -49,11 +49,11 @@ export class SchemaUnion<
 
 /**
  * Create a new schema that receives any of the given schemas.
- * @returns A new `SchemaUnion` with the type `A | B | ...`
+ * @returns A new `SchemaEither` with the type `A | B | ...`
  */
-export function union<
+export function either<
   A extends Schema,
   B extends Schema[],
 >(first: A, ...schemas: B) {
-  return new SchemaUnion<[A, ...B]>([first, ...schemas]);
+  return new SchemaEither<[A, ...B]>([first, ...schemas]);
 }

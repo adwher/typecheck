@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { Schema, SchemaInfer } from "../schema.ts";
+import { Infer, Schema } from "../schema.ts";
 import { isFn } from "../types.ts";
 
 type Fallback<T> = { (): T } | T;
@@ -39,7 +39,7 @@ export function optional<T>(schema: Schema<T>): SchemaOptional<T>;
  */
 export function optional<S extends Schema>(
   schema: S,
-  fallback: Fallback<SchemaInfer<S>>,
+  fallback: Fallback<Infer<S>>,
 ): S;
 
 /** Creates a new `optional` schema allowing to have `T` or `undefined`. */
