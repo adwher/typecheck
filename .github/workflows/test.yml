@@ -1,0 +1,47 @@
+name: Testing
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-unit:
+    name: Run unit-test cases
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+      - name: Setup Deno v1.x
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - name: Run `deno test`
+        run: deno test --allow-all
+  test-fmt:
+    name: Run formatting checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+      - name: Setup Deno v1.x
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - name: Run `deno fmt --check`
+        run: deno fmt --check
+  test-lint:
+    name: Run linting checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+      - name: Setup Deno v1.x
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - name: Run `deno lint`
+        run: deno lint
