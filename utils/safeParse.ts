@@ -1,0 +1,40 @@
+import { SchemaContext } from "../context.ts";
+import { Schema } from "../schema.ts";
+
+/** Use when the `value` satifies the `schema`. */
+export interface ParsePositive<T> {
+  success: true;
+  data: T;
+}
+
+/** Use when the `value` not satifies the `schema`. */
+export interface ParseNegative {
+  success: false;
+  error: unknown;
+}
+
+export type Parse<T> = ParsePositive<T> | ParseNegative;
+
+/**
+ * Check the `value` with the given `schema` and return the result.
+ * @returns Object with the validation of the given `schema`.
+ */
+export function safeParse<T>(
+  value: unknown,
+  schema: Schema<T>,
+): Parse<T> {
+  const context: SchemaContext = { path: [] };
+  const output = schema.check(value, context);
+
+  if (output instanceof Error) {
+    return {
+      success: false,
+      error: output,
+    };
+  }
+
+  return {
+    success: true,
+    data: output,
+  };
+}
