@@ -23,6 +23,15 @@ export class SchemaError extends Error {
   flatten() {
     return flatten(this.issues);
   }
+
+  /**
+   * Flatten the stack of issues and returns the first one.
+   * @returns First issue in the flatten stack.
+   */
+  first() {
+    const [first] = this.flatten();
+    return first;
+  }
 }
 
 export function error(
