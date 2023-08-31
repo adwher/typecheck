@@ -24,4 +24,4 @@ jobs:
       - name: Run linting checks
         run: deno lint
       - name: Run unit-test cases
-        run: deno test --allow-all
+        run: deno test -A --parallel --reporter=dot
