@@ -34,7 +34,7 @@ export class SchemaCustom<T> extends Schema<T> {
 /**
  * Create a new `SchemaCustom` that only accepts values that satisfies the `validation`.
  * @param validation Checks the given `value`.
- * @example ```
+ * @example ```ts
  * const FileSchema = custom<File>((value) => value instanceof File);
  * ```
  */

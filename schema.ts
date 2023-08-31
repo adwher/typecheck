@@ -23,7 +23,7 @@ export abstract class Schema<T = any> {
 
 /**
  * Allow to infer the exact type of a schema.
- * @example ```
+ * @example ```ts
  * const EmailSchema = string(isEmail);
  *
  * type Email = SchemaInfer<typeof EmailSchema>;

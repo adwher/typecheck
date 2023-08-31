@@ -9,7 +9,7 @@ export class SchemaLiteral<L extends Literal> extends Schema<L> {
    * Creates a new `L` schema, where only one value is allowed.
    * @param literal One to rule-them all
    */
-  constructor(private literal: L) {
+  constructor(readonly literal: L) {
     super();
   }
 

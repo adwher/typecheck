@@ -3,14 +3,14 @@ import { error, SchemaError, SchemaIssue } from "../errors.ts";
 import { Infer, Schema } from "../schema.ts";
 
 export class SchemaEither<
-  S extends [...Schema[]],
+  S extends readonly Schema[],
   R = Infer<S[number]>,
 > extends Schema<R> {
   /**
    * Create a new schema that receives any of the given schemas.
    * @param schemas List of all posible schemas.
    */
-  constructor(private schemas: S) {
+  constructor(readonly schemas: S) {
     super();
   }
 

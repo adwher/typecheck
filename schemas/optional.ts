@@ -11,7 +11,7 @@ export class SchemaOptional<T> extends Schema<T | undefined> {
    * @param fallback Defaulted value.
    */
   constructor(
-    private schema: Schema<T>,
+    readonly schema: Schema<T>,
     private fallback?: Fallback<T>,
   ) {
     super();

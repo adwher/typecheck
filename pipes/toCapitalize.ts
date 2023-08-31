@@ -2,7 +2,7 @@ const WORD_REGEX = /(^\w{1})|(\s+\w{1})/g;
 
 /**
  * Transform the `value` to capitalize style.
- * @example ```
+ * @example ```ts
  * const NameSchema = string(toCapitalize());
  * ```
  */

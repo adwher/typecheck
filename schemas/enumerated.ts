@@ -9,7 +9,7 @@ export class SchemaEnumerated<
   A extends readonly Enumerable[],
 > extends Schema<A[number]> {
   /** Allowed values of the schema. */
-  private options: Set<Enumerable>;
+  readonly options: Set<Enumerable>;
 
   /**
    * Creates a new enumerated schema that only receives the given `options`.
@@ -17,6 +17,7 @@ export class SchemaEnumerated<
    */
   constructor(options: A) {
     super();
+
     this.options = new Set(options);
   }
 
@@ -46,7 +47,7 @@ export class SchemaEnumerated<
 
 /**
  * Creates a new enumerated schema that only receives the given `options`.
- * @example ```
+ * @example ```ts
  * const RoleSchema = enumerated("Student", "Teacher", "Administrator");
  * ```
  */

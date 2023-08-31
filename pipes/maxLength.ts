@@ -3,7 +3,7 @@ import { error } from "../errors.ts";
 
 /**
  * Create a pipe that validates the `length` of the given `value`.
- * @example ```
+ * @example ```ts
  * const MessageSchema = string(maxLength(280));
  * ```
  */

@@ -15,7 +15,10 @@ export class SchemaRecord<
    * @param key Schema of each `key`.
    * @param value Schema of each `value`.
    */
-  constructor(private key: Schema<K>, private value: Schema<V>) {
+  constructor(
+    readonly key: Schema<K>,
+    readonly value: Schema<V>,
+  ) {
     super();
   }
 

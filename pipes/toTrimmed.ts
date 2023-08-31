@@ -11,10 +11,10 @@ interface Options {
 
 /**
  * Transform the `value` using `.trim`, `.trimStart` or `.trimEnd`.
- * @example ```
+ * @example ```ts
  * const NameSchema = string(toTrimmed());
  * ```
- * @example ```
+ * @example ```ts
  * const NameSchema = string(toTrimmed({ leading: true }));
  * ```
  */

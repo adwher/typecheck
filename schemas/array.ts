@@ -10,7 +10,7 @@ export class SchemaArray<T> extends Schema<T[]> {
    * @param schema Shape of the schema.
    */
   constructor(
-    private schema: Schema<T>,
+    readonly schema: Schema<T>,
     private pipes: SchemaPipes<T[]>,
   ) {
     super();

@@ -3,7 +3,7 @@ import { error } from "../errors.ts";
 
 /**
  * Create a pipe that validates the `value`.
- * @example ```
+ * @example ```ts
  * const HexSchema = number(maxValue(255));
  * ```
  */

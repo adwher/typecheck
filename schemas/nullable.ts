@@ -6,7 +6,7 @@ export class SchemaNullable<T> extends Schema<T | null> {
    * Creates a new `nullable` schema allowing to have `T` or `null`.
    * @param schema Original schema.
    */
-  constructor(private schema: Schema<T>) {
+  constructor(readonly schema: Schema<T>) {
     super();
   }
 

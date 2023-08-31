@@ -3,7 +3,7 @@ import { error } from "../errors.ts";
 
 /**
  * Create a pipe that validates the `value` as the specified regular expression.
- * @example ```
+ * @example ```ts
  * const PasswordSchema = string(isMatch(/\w{8,}/i));
  * ```
  */

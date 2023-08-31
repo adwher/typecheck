@@ -5,7 +5,7 @@ const ERROR_MESSAGE = "Must be a valid URL";
 
 /**
  * Check the `value` using the `URL` APIs.
- * @example ```
+ * @example ```ts
  * const SourceSchema = string(isURL());
  * ```
  */

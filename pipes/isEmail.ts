@@ -5,7 +5,7 @@ const ERROR_MESSAGE = "Must be a valid email";
 
 /**
  * Check the `value` as an email.
- * @example ```
+ * @example ```ts
  * const EmailSchema = string(isEmail());
  * ```
  */
