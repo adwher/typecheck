@@ -24,7 +24,7 @@ export function omit<
 
   const shape: SchemaShape = {};
 
-  for (const key of schema.keys) {
+  for (const key in schema.shape) {
     if (keys.includes(key)) {
       continue;
     }

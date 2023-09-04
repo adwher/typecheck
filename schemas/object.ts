@@ -32,7 +32,7 @@ export class SchemaObject<
     const final: O = {};
     const issues: SchemaIssue[] = [];
 
-    for (const key of this.keys) {
+    for (const key in this.shape) {
       const schema = this.shape[key];
       const field = value[key];
 
@@ -59,11 +59,6 @@ export class SchemaObject<
     }
 
     return final as R;
-  }
-
-  /** List all the keys of the current `shape`. */
-  get keys(): readonly string[] {
-    return Object.keys(this.shape);
   }
 }
 

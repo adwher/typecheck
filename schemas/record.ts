@@ -32,10 +32,11 @@ export class SchemaRecord<
     }
 
     const final: O = {};
-    const entries = Object.entries(value);
     const issues: SchemaIssue[] = [];
 
-    for (const [index, content] of entries) {
+    for (const index in value) {
+      const content = value[index];
+
       const scope: SchemaContext = {
         path: [...context.path, String(index)],
       };
@@ -47,14 +48,14 @@ export class SchemaRecord<
         continue;
       }
 
-      const value = this.value.check(content, scope);
+      const output = this.value.check(content, scope);
 
-      if (value instanceof SchemaError) {
-        issues.push(...value.issues);
+      if (output instanceof SchemaError) {
+        issues.push(...output.issues);
         continue;
       }
 
-      final[key] = value;
+      final[key] = output;
     }
 
     if (issues.length > 0) {

@@ -20,7 +20,7 @@ export function partial<
 
   const shape: SchemaShape = {};
 
-  for (const key of schema.keys) {
+  for (const key in schema.shape) {
     shape[key] = optional(schema.shape[key]);
   }
 
