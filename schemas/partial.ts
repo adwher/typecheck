@@ -15,13 +15,14 @@ export type SchemaShapeOptional<S extends SchemaShape> = {
  */
 export function partial<
   S extends SchemaShape,
-  R extends SchemaShape = SchemaShapeOptional<S>,
 >(schema: SchemaObject<S>) {
+  type R = SchemaShapeOptional<S>;
+
   const shape: SchemaShape = {};
 
   for (const key of schema.keys) {
     shape[key] = optional(schema.shape[key]);
   }
 
-  return new SchemaObject<S, R>(shape as S);
+  return new SchemaObject(shape as R);
 }

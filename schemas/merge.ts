@@ -20,12 +20,13 @@ export type SchemaShapeMerge<A> = A extends [infer F] ? Unwrap<F>
  * ```
  */
 export function merge<
-  A extends SchemaObject,
-  B extends SchemaObject[],
-  S extends SchemaShape = SchemaShapeMerge<[A, ...B]>,
->(initial: A, ...extensions: B) {
+  S extends SchemaObject,
+  E extends SchemaObject[],
+>(initial: S, ...extensions: E) {
+  type R = SchemaShapeMerge<[S, ...E]>;
+
   const shape = extensions.reduce(reduce, initial.shape);
-  return new SchemaObject(shape as S);
+  return new SchemaObject(shape as R);
 }
 
 function reduce(acc: SchemaShape, curr: SchemaObject): SchemaShape {

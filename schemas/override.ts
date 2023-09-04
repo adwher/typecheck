@@ -14,12 +14,15 @@ import { Override } from "../types.ts";
  * ```
  */
 export function override<
-  A extends SchemaShape,
-  B extends SchemaShape,
-  S extends SchemaShape = Override<A, B>,
->(initial: SchemaObject<A>, extension: B) {
-  const shape: SchemaShape = { ...initial.shape, ...extension };
-  return new SchemaObject(shape as S);
+  S extends SchemaShape,
+  E extends SchemaShape,
+>(initial: SchemaObject<S>, extension: E) {
+  type R = Override<S, E>;
+
+  return new SchemaObject<R>({
+    ...initial.shape,
+    ...extension,
+  });
 }
 
 /** Alias of {@link override}. */

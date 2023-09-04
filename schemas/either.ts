@@ -4,8 +4,7 @@ import { Infer, Schema } from "../schema.ts";
 
 export class SchemaEither<
   S extends readonly Schema[],
-  R = Infer<S[number]>,
-> extends Schema<R> {
+> extends Schema<Infer<S[number]>> {
   /**
    * Create a new schema that receives any of the given schemas.
    * @param schemas List of all posible schemas.
@@ -15,6 +14,8 @@ export class SchemaEither<
   }
 
   check(value: unknown, context: SchemaContext) {
+    type R = Infer<S[number]>;
+
     const issues: SchemaIssue[] = [];
     const schemas = this.flatten();
 

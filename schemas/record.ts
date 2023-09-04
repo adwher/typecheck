@@ -3,10 +3,10 @@ import { error, SchemaError, SchemaIssue } from "../errors.ts";
 import { Schema } from "../schema.ts";
 import { isObj } from "../types.ts";
 
-export type SchemaRecordKey = string | number | symbol;
+type Key = string | number | symbol;
 
 export class SchemaRecord<
-  K extends SchemaRecordKey,
+  K extends Key,
   V,
   R extends object = Record<K, V>,
 > extends Schema<R> {
@@ -23,15 +23,15 @@ export class SchemaRecord<
   }
 
   check(value: unknown, context: SchemaContext) {
-    type Output = Record<SchemaRecordKey, unknown>;
+    type O = Record<Key, unknown>;
 
-    if (!isObj<Output>(value)) {
+    if (!isObj<O>(value)) {
       return error(context, {
         message: `Must be a "object", got "${typeof value}"`,
       });
     }
 
-    const final: Output = {};
+    const final: O = {};
     const entries = Object.entries(value);
     const issues: SchemaIssue[] = [];
 
@@ -66,7 +66,7 @@ export class SchemaRecord<
 }
 
 /** Creates a new `object` schema where all the keys are `K` and the values `V`. */
-export function record<K extends SchemaRecordKey, V>(
+export function record<K extends Key, V>(
   key: Schema<K>,
   value: Schema<V>,
 ) {

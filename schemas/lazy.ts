@@ -1,22 +1,19 @@
 import { SchemaContext } from "../context.ts";
 import { SchemaError } from "../errors.ts";
-import { Infer, Schema } from "../schema.ts";
+import { Schema } from "../schema.ts";
 
 /** Generate (lazly) the schema in parsed-time. */
-export type SchemaLazly<S extends Schema> = (
+export type SchemaGenerator<R> = (
   value: unknown,
   context: SchemaContext,
-) => S | SchemaError;
+) => R | SchemaError;
 
-export class SchemaLazy<
-  S extends Schema,
-  R = Infer<S>,
-> extends Schema<R> {
+export class SchemaLazy<R> extends Schema<R> {
   /**
    * Create a new schema that can generate (lazly) the schema in parsed-time.
    * @param getter Generate the right schema on-demand.
    */
-  constructor(private getter: SchemaLazly<S>) {
+  constructor(private getter: SchemaGenerator<R>) {
     super();
   }
 
@@ -37,7 +34,7 @@ export class SchemaLazy<
  * Use `SchemaDescribe` and a defined type to use `recursive` schemas.
  * @returns A new `SchemaLazy` with the type of all possible schemas.
  */
-export function lazy<S extends Schema>(getter: SchemaLazly<S>) {
+export function lazy<R>(getter: SchemaGenerator<R>) {
   return new SchemaLazy(getter);
 }
 

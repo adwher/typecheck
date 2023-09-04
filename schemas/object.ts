@@ -10,8 +10,7 @@ export interface SchemaShape {
 
 export class SchemaObject<
   S extends SchemaShape = SchemaShape,
-  R extends object = Infer<S>,
-> extends Schema<R> {
+> extends Schema<Infer<S>> {
   /**
    * Create a new schema with the shape of an `object`.
    * @param shape Shape of the schema.
@@ -21,15 +20,16 @@ export class SchemaObject<
   }
 
   check(value: unknown, context: SchemaContext) {
-    type Output = Record<string, unknown>;
+    type R = Infer<S>;
+    type O = Record<string, unknown>;
 
-    if (!isObj<Output>(value)) {
+    if (!isObj<R>(value)) {
       return error(context, {
         message: `Must be a "object", got "${typeof value}"`,
       });
     }
 
-    const final: Output = {};
+    const final: O = {};
     const issues: SchemaIssue[] = [];
 
     for (const key of this.keys) {

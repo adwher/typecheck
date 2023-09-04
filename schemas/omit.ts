@@ -16,11 +16,12 @@ export type SchemaShapeOmit<
 export function omit<
   S extends SchemaShape,
   K extends Array<keyof S>,
-  R extends SchemaShape = SchemaShapeOmit<S, K>,
 >(
   schema: SchemaObject<S>,
   keys: K,
 ) {
+  type R = SchemaShapeOmit<S, K>;
+
   const shape: SchemaShape = {};
 
   for (const key of schema.keys) {
