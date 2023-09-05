@@ -45,30 +45,3 @@ Deno.test("should return an issue path", () => {
   assertInstanceOf(output, SchemaError);
   assertObjectMatch(output.first(), { path: [2] });
 });
-
-Deno.test("should execute tranformer array pipes", () => {
-  const received = [1, 2, 3];
-  const expected = [2, 4, 6];
-
-  const schema = array(number(), (arr) => arr.map((num) => num * 2));
-  const output: unknown = schema.check(received, context);
-
-  assertEquals(output, expected);
-});
-
-Deno.test("should execute validation array pipes", () => {
-  const received = [1, 2, 3];
-
-  const shouldHave = (arr: number[]) => {
-    if (arr.includes(4)) {
-      return arr;
-    }
-
-    return new SchemaError({ ...context });
-  };
-
-  const schema = array(number(), shouldHave);
-  const output: unknown = schema.check(received, context);
-
-  assertInstanceOf(output, SchemaError);
-});

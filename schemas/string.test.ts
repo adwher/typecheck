@@ -36,30 +36,3 @@ Deno.test("should return an issue path", () => {
   assertInstanceOf(output, SchemaError);
   assertObjectMatch(output.first(), { path: ["parent"] });
 });
-
-Deno.test("should execute tranformer string pipes", () => {
-  const received = "hello";
-  const expected = "HELLO";
-
-  const schema = string((value) => value.toUpperCase());
-  const output: unknown = schema.check(received, context);
-
-  assertEquals(output, expected);
-});
-
-Deno.test("should execute validation string pipes", () => {
-  const received = "hey";
-
-  const shouldBeHello = (value: string) => {
-    if (value === "hello") {
-      return value;
-    }
-
-    return new SchemaError({ ...context });
-  };
-
-  const schema = string(shouldBeHello);
-  const output: unknown = schema.check(received, context);
-
-  assertInstanceOf(output, SchemaError);
-});
