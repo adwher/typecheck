@@ -4,7 +4,7 @@ import { error } from "../errors.ts";
 /**
  * Create a pipe that validates the `length` of the given `value`.
  * @example ```ts
- * const IdentifierSchema = string(length(16));
+ * const IdentifierSchema = pipe(string(), length(16));
  * ```
  */
 export function length<T extends string | unknown[]>(

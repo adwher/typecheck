@@ -4,7 +4,7 @@ import { error } from "../errors.ts";
 /**
  * Create a pipe that validates the `length` of the given `value`.
  * @example ```ts
- * const MessageSchema = string(maxLength(280));
+ * const MessageSchema = pipe(string(), maxLength(280));
  * ```
  */
 export function maxLength<T extends string | unknown[]>(

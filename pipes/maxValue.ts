@@ -4,7 +4,7 @@ import { error } from "../errors.ts";
 /**
  * Create a pipe that validates the `value`.
  * @example ```ts
- * const HexSchema = number(maxValue(255));
+ * const HexSchema = pipe(number(), maxValue(255));
  * ```
  */
 export function maxValue(

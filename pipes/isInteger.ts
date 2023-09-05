@@ -6,7 +6,7 @@ const ERROR_MESSAGE = "Must be a integer number";
 /**
  * Check the `value` as a integer number using the `Number.isInteger` function.
  * @example ```ts
- * const CountSchema = number(isInteger());
+ * const CountSchema = pipe(number(), isInteger());
  * ```
  */
 export function isInteger(message = ERROR_MESSAGE) {
