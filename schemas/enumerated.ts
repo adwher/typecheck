@@ -3,7 +3,7 @@ import { error, SchemaError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 import { isNum, isStr } from "../types.ts";
 
-type Enumerable = string | number;
+type Enumerable = string | number | boolean;
 
 export class SchemaEnumerated<
   A extends readonly Enumerable[],
