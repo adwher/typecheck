@@ -33,3 +33,15 @@ export type Infer<T> = T extends Schema<infer U> ? U
   : T extends object ? { [K in keyof T]: Infer<T[K]> }
   : T extends (infer U)[] ? Infer<U>
   : never;
+
+/**
+ * Resctrict the schema definition with a given type.
+ * @example```
+ * type Email = string;
+ *
+ * const GoodSchema: Describe<Email> = string();
+ * // This schema will NOT pass the type checking
+ * const BadSchema: Describe<Email> = number();
+ * ```
+ */
+export type Describe<T> = Schema<T>;
