@@ -1,6 +1,5 @@
 import { SchemaContext } from "../context.ts";
 import { error, SchemaError, SchemaIssue } from "../errors.ts";
-import { pipeline, SchemaPipes } from "../pipes.ts";
 import { Schema } from "../schema.ts";
 import { isArr } from "../types.ts";
 
@@ -9,10 +8,7 @@ export class SchemaArray<T> extends Schema<T[]> {
    * Creates a new schema array of `T`.
    * @param schema Shape of the schema.
    */
-  constructor(
-    readonly schema: Schema<T>,
-    private pipes: SchemaPipes<T[]>,
-  ) {
+  constructor(readonly schema: Schema<T>) {
     super();
   }
 
@@ -48,11 +44,11 @@ export class SchemaArray<T> extends Schema<T[]> {
       return error(context, { issues });
     }
 
-    return pipeline(value, context, this.pipes);
+    return value;
   }
 }
 
 /** Creates a new schema array of `T`. */
-export function array<T>(schema: Schema<T>, ...pipes: SchemaPipes<T[]>) {
-  return new SchemaArray(schema, pipes);
+export function array<T>(schema: Schema<T>) {
+  return new SchemaArray(schema);
 }

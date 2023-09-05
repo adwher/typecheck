@@ -1,17 +1,12 @@
 import { SchemaContext } from "../context.ts";
 import { error } from "../errors.ts";
-import { pipeline, SchemaPipes } from "../pipes.ts";
 import { Schema } from "../schema.ts";
 import { isStr } from "../types.ts";
 
 export class SchemaString extends Schema<string> {
-  constructor(private pipes: SchemaPipes<string>) {
-    super();
-  }
-
   check(value: unknown, context: SchemaContext) {
     if (isStr(value)) {
-      return pipeline(value, context, this.pipes);
+      return value;
     }
 
     return error(context, {
@@ -21,6 +16,6 @@ export class SchemaString extends Schema<string> {
 }
 
 /** Creates a new `string` schema. */
-export function string(...pipes: SchemaPipes<string>) {
-  return new SchemaString(pipes);
+export function string() {
+  return new SchemaString();
 }
