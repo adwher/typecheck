@@ -1,4 +1,5 @@
 import { SchemaContext } from "../context.ts";
+import { SchemaError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 
 /** Use when the `value` satifies the `schema`. */
@@ -10,10 +11,10 @@ export interface ParsePositive<T> {
 /** Use when the `value` not satifies the `schema`. */
 export interface ParseNegative {
   success: false;
-  error: unknown;
+  error: SchemaError;
 }
 
-export type Parse<T> = ParsePositive<T> | ParseNegative;
+export type SafeParse<T> = ParsePositive<T> | ParseNegative;
 
 /**
  * Check the `value` with the given `schema` and return the result.
@@ -22,7 +23,7 @@ export type Parse<T> = ParsePositive<T> | ParseNegative;
 export function safeParse<T>(
   value: unknown,
   schema: Schema<T>,
-): Parse<T> {
+): SafeParse<T> {
   const context: SchemaContext = { path: [] };
   const output = schema.check(value, context);
 
