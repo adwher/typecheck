@@ -21,20 +21,22 @@ export class SchemaObject<
 
   check(value: unknown, context: SchemaContext) {
     type R = Infer<S>;
-    type O = Record<string, unknown>;
 
     if (!isObj<R>(value)) {
-      return error(context, {
-        message: `Must be a "object", got "${typeof value}"`,
-      });
+      return error(context, { message: `Must be a "object"` });
     }
 
-    const final: O = {};
+    const final = {} as R;
     const issues: SchemaIssue[] = [];
 
     for (const key in this.shape) {
+      const received = value[key];
       const schema = this.shape[key];
-      const field = value[key];
+
+      if (!schema && context.strict === true) {
+        const message = `"${key}" is not on the shape`;
+        issues.push({ ...context, message, issues });
+      }
 
       if (!schema) {
         continue;
@@ -44,7 +46,7 @@ export class SchemaObject<
         path: [...context.path, key],
       };
 
-      const output = schema.check(field, scope);
+      const output = schema.check(received, scope);
 
       if (output instanceof SchemaError) {
         issues.push(...output.issues);
