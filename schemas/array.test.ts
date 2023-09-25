@@ -36,7 +36,7 @@ Deno.test("should discard non-array values", () => {
   assertInstanceOf(output, SchemaError);
 });
 
-Deno.test("should return an issue path", () => {
+Deno.test("should return an issue path correctly", () => {
   const received = [1, 2, false];
 
   const schema = array(number());

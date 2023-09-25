@@ -4,9 +4,8 @@ import { Schema } from "../schema.ts";
 
 export class SchemaNever extends Schema<never> {
   check(value: unknown, context: SchemaContext) {
-    return error(context, {
-      message: `Must be "never", got "${typeof value}"`,
-    });
+    const message = `Must be "never", got "${typeof value}"`;
+    return error(context, { message });
   }
 }
 

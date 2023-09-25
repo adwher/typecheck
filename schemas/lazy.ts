@@ -11,14 +11,14 @@ export type SchemaGenerator<S extends Schema> = (
 export class SchemaLazy<S extends Schema> extends Schema<Infer<S>> {
   /**
    * Create a new schema that can generate (lazly) the schema in parsed-time.
-   * @param getter Generate the right schema on-demand.
+   * @param generate Generate the right schema on-demand.
    */
-  constructor(private getter: SchemaGenerator<S>) {
+  constructor(readonly generate: SchemaGenerator<S>) {
     super();
   }
 
   check(value: unknown, context: SchemaContext): SchemaError | Infer<S> {
-    const output = this.getter(value, context);
+    const output = this.generate(value, context);
 
     if (output instanceof SchemaError) {
       return output;

@@ -16,18 +16,15 @@ export type Pipe<T> = (
 export type Pipes<T> = Pipe<T>[];
 
 /** List of multiple schema pipes of the same `Infer<S>`.  */
-export type PipesTo<S extends Schema> = Pipe<Infer<S>>[];
+export type PipesFrom<S extends Schema> = Pipe<Infer<S>>[];
 
 export class SchemaPipe<R> extends Schema<R> {
   /**
-   * TO-DO
-   * @param schema TO-DO
-   * @param pipes TO-DO
+   * Create a chain of `pipes` once the `schema` return the validated value.
+   * @param schema Wrapped schema.
+   * @param pipes List of multiple schema pipes of the same `T`.
    */
-  constructor(
-    private schema: Schema<R>,
-    private pipes: Pipes<R>,
-  ) {
+  constructor(readonly schema: Schema<R>, private pipes: Pipes<R>) {
     super();
   }
 
@@ -60,9 +57,9 @@ export class SchemaPipe<R> extends Schema<R> {
   }
 }
 
-export function pipe<S extends Schema>(schema: S, ...pipes: PipesTo<S>): S;
+export function pipe<S extends Schema>(schema: S, ...pipes: PipesFrom<S>): S;
 
 /** Create a chain of `pipes` once the `schema` return the validated value. */
-export function pipe<S extends Schema>(schema: S, ...pipes: PipesTo<S>) {
+export function pipe<S extends Schema>(schema: S, ...pipes: PipesFrom<S>) {
   return new SchemaPipe(schema, pipes);
 }

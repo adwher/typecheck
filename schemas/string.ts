@@ -9,9 +9,8 @@ export class SchemaString extends Schema<string> {
       return value;
     }
 
-    return error(context, {
-      message: `Must be a "string", got "${typeof value}"`,
-    });
+    const message = `Must be a "string", got "${typeof value}"`;
+    return error(context, { message });
   }
 }
 

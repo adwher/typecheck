@@ -8,8 +8,7 @@ type Key = string | number | symbol;
 export class SchemaRecord<
   K extends Key,
   V,
-  R extends object = Record<K, V>,
-> extends Schema<R> {
+> extends Schema<Record<K, V>> {
   /**
    * Creates a new `object` schema where all the keys are `K` and the values `V`.
    * @param key Schema of each `key`.
@@ -23,15 +22,15 @@ export class SchemaRecord<
   }
 
   check(value: unknown, context: SchemaContext) {
-    type O = Record<Key, unknown>;
+    type R = Record<K, V>;
 
-    if (!isObj<O>(value)) {
+    if (!isObj<R>(value)) {
       return error(context, {
         message: `Must be a "object", got "${typeof value}"`,
       });
     }
 
-    const final: O = {};
+    const final: R = {} as R;
     const issues: SchemaIssue[] = [];
 
     for (const index in value) {
@@ -62,7 +61,7 @@ export class SchemaRecord<
       return error(context, { issues });
     }
 
-    return final as R;
+    return final;
   }
 }
 

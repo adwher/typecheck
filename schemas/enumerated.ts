@@ -6,41 +6,34 @@ import { isNum, isStr } from "../types.ts";
 type Enumerable = string | number | boolean;
 
 export class SchemaEnumerated<
-  A extends readonly Enumerable[],
-> extends Schema<A[number]> {
+  T extends readonly Enumerable[],
+> extends Schema<T[number]> {
   /** Allowed values of the schema. */
-  readonly options: Set<Enumerable>;
+  private options: Set<T[number]>;
 
   /**
    * Creates a new enumerated schema that only receives the given `options`.
    * @param options Allowed values of the schema.
    */
-  constructor(options: A) {
+  constructor(options: T) {
     super();
 
     this.options = new Set(options);
   }
 
-  check(value: unknown, context: SchemaContext): A[number] | SchemaError {
+  check(value: unknown, context: SchemaContext): T[number] | SchemaError {
     const isEnumerable = isStr(value) || isNum(value);
 
-    if (!isEnumerable) {
-      return error(context, {
-        message: `Must be either "string" or "number", got ${typeof value}`,
-      });
-    }
-
-    if (!this.has(value)) {
-      return error(context, {
-        message: `Must be one of the given options, got "${value}"`,
-      });
+    if (!isEnumerable || !this.canUse(value)) {
+      const message = `Must be one of the given options, got "${value}"`;
+      return error(context, { message });
     }
 
     return value;
   }
 
-  /** Validate `value` exists in `options`. */
-  has(value: Enumerable) {
+  /** Checks `value` is allowed in the `options`. */
+  canUse(value: Enumerable) {
     return this.options.has(value);
   }
 }

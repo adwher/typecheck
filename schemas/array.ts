@@ -14,9 +14,7 @@ export class SchemaArray<T> extends Schema<T[]> {
 
   check(value: unknown, context: SchemaContext) {
     if (!isArr<T>(value)) {
-      return error(context, {
-        message: `Must be an "array", got "${typeof value}"`,
-      });
+      return error(context, { message: `Must be an "array"` });
     }
 
     const size = value.length;
@@ -24,13 +22,13 @@ export class SchemaArray<T> extends Schema<T[]> {
     const issues: SchemaIssue[] = [];
 
     for (let key = 0; key < size; key++) {
-      const field = value[key];
+      const received = value[key];
 
       const scope: SchemaContext = {
         path: [...context.path, key],
       };
 
-      const output = this.schema.check(field, scope);
+      const output = this.schema.check(received, scope);
 
       if (output instanceof SchemaError) {
         issues.push(...output.issues);

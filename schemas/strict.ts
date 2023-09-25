@@ -1,26 +1,54 @@
 import { SchemaContext } from "../context.ts";
-import { Schema } from "../schema.ts";
+import { error, SchemaError, SchemaIssue } from "../errors.ts";
+import { Infer, Schema } from "../schema.ts";
+import { isObj } from "../types.ts";
+import { SchemaObject } from "./object.ts";
 
-export class SchemaStrict<R> extends Schema<R> {
+export class SchemaStrict<S extends SchemaObject> extends Schema<Infer<S>> {
   /**
    * Create a stricted schema that wraps the original one.
    * @param schema Wrapped schema.
    */
-  constructor(readonly schema: Schema<R>) {
+  constructor(readonly schema: S) {
     super();
   }
 
-  check(value: unknown, context: SchemaContext) {
-    return this.schema.check(value, { ...context, strict: true });
+  check(value: unknown, context: SchemaContext): Infer<S> | SchemaError {
+    type R = Infer<S>;
+
+    if (!isObj<R>(value)) {
+      return error(context, { message: `Must be an "object"` });
+    }
+
+    const issues: SchemaIssue[] = [];
+
+    for (const key in value) {
+      if (key in this.schema.shape) {
+        continue;
+      }
+
+      const message = `"${key}" is not defined on the shape`;
+      issues.push({ ...context, message });
+    }
+
+    const output = this.schema.check(value, context);
+
+    if (output instanceof SchemaError) {
+      return output.attach(...issues);
+    }
+
+    if (issues.length > 0) {
+      return error(context, { issues });
+    }
+
+    return output as R;
   }
 }
-
-export function strict<S extends Schema>(schema: S): S;
 
 /**
  * Create a stricted schema that wraps the original one.
  * @param schema Wrapped schema.
  */
-export function strict<S extends Schema>(schema: S) {
+export function strict<S extends SchemaObject>(schema: S) {
   return new SchemaStrict(schema);
 }

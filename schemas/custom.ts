@@ -2,6 +2,7 @@ import { SchemaContext } from "../context.ts";
 import { error, SchemaError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 
+/** Function that validates the satisfaction of the given `value` as the given schema. */
 export type SchemaValidation = (
   value: unknown,
   context: SchemaContext,
@@ -10,14 +11,14 @@ export type SchemaValidation = (
 export class SchemaCustom<T> extends Schema<T> {
   /**
    * Create a new `SchemaCustom` that only accepts values that satisfies the `validation`.
-   * @param validation Checks the given `value`.
+   * @param canParse Checks the given `value` is allowed as `T`.
    */
-  constructor(private validation: SchemaValidation) {
+  constructor(readonly canParse: SchemaValidation) {
     super();
   }
 
   check(value: unknown, context: SchemaContext) {
-    const output = this.validation(value, context);
+    const output = this.canParse(value, context);
 
     if (output instanceof SchemaError) {
       return output;

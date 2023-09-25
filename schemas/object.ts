@@ -3,9 +3,11 @@ import { error, SchemaError, SchemaIssue } from "../errors.ts";
 import { Infer, Schema } from "../schema.ts";
 import { isObj } from "../types.ts";
 
+export type SchemaShapeKey = string | number | symbol;
+
 /** Defines an record of `keys` and their schemas, useful for objects. */
 export interface SchemaShape {
-  [key: string | number | symbol]: Schema;
+  [key: SchemaShapeKey]: Schema;
 }
 
 export class SchemaObject<
@@ -23,7 +25,7 @@ export class SchemaObject<
     type R = Infer<S>;
 
     if (!isObj<R>(value)) {
-      return error(context, { message: `Must be a "object"` });
+      return error(context, { message: `Must be an "object"` });
     }
 
     const final = {} as R;
@@ -31,20 +33,15 @@ export class SchemaObject<
 
     for (const key in this.shape) {
       const received = value[key];
-      const schema = this.shape[key];
-
-      if (!schema && context.strict === true) {
-        const message = `"${key}" is not on the shape`;
-        issues.push({ ...context, message, issues });
-      }
-
-      if (!schema) {
-        continue;
-      }
+      const schema: Schema | undefined = this.shape[key];
 
       const scope: SchemaContext = {
         path: [...context.path, key],
       };
+
+      if (!schema) {
+        continue;
+      }
 
       const output = schema.check(received, scope);
 
@@ -53,7 +50,7 @@ export class SchemaObject<
         continue;
       }
 
-      final[key] = output;
+      final[key as keyof R] = output;
     }
 
     if (issues.length > 0) {

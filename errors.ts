@@ -17,6 +17,15 @@ export class SchemaError extends Error {
   }
 
   /**
+   * Attach new issues to the current `SchemaError`.
+   * @returns Same `SchemaError` with new issues.
+   */
+  attach(...issues: SchemaIssue[]) {
+    this.issues.push(...issues);
+    return this;
+  }
+
+  /**
    * Flatten the stack of issues by returning the non-nested ones.
    * @returns Summarized array of issues.
    */

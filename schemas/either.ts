@@ -30,10 +30,8 @@ export class SchemaEither<
       return output;
     }
 
-    return error(context, {
-      message: "Must be valid at least one of the specified schemas",
-      issues,
-    });
+    const message = "Must be valid at least one of the specified schemas";
+    return error(context, { message, issues });
   }
 
   /** Transform the array of schemas applying the `flatten` strategy. */

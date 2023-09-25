@@ -19,9 +19,9 @@ Deno.test("should pass a simple tuple", () => {
 });
 
 Deno.test("should pass a nested tuple", () => {
-  const received: unknown = [[1, 2]];
+  const received: unknown = [[1, 2], 2];
 
-  const schema = tuple(tuple(number(), number()));
+  const schema = tuple(tuple(number(), number()), number());
   const output = schema.check(received, context);
 
   assertEquals(output, received);
@@ -30,7 +30,7 @@ Deno.test("should pass a nested tuple", () => {
 Deno.test("should discard non-tuple values", () => {
   const received = "";
 
-  const schema = tuple(number());
+  const schema = tuple(number(), number());
   const output = schema.check(received, context);
 
   assertInstanceOf(output, SchemaError);
@@ -39,19 +39,9 @@ Deno.test("should discard non-tuple values", () => {
 Deno.test("should return an issue path correctly", () => {
   const received = [false];
 
-  const schema = tuple(number());
+  const schema = tuple(number(), number());
   const output = schema.check(received, context);
 
   assertInstanceOf(output, SchemaError);
   assertObjectMatch(output.first(), { path: [0] });
-});
-
-Deno.test("should restrict indexes on strict mode", () => {
-  const received = [1, 2];
-
-  const schema = tuple(number());
-  const output = schema.check(received, { ...context, strict: true });
-
-  assertInstanceOf(output, SchemaError);
-  assertObjectMatch(output.first(), { path: [1] });
 });

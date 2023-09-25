@@ -16,11 +16,12 @@ export type SchemaShapePick<
 export function pick<
   S extends SchemaShape,
   K extends Array<keyof S>,
-  R extends SchemaShape = SchemaShapePick<S, K>,
 >(
   schema: SchemaObject<S>,
   keys: K,
 ) {
+  type R = SchemaShapePick<S, K>;
+
   const shape: SchemaShape = {};
 
   for (const key of keys) {

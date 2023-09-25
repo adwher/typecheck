@@ -9,9 +9,8 @@ export class SchemaBoolean extends Schema<boolean> {
       return value;
     }
 
-    return error(context, {
-      message: `Must be a "boolean", got "${typeof value}"`,
-    });
+    const message = `Must be a "boolean", got "${typeof value}"`;
+    return error(context, { message });
   }
 }
 

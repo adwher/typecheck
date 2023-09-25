@@ -4,7 +4,7 @@ import { Infer, Schema } from "../schema.ts";
 import { isArr } from "../types.ts";
 
 export class SchemaTuple<
-  S extends readonly [...Schema[]],
+  S extends readonly Schema[],
 > extends Schema<Infer<S>> {
   /**
    * Creates a new schema tuple of `T`.
@@ -21,22 +21,17 @@ export class SchemaTuple<
       });
     }
 
-    const size = value.length;
+    const size = this.schemas.length;
     const final = new Array(size);
     const issues: SchemaIssue[] = [];
 
     for (let index = 0; index < size; index++) {
       const received = value[index];
-      const schema = this.schemas[index];
+      const schema: S[number] | undefined = this.schemas[index];
 
       const scope: SchemaContext = {
         path: [...context.path, index],
       };
-
-      if (!schema && context.strict === true) {
-        const message = `Must be in the tuple definition`;
-        issues.push({ ...scope, message });
-      }
 
       if (!schema) {
         continue;
@@ -60,7 +55,11 @@ export class SchemaTuple<
   }
 }
 
-/** Creates a new schema tuple of `T`. */
-export function tuple<S extends readonly [...Schema[]]>(...schemas: S) {
-  return new SchemaTuple(schemas);
+/** Creates a new schema tuple of type `[A, B, ...C]`. */
+export function tuple<
+  A extends Schema,
+  B extends Schema,
+  C extends readonly Schema[],
+>(first: A, second: B, ...rest: C) {
+  return new SchemaTuple<[A, B, ...C]>([first, second, ...rest]);
 }

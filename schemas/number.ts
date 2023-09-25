@@ -9,9 +9,8 @@ export class SchemaNumber extends Schema<number> {
       return value;
     }
 
-    return error(context, {
-      message: `Must be a "number", got "${typeof value}"`,
-    });
+    const message = `Must be a "number", got "${typeof value}"`;
+    return error(context, { message });
   }
 }
 
