@@ -19,9 +19,14 @@ jobs:
         uses: denoland/setup-deno@v1
         with:
           deno-version: 1.x
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path:  ~/.cache/deno/
+          key: ${{ hashFiles('deno.lock') }}
       - name: Run formatting checks
         run: deno fmt --check
       - name: Run linting checks
         run: deno lint
       - name: Run unit-test cases
-        run: deno test -A --parallel --reporter=dot
+        run: deno test
