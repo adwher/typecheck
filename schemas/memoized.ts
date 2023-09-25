@@ -1,21 +1,21 @@
 import { SchemaContext } from "../context.ts";
 import { SchemaError } from "../errors.ts";
-import { Infer, Schema } from "../schema.ts";
+import { Schema } from "../schema.ts";
 
-export class SchemaMemoized<S extends Schema> extends Schema<Infer<S>> {
-  private cache: Map<unknown, Infer<S> | SchemaError>;
+export class SchemaMemoized<T> extends Schema<T> {
+  private cache: Map<unknown, T | SchemaError>;
 
   /**
    * Create a new schema that memoize the results of the previous checks.
    * @param schema Original schema.
    */
-  constructor(readonly schema: S) {
+  constructor(readonly schema: Schema<T>) {
     super();
 
     this.cache = new Map();
   }
 
-  check(value: unknown, context: SchemaContext): Infer<S> | SchemaError {
+  check(value: unknown, context: SchemaContext): T | SchemaError {
     const cache = this.cache.get(value);
 
     if (cache) {
@@ -40,6 +40,6 @@ export class SchemaMemoized<S extends Schema> extends Schema<Infer<S>> {
  * @param schema Original schema.
  * @returns Instance of `SchemaMemoized`.
  */
-export function memoized<S extends Schema>(schema: S) {
+export function memoized<T>(schema: Schema<T>) {
   return new SchemaMemoized(schema);
 }
