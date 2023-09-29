@@ -35,18 +35,20 @@ Deno.test("should support array type as keys", () => {
   const schema = memoized(array(number()));
 
   const received = [1, 2, 3, 4];
+  const expected = [1, 2, 3, 4];
 
-  assertEquals(schema.has(received), false);
+  assertEquals(schema.has(expected), false);
   assertEquals(schema.check(received, context), received);
-  assertEquals(schema.has(received), true);
+  assertEquals(schema.has(expected), true);
 });
 
 Deno.test("should support object type as keys", () => {
   const schema = memoized(object({ hello: string() }));
 
   const received = { hello: "world" };
+  const expected = { hello: "world" };
 
-  assertEquals(schema.has(received), false);
+  assertEquals(schema.has(expected), false);
   assertEquals(schema.check(received, context), received);
-  assertEquals(schema.has(received), true);
+  assertEquals(schema.has(expected), true);
 });
