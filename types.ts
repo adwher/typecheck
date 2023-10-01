@@ -1,3 +1,6 @@
+/** Allow to merge two elements from `L` to `R`. */
+export type Override<L, R> = Omit<L, keyof R> & R;
+
 /** Check the `value` as `string`. */
 export function isStr(value: unknown): value is string {
   return typeof value === "string";
@@ -20,7 +23,7 @@ export function isFn<F extends { (): void }>(value: unknown): value is F {
 
 /** Check the `value` as an `object` like `T`. */
 export function isObj<T extends object>(value: unknown): value is T {
-  return typeof value === "object" && !isArr(value);
+  return Boolean(value) && typeof value === "object" && !isArr(value);
 }
 
 /** Check the `value` as an array of `T`. */
@@ -29,9 +32,6 @@ export function isArr<T = unknown>(value: unknown): value is T[] {
 }
 
 /** Check the `value` as an extension (or instance) of `Error`. */
-export function isError<E extends Error = Error>(value: unknown): value is E {
+export function isErr<E extends Error = Error>(value: unknown): value is E {
   return value instanceof Error;
 }
-
-/** Allow to merge two elements from `L` to `R`. */
-export type Override<L, R> = Omit<L, keyof R> & R;

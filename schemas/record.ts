@@ -3,10 +3,11 @@ import { error, SchemaError, SchemaIssue } from "../errors.ts";
 import { Schema } from "../schema.ts";
 import { isObj } from "../types.ts";
 
-type Key = string | number | symbol;
+/** Allowed types to be a key of `SchemaRecord`. */
+export type SchemaRecordKey = string | number | symbol;
 
 export class SchemaRecord<
-  K extends Key,
+  K extends SchemaRecordKey,
   V,
 > extends Schema<Record<K, V>> {
   /**
@@ -66,7 +67,7 @@ export class SchemaRecord<
 }
 
 /** Creates a new `object` schema where all the keys are `K` and the values `V`. */
-export function record<K extends Key, V>(
+export function record<K extends SchemaRecordKey, V>(
   key: Schema<K>,
   value: Schema<V>,
 ) {

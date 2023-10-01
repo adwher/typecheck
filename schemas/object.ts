@@ -3,6 +3,7 @@ import { error, SchemaError, SchemaIssue } from "../errors.ts";
 import { Infer, Schema } from "../schema.ts";
 import { isObj } from "../types.ts";
 
+/** Sets the allowed keys for a shape. */
 export type SchemaShapeKey = string | number | symbol;
 
 /** Defines an record of `keys` and their schemas, useful for objects. */

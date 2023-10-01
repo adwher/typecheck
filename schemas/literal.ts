@@ -2,7 +2,8 @@ import { SchemaContext } from "../context.ts";
 import { error } from "../errors.ts";
 import { Schema } from "../schema.ts";
 
-type Literal = string | number | bigint | boolean | null | undefined;
+/** Allowed types as literals. */
+export type Literal = string | number | bigint | boolean | null;
 
 export class SchemaLiteral<L extends Literal> extends Schema<L> {
   /**
