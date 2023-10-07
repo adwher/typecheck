@@ -1,5 +1,4 @@
-import { assertEquals } from "std/assert/assert_equals.ts";
-import { assertInstanceOf } from "std/assert/assert_instance_of.ts";
+import { assertEquals, assertInstanceOf } from "std/assert/mod.ts";
 
 import { SchemaContext } from "../context.ts";
 import { number } from "./number.ts";

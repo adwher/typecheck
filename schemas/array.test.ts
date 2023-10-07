@@ -1,6 +1,8 @@
-import { assertEquals } from "std/assert/assert_equals.ts";
-import { assertInstanceOf } from "std/assert/assert_instance_of.ts";
-import { assertObjectMatch } from "std/assert/assert_object_match.ts";
+import {
+  assertEquals,
+  assertInstanceOf,
+  assertObjectMatch,
+} from "std/assert/mod.ts";
 
 import { SchemaContext } from "../context.ts";
 import { array } from "./array.ts";
@@ -10,37 +12,26 @@ import { SchemaError } from "../errors.ts";
 const context: SchemaContext = { path: [] };
 
 Deno.test("should pass simple array schemas", () => {
-  const received = [1, 2, 3];
-
   const schema = array(number());
-  const output = schema.check(received, context);
 
-  assertEquals(output, received);
+  assertEquals(schema.check([1, 2, 3], context), [1, 2, 3]);
+  assertEquals(schema.check([2, 4, 6], context), [2, 4, 6]);
+
+  assertInstanceOf(schema.check("", context), SchemaError);
+  assertInstanceOf(schema.check(1234, context), SchemaError);
+  assertInstanceOf(schema.check([true, false], context), SchemaError);
 });
 
 Deno.test("should pass nested array schemas", () => {
-  const received = [[1, 2], [2, 3], [3, 4]];
-
   const schema = array(array(number()));
-  const output = schema.check(received, context);
 
-  assertEquals(output, received);
-});
-
-Deno.test("should discard non-array values", () => {
-  const received = "";
-
-  const schema = array(number());
-  const output = schema.check(received, context);
-
-  assertInstanceOf(output, SchemaError);
+  assertEquals(schema.check([[1, 2], [2, 3]], context), [[1, 2], [2, 3]]);
+  assertEquals(schema.check([[2, 3], [3, 4]], context), [[2, 3], [3, 4]]);
 });
 
 Deno.test("should return an issue path correctly", () => {
-  const received = [1, 2, false];
-
   const schema = array(number());
-  const output = schema.check(received, context);
+  const output = schema.check([1, 2, false], context);
 
   assertInstanceOf(output, SchemaError);
   assertObjectMatch(output.first(), { path: [2] });

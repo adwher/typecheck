@@ -1,6 +1,8 @@
-import { assertEquals } from "std/assert/assert_equals.ts";
-import { assertInstanceOf } from "std/assert/assert_instance_of.ts";
-import { assertObjectMatch } from "std/assert/assert_object_match.ts";
+import {
+  assertEquals,
+  assertInstanceOf,
+  assertObjectMatch,
+} from "std/assert/mod.ts";
 
 import { SchemaContext } from "../context.ts";
 import { number } from "./number.ts";
@@ -10,36 +12,28 @@ import { tuple } from "./tuple.ts";
 const context: SchemaContext = { path: [] };
 
 Deno.test("should pass a simple tuple", () => {
-  const received: unknown = [1, 2, 3];
-
   const schema = tuple(number(), number(), number());
-  const output = schema.check(received, context);
 
-  assertEquals(output, received);
+  assertEquals(schema.check([1, 2, 3], context), [1, 2, 3]);
+  assertEquals(schema.check([2, 4, 6], context), [2, 4, 6]);
+
+  assertInstanceOf(schema.check("", context), SchemaError);
+  assertInstanceOf(schema.check(false, context), SchemaError);
+  assertInstanceOf(schema.check(null, context), SchemaError);
+  assertInstanceOf(schema.check([], context), SchemaError);
 });
 
 Deno.test("should pass a nested tuple", () => {
-  const received: unknown = [[1, 2], 2];
-
   const schema = tuple(tuple(number(), number()), number());
-  const output = schema.check(received, context);
 
-  assertEquals(output, received);
-});
-
-Deno.test("should discard non-tuple values", () => {
-  const received = "";
-
-  const schema = tuple(number(), number());
-  const output = schema.check(received, context);
-
-  assertInstanceOf(output, SchemaError);
+  assertEquals(schema.check([[1, 2], 2], context), [[1, 2], 2]);
+  assertEquals(schema.check([[2, 2], 4], context), [[2, 2], 4]);
 });
 
 Deno.test("should return an issue path correctly", () => {
-  const received = [false];
-
   const schema = tuple(number(), number());
+
+  const received = [false];
   const output = schema.check(received, context);
 
   assertInstanceOf(output, SchemaError);

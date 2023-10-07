@@ -8,13 +8,8 @@ Deno.test("should thrown for non-valid values", () => {
   const schema = string();
 
   assertThrows(() => parse(false, schema), SchemaError);
-});
 
-Deno.test("should return the same value", () => {
-  const schema = string();
-  const expected = "hey";
-
-  const output = parse(expected, schema);
-
-  assertEquals(output, expected);
+  assertEquals(parse("hey", schema), "hey");
+  assertEquals(parse("hello", schema), "hello");
+  assertEquals(parse("hola", schema), "hola");
 });
