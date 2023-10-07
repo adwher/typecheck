@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error, SchemaError } from "../errors.ts";
+import { createError, SchemaError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 import { isNum, isStr } from "../types.ts";
 
@@ -27,7 +27,7 @@ export class SchemaEnumerated<
 
     if (!isEnumerable || !this.canUse(value)) {
       const message = `Must be one of the given options, got "${value}"`;
-      return error(context, { message });
+      return createError(context, { message });
     }
 
     return value;

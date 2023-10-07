@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error } from "../errors.ts";
+import { createError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 
 /** Allowed types as literals. */
@@ -19,7 +19,7 @@ export class SchemaLiteral<L extends Literal> extends Schema<L> {
       return value as L;
     }
 
-    return error(context, {
+    return createError(context, {
       message: `Must be "${this.literal}", got "${value}"`,
     });
   }

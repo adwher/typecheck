@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error } from "../errors.ts";
+import { createError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 import { isStr } from "../types.ts";
 
@@ -10,7 +10,7 @@ export class SchemaString extends Schema<string> {
     }
 
     const message = `Must be a "string", got "${typeof value}"`;
-    return error(context, { message });
+    return createError(context, { message });
   }
 }
 

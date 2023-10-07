@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error } from "../errors.ts";
+import { createError } from "../errors.ts";
 
 const ERROR_MESSAGE = "Must be a integer number";
 
@@ -15,6 +15,6 @@ export function isInteger(message = ERROR_MESSAGE) {
       return value;
     }
 
-    return error(context, { message });
+    return createError(context, { message });
   };
 }

@@ -5,7 +5,7 @@
  * @module
  */
 
-export * from "./check.ts";
 export * from "./createGuard.ts";
+export * from "./hasError.ts";
 export * from "./parse.ts";
 export * from "./safeParse.ts";

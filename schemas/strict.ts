@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error, SchemaError, SchemaIssue } from "../errors.ts";
+import { createError, SchemaError, SchemaIssue } from "../errors.ts";
 import { Infer, Schema } from "../schema.ts";
 import { isObj } from "../types.ts";
 import { SchemaObject } from "./object.ts";
@@ -17,7 +17,7 @@ export class SchemaStrict<S extends SchemaObject> extends Schema<Infer<S>> {
     type R = Infer<S>;
 
     if (!isObj<R>(value)) {
-      return error(context, { message: `Must be an "object"` });
+      return createError(context, { message: `Must be an "object"` });
     }
 
     const issues: SchemaIssue[] = [];
@@ -34,11 +34,11 @@ export class SchemaStrict<S extends SchemaObject> extends Schema<Infer<S>> {
     const output = this.schema.check(value, context);
 
     if (output instanceof SchemaError) {
-      return output.attach(...issues);
+      issues.push(...output.issues);
     }
 
     if (issues.length > 0) {
-      return error(context, { issues });
+      return createError(context, { issues });
     }
 
     return output as R;

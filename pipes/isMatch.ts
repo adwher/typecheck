@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error } from "../errors.ts";
+import { createError } from "../errors.ts";
 
 /**
  * Create a pipe that validates the `value` as the specified regular expression.
@@ -16,6 +16,6 @@ export function isMatch(
       return value;
     }
 
-    return error(context, { message });
+    return createError(context, { message });
   };
 }

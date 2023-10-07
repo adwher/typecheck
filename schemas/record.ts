@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error, SchemaError, SchemaIssue } from "../errors.ts";
+import { createError, SchemaError, SchemaIssue } from "../errors.ts";
 import { Schema } from "../schema.ts";
 import { isObj } from "../types.ts";
 
@@ -26,7 +26,7 @@ export class SchemaRecord<
     type R = Record<K, V>;
 
     if (!isObj<R>(value)) {
-      return error(context, {
+      return createError(context, {
         message: `Must be a "object", got "${typeof value}"`,
       });
     }
@@ -59,7 +59,7 @@ export class SchemaRecord<
     }
 
     if (issues.length > 0) {
-      return error(context, { issues });
+      return createError(context, { issues });
     }
 
     return final;

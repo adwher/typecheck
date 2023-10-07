@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error, SchemaError } from "../errors.ts";
+import { createError, SchemaError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 
 /** Function that validates the satisfaction of the given `value` as the given schema. */
@@ -28,7 +28,9 @@ export class SchemaCustom<T> extends Schema<T> {
       return value as T;
     }
 
-    return error(context, { message: "Must satisfies the given validation" });
+    return createError(context, {
+      message: "Must satisfies the given validation",
+    });
   }
 }
 

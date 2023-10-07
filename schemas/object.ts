@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error, SchemaError, SchemaIssue } from "../errors.ts";
+import { createError, SchemaError, SchemaIssue } from "../errors.ts";
 import { Infer, Schema } from "../schema.ts";
 import { isObj } from "../types.ts";
 
@@ -26,7 +26,7 @@ export class SchemaObject<
     type R = Infer<S>;
 
     if (!isObj<R>(value)) {
-      return error(context, { message: `Must be an "object"` });
+      return createError(context, { message: `Must be an "object"` });
     }
 
     const final = {} as R;
@@ -55,7 +55,7 @@ export class SchemaObject<
     }
 
     if (issues.length > 0) {
-      return error(context, { issues });
+      return createError(context, { issues });
     }
 
     return final as R;

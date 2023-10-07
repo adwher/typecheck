@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error, SchemaError, SchemaIssue } from "../errors.ts";
+import { createError, SchemaError, SchemaIssue } from "../errors.ts";
 import { Infer, Schema } from "../schema.ts";
 
 /**
@@ -53,7 +53,7 @@ export class SchemaPipe<R> extends Schema<R> {
       return final;
     }
 
-    return error(context, { issues });
+    return createError(context, { issues });
   }
 }
 
@@ -63,3 +63,6 @@ export function pipe<S extends Schema>(schema: S, ...pipes: PipesFrom<S>): S;
 export function pipe<S extends Schema>(schema: S, ...pipes: PipesFrom<S>) {
   return new SchemaPipe(schema, pipes);
 }
+
+/** Alias of `pipe`. */
+export const refine = pipe;

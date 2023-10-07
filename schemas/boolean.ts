@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error } from "../errors.ts";
+import { createError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 import { isBool } from "../types.ts";
 
@@ -10,7 +10,7 @@ export class SchemaBoolean extends Schema<boolean> {
     }
 
     const message = `Must be a "boolean", got "${typeof value}"`;
-    return error(context, { message });
+    return createError(context, { message });
   }
 }
 

@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error, SchemaError, SchemaIssue } from "../errors.ts";
+import { createError, SchemaError, SchemaIssue } from "../errors.ts";
 import { Infer, Schema } from "../schema.ts";
 import { isArr } from "../types.ts";
 
@@ -16,7 +16,7 @@ export class SchemaTuple<
 
   check(value: unknown, context: SchemaContext) {
     if (!isArr(value)) {
-      return error(context, {
+      return createError(context, {
         message: `Must be an "tuple", got "${typeof value}"`,
       });
     }
@@ -48,7 +48,7 @@ export class SchemaTuple<
     }
 
     if (issues.length > 0) {
-      return error(context, { issues });
+      return createError(context, { issues });
     }
 
     return value as Infer<S>;

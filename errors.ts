@@ -17,22 +17,6 @@ export class SchemaError extends Error {
   }
 
   /**
-   * Attach a new issue to the current `SchemaError`.
-   * @returns Same `SchemaError` with the new issue.
-   */
-  attach(issue: SchemaIssue): this;
-  /**
-   * Attach new issues to the current `SchemaError`.
-   * @returns Same `SchemaError` with new issues.
-   */
-  attach(...issues: SchemaIssue[]): this;
-
-  attach(...issues: SchemaIssue[]) {
-    this.issues.push(...issues);
-    return this;
-  }
-
-  /**
    * Flatten the stack of issues by returning the non-nested ones.
    * @returns Summarized array of issues.
    */
@@ -50,7 +34,11 @@ export class SchemaError extends Error {
   }
 }
 
-export function error(
+/**
+ * Creates a new `SchemaError` using the current `context` and the `descriptor`.
+ * @returns Instance of `SchemaError`.
+ */
+export function createError(
   context: SchemaContext,
   descriptor?: Omit<SchemaIssue, keyof SchemaContext>,
 ) {

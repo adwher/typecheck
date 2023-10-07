@@ -1,5 +1,6 @@
+import { SchemaContext } from "../context.ts";
+import { SchemaError } from "../errors.ts";
 import { Schema } from "../schema.ts";
-import { check } from "./check.ts";
 
 /**
  * Creates a new function guard that checks values with the given `schema`.
@@ -13,7 +14,12 @@ import { check } from "./check.ts";
  * ```
  */
 export function createGuard<T>(schema: Schema<T>) {
+  const context: SchemaContext = { path: [] };
+
   return function (value: unknown): value is T {
-    return check(value, schema);
+    const data = schema.check(value, context);
+    const hasError = data instanceof SchemaError;
+
+    return !hasError;
   };
 }

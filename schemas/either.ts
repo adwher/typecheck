@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error, SchemaError, SchemaIssue } from "../errors.ts";
+import { createError, SchemaError, SchemaIssue } from "../errors.ts";
 import { Infer, Schema } from "../schema.ts";
 
 export class SchemaEither<
@@ -31,7 +31,7 @@ export class SchemaEither<
     }
 
     const message = "Must be valid at least one of the specified schemas";
-    return error(context, { message, issues });
+    return createError(context, { message, issues });
   }
 
   /** Transform the array of schemas applying the `flatten` strategy. */
@@ -56,3 +56,6 @@ export function either<
 >(first: A, ...schemas: B) {
   return new SchemaEither<[A, ...B]>([first, ...schemas]);
 }
+
+/** Alias of `either`. */
+export const or = either;

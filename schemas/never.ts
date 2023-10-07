@@ -1,11 +1,11 @@
 import { SchemaContext } from "../context.ts";
-import { error } from "../errors.ts";
+import { createError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 
 export class SchemaNever extends Schema<never> {
   check(value: unknown, context: SchemaContext) {
     const message = `Must be "never", got "${typeof value}"`;
-    return error(context, { message });
+    return createError(context, { message });
   }
 }
 

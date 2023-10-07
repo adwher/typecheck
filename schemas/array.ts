@@ -1,5 +1,5 @@
 import { SchemaContext } from "../context.ts";
-import { error, SchemaError, SchemaIssue } from "../errors.ts";
+import { createError, SchemaError, SchemaIssue } from "../errors.ts";
 import { Schema } from "../schema.ts";
 import { isArr } from "../types.ts";
 
@@ -14,7 +14,7 @@ export class SchemaArray<T> extends Schema<T[]> {
 
   check(value: unknown, context: SchemaContext) {
     if (!isArr<T>(value)) {
-      return error(context, { message: `Must be an "array"` });
+      return createError(context, { message: `Must be an "array"` });
     }
 
     const size = value.length;
@@ -39,7 +39,7 @@ export class SchemaArray<T> extends Schema<T[]> {
     }
 
     if (issues.length > 0) {
-      return error(context, { issues });
+      return createError(context, { issues });
     }
 
     return value;
