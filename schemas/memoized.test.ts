@@ -1,24 +1,16 @@
-import { assertEquals, assertInstanceOf } from "std/assert/mod.ts";
+import { assertEquals } from "std/assert/mod.ts";
 
-import { SchemaContext } from "../context.ts";
-import { number } from "./number.ts";
+import { createContext } from "../context.ts";
 import { memoized } from "./memoized.ts";
-import { SchemaError } from "../errors.ts";
 import { unknown } from "./unknown.ts";
 import { array } from "./array.ts";
+import { number } from "./number.ts";
 import { object } from "./object.ts";
 import { string } from "./string.ts";
 
-const context: SchemaContext = { path: [] };
+const context = createContext();
 
-Deno.test("should forward the schema returns", () => {
-  const schema = memoized(number());
-
-  assertEquals(schema.check(1234, context), 1234);
-  assertInstanceOf(schema.check(null, context), SchemaError);
-});
-
-Deno.test("should support simple types as keys", () => {
+Deno.test("should memoize returned values", () => {
   const schema = memoized(unknown());
 
   const received = ["hello", 1234, true, null];

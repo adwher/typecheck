@@ -1,13 +1,13 @@
-import { assertEquals, assertInstanceOf } from "std/assert/mod.ts";
+import { assertEquals, assertIsError } from "std/assert/mod.ts";
 
-import { SchemaContext } from "../context.ts";
+import { createContext } from "../context.ts";
 import { SchemaError } from "../errors.ts";
 import { either } from "./either.ts";
 import { string } from "./string.ts";
 import { number } from "./number.ts";
 import { boolean } from "./boolean.ts";
 
-const context: SchemaContext = { path: [] };
+const context = createContext();
 
 Deno.test("should pass allowed values", () => {
   const schema = either(string(), number());
@@ -15,9 +15,9 @@ Deno.test("should pass allowed values", () => {
   assertEquals(schema.check(1234, context), 1234);
   assertEquals(schema.check("hello", context), "hello");
 
-  assertInstanceOf(schema.check(false, context), SchemaError);
-  assertInstanceOf(schema.check(null, context), SchemaError);
-  assertInstanceOf(schema.check([], context), SchemaError);
+  assertIsError(schema.check(false, context), SchemaError);
+  assertIsError(schema.check(null, context), SchemaError);
+  assertIsError(schema.check([], context), SchemaError);
 });
 
 Deno.test("should pass nested unions", () => {

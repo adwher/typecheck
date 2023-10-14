@@ -1,4 +1,4 @@
-import { assertEquals, assertInstanceOf } from "std/assert/mod.ts";
+import { assertEquals, assertIsError } from "std/assert/mod.ts";
 import { custom } from "./custom.ts";
 import { isStr } from "../types.ts";
 import { SchemaError } from "../errors.ts";
@@ -20,7 +20,7 @@ Deno.test("should pass only distances", () => {
   assertEquals(schema.check("10cm", context), "10cm");
   assertEquals(schema.check("100km", context), "100km");
 
-  assertInstanceOf(schema.check(1234, context), SchemaError);
-  assertInstanceOf(schema.check("1234", context), SchemaError);
-  assertInstanceOf(schema.check("km", context), SchemaError);
+  assertIsError(schema.check(1234, context), SchemaError);
+  assertIsError(schema.check("1234", context), SchemaError);
+  assertIsError(schema.check("km", context), SchemaError);
 });

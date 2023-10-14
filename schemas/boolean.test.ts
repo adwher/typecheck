@@ -1,10 +1,10 @@
-import { assertEquals, assertInstanceOf } from "std/assert/mod.ts";
+import { assertEquals, assertIsError } from "std/assert/mod.ts";
 
-import { SchemaContext } from "../context.ts";
+import { createContext } from "../context.ts";
 import { boolean } from "./boolean.ts";
 import { SchemaError } from "../errors.ts";
 
-const context: SchemaContext = { path: [] };
+const context = createContext();
 
 Deno.test("should pass boolean values", () => {
   const schema = boolean();
@@ -12,8 +12,8 @@ Deno.test("should pass boolean values", () => {
   assertEquals(schema.check(true, context), true);
   assertEquals(schema.check(false, context), false);
 
-  assertInstanceOf(schema.check("", context), SchemaError);
-  assertInstanceOf(schema.check(1234, context), SchemaError);
-  assertInstanceOf(schema.check(null, context), SchemaError);
-  assertInstanceOf(schema.check([], context), SchemaError);
+  assertIsError(schema.check("", context), SchemaError);
+  assertIsError(schema.check(1234, context), SchemaError);
+  assertIsError(schema.check(null, context), SchemaError);
+  assertIsError(schema.check([], context), SchemaError);
 });

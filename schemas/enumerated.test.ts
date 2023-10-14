@@ -1,10 +1,10 @@
-import { assertEquals, assertInstanceOf } from "std/assert/mod.ts";
+import { assertEquals, assertIsError } from "std/assert/mod.ts";
 
-import { SchemaContext } from "../context.ts";
+import { createContext } from "../context.ts";
 import { SchemaError } from "../errors.ts";
 import { enumerated } from "./enumerated.ts";
 
-const context: SchemaContext = { path: [] };
+const context = createContext();
 
 Deno.test("should pass allowed values", () => {
   const schema = enumerated("hello", "hola", "hallo");
@@ -13,7 +13,7 @@ Deno.test("should pass allowed values", () => {
   assertEquals(schema.check("hola", context), "hola");
   assertEquals(schema.check("hallo", context), "hallo");
 
-  assertInstanceOf(schema.check("bye", context), SchemaError);
-  assertInstanceOf(schema.check("adios", context), SchemaError);
-  assertInstanceOf(schema.check("doei", context), SchemaError);
+  assertIsError(schema.check("bye", context), SchemaError);
+  assertIsError(schema.check("adios", context), SchemaError);
+  assertIsError(schema.check("doei", context), SchemaError);
 });
