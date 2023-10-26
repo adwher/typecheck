@@ -20,13 +20,15 @@ jobs:
         with:
           deno-version: 1.x
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
-          path:  ~/.cache/deno/
           key: ${{ hashFiles('deno.lock') }}
+          path: |
+            ~/.deno
+            ~/.cache/deno
       - name: Run formatting checks
         run: deno fmt --check
       - name: Run linting checks
         run: deno lint
       - name: Run unit-test cases
-        run: deno test
+        run: deno test --parallel --reporter=dot
