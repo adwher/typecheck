@@ -14,12 +14,12 @@ Deno.test("allows object values", () => {
   const correct = [{ a: "hello" }, { a: "world" }];
   const incorrect = ["hello", 1234, null, false, true, [], {}];
 
-  for (const example of correct) {
-    assertEquals(schema.check(example, context), example);
+  for (const received of correct) {
+    assertEquals(schema.check(received, context), received);
   }
 
-  for (const example of incorrect) {
-    assertIsError(schema.check(example, context));
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
   }
 });
 
@@ -42,12 +42,12 @@ Deno.test("respect the given shape", () => {
     { title: [], description: "Lorem", reads: 10 },
   ];
 
-  for (const example of correct) {
-    assertEquals(schema.check(example, context), example);
+  for (const received of correct) {
+    assertEquals(schema.check(received, context), received);
   }
 
-  for (const example of incorrect) {
-    assertIsError(schema.check(example, context));
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
   }
 });
 

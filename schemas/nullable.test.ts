@@ -1,21 +1,20 @@
 import { assertEquals, assertIsError } from "std/assert/mod.ts";
-
 import { createContext } from "../context.ts";
-import { boolean } from "./boolean.ts";
-import { nullable } from "./nullable.ts";
+import { boolean, nullable } from "./mod.ts";
 
 const context = createContext();
-const schema = nullable(boolean());
 
-Deno.test(`pass either wrapped or "null" values`, () => {
+Deno.test(`should pass either wrapped or "null" values`, () => {
+  const schema = nullable(boolean());
+
   const correct = [true, false, null];
   const incorrect = ["hello", 1234, undefined, [], {}];
 
-  for (const example of correct) {
-    assertEquals(schema.check(example, context), example);
+  for (const received of correct) {
+    assertEquals(schema.check(received, context), received);
   }
 
-  for (const example of incorrect) {
-    assertIsError(schema.check(example, context));
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
   }
 });

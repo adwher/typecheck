@@ -6,15 +6,15 @@ import { maxValue } from "./maxValue.ts";
 const context = createContext();
 const schema = pipe(number(), maxValue(3));
 
-Deno.test("restrict the allowed numbers", () => {
+Deno.test("should restrict the allowed numbers", () => {
   const correct = [0, 1, 2];
   const incorrect = [3, 4, 5];
 
-  for (const example of correct) {
-    assertEquals(schema.check(example, context), example);
+  for (const received of correct) {
+    assertEquals(schema.check(received, context), received);
   }
 
-  for (const example of incorrect) {
-    assertIsError(schema.check(example, context));
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
   }
 });

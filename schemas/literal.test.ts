@@ -1,17 +1,17 @@
 import { assertEquals, assertIsError } from "std/assert/mod.ts";
-
 import { createContext } from "../context.ts";
-import { literal } from "./literal.ts";
+import { literal } from "./mod.ts";
 
 const context = createContext();
-const schema = literal("hello");
 
-Deno.test("pass allowed values", () => {
+Deno.test("should assert with the given literal", () => {
+  const schema = literal("hello");
   const incorrect = ["bye", 1234, undefined, [], {}];
 
+  // Yep, only one schema be allowed
   assertEquals(schema.check("hello", context), "hello");
 
-  for (const example of incorrect) {
-    assertIsError(schema.check(example, context));
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
   }
 });

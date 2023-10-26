@@ -1,12 +1,11 @@
 import { assertEquals } from "std/assert/mod.ts";
-import { unknown } from "./unknown.ts";
+import { unknown } from "./mod.ts";
 
-Deno.test("return the received value", () => {
+Deno.test("should assert with any value", () => {
   const schema = unknown();
+  const examples: unknown[] = [`hello`, `hola`, 1234, false, null, [], {}];
 
-  const correct: unknown[] = [`hello`, `hola`, 1234, false, null, [], {}];
-
-  for (const expected of correct) {
-    assertEquals(schema.check(expected), expected);
+  for (const example of examples) {
+    assertEquals(schema.check(example), example);
   }
 });

@@ -1,10 +1,10 @@
 import { assertIsError, assertObjectMatch } from "std/assert/mod.ts";
-import { object, partial, string } from "./mod.ts";
 import { createContext } from "../context.ts";
+import { object, partial, string } from "./mod.ts";
 
 const context = createContext();
 
-Deno.test("strict the schema shape", () => {
+Deno.test(`should allow "undefined" the object schema`, () => {
   const schema = partial(object({ hello: string() }));
 
   const correct = [{ hello: undefined }, { hello: "word!" }];
@@ -14,7 +14,7 @@ Deno.test("strict the schema shape", () => {
     assertObjectMatch(schema.check(example, context), { ...example });
   }
 
-  for (const example of incorrect) {
-    assertIsError(schema.check(example, context));
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
   }
 });

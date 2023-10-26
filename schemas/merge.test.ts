@@ -1,23 +1,20 @@
 import { assertObjectMatch } from "std/assert/mod.ts";
-import { object } from "./object.ts";
-import { string } from "./string.ts";
-import { merge } from "./merge.ts";
-import { number } from "./number.ts";
+import { merge, number, object, string } from "./mod.ts";
 
-Deno.test("merge object schemas", () => {
-  const mergedSchema = merge(
+Deno.test("should merge object schemas", () => {
+  const schema = merge(
     object({ a: string() }),
     object({ b: string() }),
   );
 
-  assertObjectMatch(mergedSchema.shape, { a: string(), b: string() });
+  assertObjectMatch(schema.shape, { a: string(), b: string() });
 });
 
-Deno.test("override with the last schema", () => {
-  const mergedSchema = merge(
+Deno.test("should override with the last schema", () => {
+  const schema = merge(
     object({ a: string() }),
     object({ a: number() }),
   );
 
-  assertObjectMatch(mergedSchema.shape, { a: number() });
+  assertObjectMatch(schema.shape, { a: number() });
 });

@@ -3,30 +3,29 @@ import {
   assertObjectMatch,
   assertStrictEquals,
 } from "std/assert/mod.ts";
-
 import { createContext } from "../context.ts";
-import { number } from "./number.ts";
-
-import { tuple } from "./tuple.ts";
+import { number, tuple } from "./mod.ts";
 
 const context = createContext();
-const schema = tuple(number(), number(), number());
 
-Deno.test("pass a tuple values", () => {
-  const correct = [[1, 2, 3], [2, 4, 6]];
-  const incorrect = [[1, 2], false, null, [], {}];
+Deno.test("should assert with tuples", () => {
+  const schema = tuple(number(), number());
 
-  for (const url of correct) {
-    assertStrictEquals(schema.check(url, context), url);
+  const correct = [[1, 2], [3, 4]];
+  const incorrect = [[1], [1, 2, 3], false, null, [], {}];
+
+  for (const received of correct) {
+    assertStrictEquals(schema.check(received, context), received);
   }
 
-  for (const url of incorrect) {
-    assertIsError(schema.check(url, context));
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
   }
 });
 
-Deno.test("return an issue path correctly", () => {
-  const output = schema.check([true, false], context);
+Deno.test("should return an issue with the right path", () => {
+  const schema = tuple(number(), number(), number());
+  const output = schema.check([true, false, 0], context);
 
   assertIsError(output);
   assertObjectMatch(output.first(), { path: [0] });

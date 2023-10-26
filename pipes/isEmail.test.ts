@@ -1,11 +1,11 @@
 import { assertEquals, assertIsError } from "std/assert/mod.ts";
-import { pipe, string } from "../schemas/mod.ts";
 import { createContext } from "../context.ts";
+import { pipe, string } from "../schemas/mod.ts";
 import { isEmail } from "./isEmail.ts";
 
 const context = createContext();
 
-Deno.test("assert formatted emails", () => {
+Deno.test("should assert formatted emails", () => {
   const schema = pipe(string(), isEmail());
 
   const correct = [
@@ -33,11 +33,11 @@ Deno.test("assert formatted emails", () => {
     `Joe Smith: joe@domain.com`,
   ];
 
-  for (const example of correct) {
-    assertEquals(schema.check(example, context), example);
+  for (const received of correct) {
+    assertEquals(schema.check(received, context), received);
   }
 
-  for (const example of incorrect) {
-    assertIsError(schema.check(example, context));
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
   }
 });

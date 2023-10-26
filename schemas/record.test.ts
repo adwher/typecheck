@@ -5,15 +5,15 @@ import { number, record } from "./mod.ts";
 const context = createContext();
 const schema = record(number());
 
-Deno.test("allow only the given key-value", () => {
+Deno.test("should allow only the given schema", () => {
   const correct: unknown[] = [{ one: 1 }, { thousand: 1000 }];
   const incorrect = [{ 123: "123" }, "hello", 1234, true, false, null, []];
 
-  for (const example of correct) {
-    assertEquals(schema.check(example, context), example);
+  for (const received of correct) {
+    assertEquals(schema.check(received, context), received);
   }
 
-  for (const example of incorrect) {
-    assertIsError(schema.check(example, context));
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
   }
 });

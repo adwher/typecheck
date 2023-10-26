@@ -6,8 +6,8 @@ import { toUpperCase } from "./toUpperCase.ts";
 const context = createContext();
 const schema = pipe(string(), toUpperCase());
 
-Deno.test("replace with upper case", () => {
-  const examples = [
+Deno.test("should replace with upper case", () => {
+  const cases = [
     ["BYE", "BYE"],
     ["hello", "HELLO"],
     ["Joe Doe", "JOE DOE"],
@@ -15,7 +15,7 @@ Deno.test("replace with upper case", () => {
     ["must be in upper case", "MUST BE IN UPPER CASE"],
   ];
 
-  for (const [example, lowercase] of examples) {
-    assertEquals(schema.check(example, context), lowercase);
+  for (const [received, expected] of cases) {
+    assertEquals(schema.check(received, context), expected);
   }
 });

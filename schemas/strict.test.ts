@@ -1,18 +1,17 @@
 import { assertEquals, assertIsError } from "std/assert/mod.ts";
-import { object, strict, string } from "./mod.ts";
 import { createContext } from "../context.ts";
+import { object, strict, string } from "./mod.ts";
 
 const context = createContext();
 
-Deno.test("strict the schema shape", () => {
+Deno.test("should assert with the given schema", () => {
   const schema = strict(object({ hello: string() }));
+  const incorrect = [{ hello: "world", hola: "mundo" }, { oops: "sorry!" }];
 
   // Yep, only one schema be allowed
   assertEquals(schema.check({ hello: "world" }, context), { hello: "world" });
 
-  const incorrect = [{ hello: "world", hola: "mundo" }, { oops: "sorry!" }];
-
-  for (const example of incorrect) {
-    assertIsError(schema.check(example, context));
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
   }
 });

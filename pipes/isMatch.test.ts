@@ -6,15 +6,15 @@ import { isMatch } from "./isMatch.ts";
 const context = createContext();
 const schema = pipe(string(), isMatch(/[A-Z]{3}-\d{1,}/i));
 
-Deno.test("pass accepted values on the regular-expression", () => {
+Deno.test("should pass accepted values on the regular-expression", () => {
   const correct = ["ABC-123", "XYZ-456"];
   const incorrect = ["ABCD", "AB-1234"];
 
-  for (const example of correct) {
-    assertEquals(schema.check(example, context), example);
+  for (const received of correct) {
+    assertEquals(schema.check(received, context), received);
   }
 
-  for (const example of incorrect) {
-    assertIsError(schema.check(example, context));
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
   }
 });

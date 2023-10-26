@@ -25,6 +25,12 @@ export class SchemaTuple<
     const final = new Array(size);
     const issues: SchemaIssue[] = [];
 
+    if (value.length > size || value.length < size) {
+      return createError(context, {
+        message: `Must have ${size} elements. Got ${value.length}`,
+      });
+    }
+
     for (let index = 0; index < size; index++) {
       const received = value[index];
       const schema: S[number] | undefined = this.schemas[index];

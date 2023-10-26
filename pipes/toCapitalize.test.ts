@@ -6,15 +6,15 @@ import { toCapitalize } from "./toCapitalize.ts";
 const context = createContext();
 const schema = pipe(string(), toCapitalize());
 
-Deno.test("capitalize the given text", () => {
-  const examples = [
+Deno.test("should capitalize the given text", () => {
+  const cases = [
     ["hello", "Hello"],
     ["joe doe", "Joe Doe"],
     ["the new york times", "The New York Times"],
     ["must be capitalized", "Must Be Capitalized"],
   ];
 
-  for (const [example, capitalized] of examples) {
-    assertEquals(schema.check(example, context), capitalized);
+  for (const [received, expected] of cases) {
+    assertEquals(schema.check(received, context), expected);
   }
 });
