@@ -7,7 +7,7 @@ import { optional } from "./optional.ts";
 const context = createContext();
 const schema = optional(boolean());
 
-Deno.test(`should pass either wrapped or "undefined" values`, () => {
+Deno.test(`pass either wrapped or "undefined" values`, () => {
   const correct = [true, false, undefined];
   const incorrect = ["hello", 1234, null, [], {}];
 

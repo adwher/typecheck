@@ -1,14 +1,21 @@
 import { assertEquals, assertIsError } from "std/assert/mod.ts";
 import { number, pipe } from "../schemas/mod.ts";
 import { createContext } from "../context.ts";
-import { SchemaError } from "../errors.ts";
+
 import { isPositive } from "./isPositive.ts";
 
 const context = createContext();
+const schema = pipe(number(), isPositive());
 
-Deno.test("should assert negative numbers", () => {
-  const schema = pipe(number(), isPositive());
+Deno.test("assert negative numbers", () => {
+  const correct = [1, 10, 100_000];
+  const incorrect = [-1, -10, -100_000];
 
-  assertEquals(schema.check(1, context), 1);
-  assertIsError(schema.check(-1, context), SchemaError);
+  for (const example of correct) {
+    assertEquals(schema.check(example, context), example);
+  }
+
+  for (const example of incorrect) {
+    assertIsError(schema.check(example, context));
+  }
 });

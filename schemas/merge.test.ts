@@ -4,7 +4,7 @@ import { string } from "./string.ts";
 import { merge } from "./merge.ts";
 import { number } from "./number.ts";
 
-Deno.test("should merge object schemas", () => {
+Deno.test("merge object schemas", () => {
   const mergedSchema = merge(
     object({ a: string() }),
     object({ b: string() }),
@@ -13,7 +13,7 @@ Deno.test("should merge object schemas", () => {
   assertObjectMatch(mergedSchema.shape, { a: string(), b: string() });
 });
 
-Deno.test("should override with the last schema", () => {
+Deno.test("override with the last schema", () => {
   const mergedSchema = merge(
     object({ a: string() }),
     object({ a: number() }),

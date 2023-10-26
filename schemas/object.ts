@@ -7,9 +7,7 @@ import { isObj } from "../types.ts";
 export type SchemaShapeKey = string | number | symbol;
 
 /** Defines an record of `keys` and their schemas, useful for objects. */
-export interface SchemaShape {
-  [key: SchemaShapeKey]: Schema;
-}
+export type SchemaShape = Record<SchemaShapeKey, Schema>;
 
 export class SchemaObject<
   S extends SchemaShape = SchemaShape,

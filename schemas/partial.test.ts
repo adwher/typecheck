@@ -4,7 +4,7 @@ import { createContext } from "../context.ts";
 
 const context = createContext();
 
-Deno.test("should strict the schema shape", () => {
+Deno.test("strict the schema shape", () => {
   const schema = partial(object({ hello: string() }));
 
   const correct = [{ hello: undefined }, { hello: "word!" }];

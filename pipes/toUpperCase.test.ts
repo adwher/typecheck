@@ -6,7 +6,7 @@ import { toUpperCase } from "./toUpperCase.ts";
 const context = createContext();
 const schema = pipe(string(), toUpperCase());
 
-Deno.test("should replace with upper case", () => {
+Deno.test("replace with upper case", () => {
   const examples = [
     ["BYE", "BYE"],
     ["hello", "HELLO"],

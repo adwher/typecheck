@@ -6,7 +6,7 @@ import { toCapitalize } from "./toCapitalize.ts";
 const context = createContext();
 const schema = pipe(string(), toCapitalize());
 
-Deno.test("should capitalize the given text", () => {
+Deno.test("capitalize the given text", () => {
   const examples = [
     ["hello", "Hello"],
     ["joe doe", "Joe Doe"],

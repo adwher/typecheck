@@ -6,7 +6,7 @@ import { createGuard } from "./createGuard.ts";
 const schema = string();
 const guard = createGuard(schema);
 
-Deno.test("should return a guard function", () => {
+Deno.test("return a guard function", () => {
   assert(typeof guard === "function");
 
   assertEquals(guard(""), true);

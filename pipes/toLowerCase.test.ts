@@ -6,7 +6,7 @@ import { toLowerCase } from "./toLowerCase.ts";
 const context = createContext();
 const schema = pipe(string(), toLowerCase());
 
-Deno.test("should replace with lower case", () => {
+Deno.test("replace with lower case", () => {
   const examples = [
     ["bye", "bye"],
     ["HELLO", "hello"],

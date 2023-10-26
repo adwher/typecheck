@@ -1,34 +1,33 @@
 import {
-  assertEquals,
   assertIsError,
   assertObjectMatch,
+  assertStrictEquals,
 } from "std/assert/mod.ts";
 
 import { createContext } from "../context.ts";
 import { number } from "./number.ts";
-import { SchemaError } from "../errors.ts";
+
 import { tuple } from "./tuple.ts";
 
 const context = createContext();
+const schema = tuple(number(), number(), number());
 
-Deno.test("should pass a tuple values", () => {
-  const schema = tuple(number(), number(), number());
+Deno.test("pass a tuple values", () => {
+  const correct = [[1, 2, 3], [2, 4, 6]];
+  const incorrect = [[1, 2], false, null, [], {}];
 
-  assertEquals(schema.check([1, 2, 3], context), [1, 2, 3]);
-  assertEquals(schema.check([2, 4, 6], context), [2, 4, 6]);
+  for (const url of correct) {
+    assertStrictEquals(schema.check(url, context), url);
+  }
 
-  assertIsError(schema.check("", context), SchemaError);
-  assertIsError(schema.check(false, context), SchemaError);
-  assertIsError(schema.check(null, context), SchemaError);
-  assertIsError(schema.check([], context), SchemaError);
+  for (const url of incorrect) {
+    assertIsError(schema.check(url, context));
+  }
 });
 
-Deno.test("should return an issue path correctly", () => {
-  const schema = tuple(number(), number());
+Deno.test("return an issue path correctly", () => {
+  const output = schema.check([true, false], context);
 
-  const received = [false];
-  const output = schema.check(received, context);
-
-  assertIsError(output, SchemaError);
+  assertIsError(output);
   assertObjectMatch(output.first(), { path: [0] });
 });

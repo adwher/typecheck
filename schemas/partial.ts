@@ -13,9 +13,7 @@ export type SchemaShapeOptional<S extends SchemaShape> = {
  * const CreateUserSchema = partial(UserSchema);
  * ```
  */
-export function partial<
-  S extends SchemaShape,
->(schema: SchemaObject<S>) {
+export function partial<S extends SchemaShape>(schema: SchemaObject<S>) {
   type R = SchemaShapeOptional<S>;
 
   const shape: SchemaShape = {};

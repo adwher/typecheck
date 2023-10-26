@@ -10,7 +10,7 @@ import { string } from "./string.ts";
 
 const context = createContext();
 
-Deno.test("should memoize returned values", () => {
+Deno.test("memoize returned values", () => {
   const schema = memoized(unknown());
 
   const received = ["hello", 1234, true, null];
@@ -22,7 +22,7 @@ Deno.test("should memoize returned values", () => {
   }
 });
 
-Deno.test("should support array type as keys", () => {
+Deno.test("support array type as keys", () => {
   const schema = memoized(array(number()));
 
   const received = [1, 2, 3, 4];
@@ -33,7 +33,7 @@ Deno.test("should support array type as keys", () => {
   assertEquals(schema.has(expected), true);
 });
 
-Deno.test("should support object type as keys", () => {
+Deno.test("support object type as keys", () => {
   const schema = memoized(object({ hello: string() }));
 
   const received = { hello: "world" };

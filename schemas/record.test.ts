@@ -5,7 +5,7 @@ import { number, record } from "./mod.ts";
 const context = createContext();
 const schema = record(number());
 
-Deno.test("should allow only the given key-value", () => {
+Deno.test("allow only the given key-value", () => {
   const correct: unknown[] = [{ one: 1 }, { thousand: 1000 }];
   const incorrect = [{ 123: "123" }, "hello", 1234, true, false, null, []];
 

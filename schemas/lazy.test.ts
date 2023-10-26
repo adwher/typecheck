@@ -6,7 +6,7 @@ import { createError } from "../errors.ts";
 
 const context = createContext();
 
-Deno.test("should return given errors", () => {
+Deno.test("return given errors", () => {
   const schema = lazy(() => createError(context));
 
   const examples = ["hello", 1234, true, false, null, [], {}];
@@ -16,7 +16,7 @@ Deno.test("should return given errors", () => {
   }
 });
 
-Deno.test("should allow nested schemas", () => {
+Deno.test("allow nested schemas", () => {
   type Node = { children: Node[] };
 
   const schema: Describe<Node> = lazy(() =>

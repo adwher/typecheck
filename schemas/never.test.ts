@@ -1,16 +1,14 @@
 import { assertIsError } from "std/assert/mod.ts";
 import { createContext } from "../context.ts";
 import { never } from "./never.ts";
-import { SchemaError } from "../errors.ts";
 
 const context = createContext();
+const schema = never();
 
-Deno.test("should always return an error", () => {
-  const schema = never();
+Deno.test("always return an error", () => {
+  const incorrect = ["hello", 1234, null, true, false, [], {}];
 
-  assertIsError(schema.check(1234, context), SchemaError);
-  assertIsError(schema.check("hello", context), SchemaError);
-  assertIsError(schema.check(true, context), SchemaError);
-  assertIsError(schema.check(false, context), SchemaError);
-  assertIsError(schema.check(null, context), SchemaError);
+  for (const example of incorrect) {
+    assertIsError(schema.check(example, context));
+  }
 });

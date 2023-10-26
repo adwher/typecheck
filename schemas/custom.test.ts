@@ -1,7 +1,7 @@
 import { assertEquals, assertIsError } from "std/assert/mod.ts";
 import { custom } from "./custom.ts";
 import { isStr } from "../types.ts";
-import { SchemaError } from "../errors.ts";
+
 import { createContext } from "../context.ts";
 
 type Distance = `${string}${"cm" | "m" | "km"}`;
@@ -12,15 +12,17 @@ const isDistance = (value: unknown) => {
 };
 
 const context = createContext();
+const schema = custom<Distance>(isDistance);
 
-Deno.test("should pass only distances", () => {
-  const schema = custom<Distance>(isDistance);
+Deno.test("pass only distances", () => {
+  const correct: unknown[] = ["1m", "10cm", "100km"];
+  const incorrect = [1234, "1234", "km", "-cm"];
 
-  assertEquals(schema.check("1m", context), "1m");
-  assertEquals(schema.check("10cm", context), "10cm");
-  assertEquals(schema.check("100km", context), "100km");
+  for (const example of correct) {
+    assertEquals(schema.check(example, context), example);
+  }
 
-  assertIsError(schema.check(1234, context), SchemaError);
-  assertIsError(schema.check("1234", context), SchemaError);
-  assertIsError(schema.check("km", context), SchemaError);
+  for (const example of incorrect) {
+    assertIsError(schema.check(example, context));
+  }
 });

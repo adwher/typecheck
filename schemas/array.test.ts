@@ -7,24 +7,26 @@ import {
 import { createContext } from "../context.ts";
 import { array } from "./array.ts";
 import { number } from "./number.ts";
-import { SchemaError } from "../errors.ts";
 
 const context = createContext();
+const schema = array(number());
 
-Deno.test("should pass array values", () => {
-  const schema = array(number());
+Deno.test("pass array values", () => {
+  const correct = [[1, 2], [10_000, 20_000]];
+  const incorrect = [[1, false], [true, false], ["hello", "world"]];
 
-  assertEquals(schema.check([1, 2, 3], context), [1, 2, 3]);
-  assertEquals(schema.check([2, 4, 6], context), [2, 4, 6]);
+  for (const example of correct) {
+    assertEquals(schema.check(example, context), example);
+  }
 
-  assertIsError(schema.check("hello", context), SchemaError);
-  assertIsError(schema.check([true, false], context), SchemaError);
+  for (const example of incorrect) {
+    assertIsError(schema.check(example, context));
+  }
 });
 
-Deno.test("should return an issue path correctly", () => {
-  const schema = array(number());
+Deno.test("return an issue path correctly", () => {
   const output = schema.check([1, 2, false], context);
 
-  assertIsError(output, SchemaError);
+  assertIsError(output);
   assertObjectMatch(output.first(), { path: [2] });
 });

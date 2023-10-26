@@ -4,10 +4,10 @@ import { createContext } from "../context.ts";
 
 const context = createContext();
 
-Deno.test("should strict the schema shape", () => {
+Deno.test("strict the schema shape", () => {
   const schema = strict(object({ hello: string() }));
 
-  // Yep, only one schema should be allowed
+  // Yep, only one schema be allowed
   assertEquals(schema.check({ hello: "world" }, context), { hello: "world" });
 
   const incorrect = [{ hello: "world", hola: "mundo" }, { oops: "sorry!" }];

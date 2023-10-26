@@ -5,7 +5,7 @@ import { isEmail } from "./isEmail.ts";
 
 const context = createContext();
 
-Deno.test("should assert emails formats", () => {
+Deno.test("assert formatted emails", () => {
   const schema = pipe(string(), isEmail());
 
   const correct = [
@@ -20,7 +20,7 @@ Deno.test("should assert emails formats", () => {
     `a@b.cd`,
   ];
 
-  const invalid = [
+  const incorrect = [
     ``,
     `plaintext`,
     `name@double..com`,
@@ -33,11 +33,11 @@ Deno.test("should assert emails formats", () => {
     `Joe Smith: joe@domain.com`,
   ];
 
-  for (const email of correct) {
-    assertEquals(schema.check(email, context), email);
+  for (const example of correct) {
+    assertEquals(schema.check(example, context), example);
   }
 
-  for (const email of invalid) {
-    assertIsError(schema.check(email, context));
+  for (const example of incorrect) {
+    assertIsError(schema.check(example, context));
   }
 });

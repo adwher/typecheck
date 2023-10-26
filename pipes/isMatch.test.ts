@@ -2,16 +2,19 @@ import { assertEquals, assertIsError } from "std/assert/mod.ts";
 import { createContext } from "../context.ts";
 import { pipe, string } from "../schemas/mod.ts";
 import { isMatch } from "./isMatch.ts";
-import { SchemaError } from "../errors.ts";
 
 const context = createContext();
+const schema = pipe(string(), isMatch(/[A-Z]{3}-\d{1,}/i));
 
-Deno.test("should pass accepted values on the regular-expression", () => {
-  const schema = pipe(string(), isMatch(/[A-Z]{3}-\d{1,}/i));
+Deno.test("pass accepted values on the regular-expression", () => {
+  const correct = ["ABC-123", "XYZ-456"];
+  const incorrect = ["ABCD", "AB-1234"];
 
-  assertEquals(schema.check("ABC-123", context), "ABC-123");
-  assertEquals(schema.check("XYZ-456", context), "XYZ-456");
+  for (const example of correct) {
+    assertEquals(schema.check(example, context), example);
+  }
 
-  assertIsError(schema.check("ABCD", context), SchemaError);
-  assertIsError(schema.check("AB-1234", context), SchemaError);
+  for (const example of incorrect) {
+    assertIsError(schema.check(example, context));
+  }
 });

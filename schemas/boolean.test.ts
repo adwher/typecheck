@@ -2,18 +2,19 @@ import { assertEquals, assertIsError } from "std/assert/mod.ts";
 
 import { createContext } from "../context.ts";
 import { boolean } from "./boolean.ts";
-import { SchemaError } from "../errors.ts";
 
 const context = createContext();
+const schema = boolean();
 
-Deno.test("should pass boolean values", () => {
-  const schema = boolean();
+Deno.test("pass boolean values", () => {
+  const correct = [true, false];
+  const incorrect = ["hello", 1234, null, [], {}];
 
-  assertEquals(schema.check(true, context), true);
-  assertEquals(schema.check(false, context), false);
+  for (const example of correct) {
+    assertEquals(schema.check(example, context), example);
+  }
 
-  assertIsError(schema.check("", context), SchemaError);
-  assertIsError(schema.check(1234, context), SchemaError);
-  assertIsError(schema.check(null, context), SchemaError);
-  assertIsError(schema.check([], context), SchemaError);
+  for (const example of incorrect) {
+    assertIsError(schema.check(example, context));
+  }
 });

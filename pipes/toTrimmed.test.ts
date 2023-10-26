@@ -6,7 +6,7 @@ import { toTrimmed } from "./toTrimmed.ts";
 const context = createContext();
 const schema = pipe(string(), toTrimmed());
 
-Deno.test("should remove white spaces", () => {
+Deno.test("remove white spaces", () => {
   const examples = [
     [" one", "one"],
     ["one ", "one"],

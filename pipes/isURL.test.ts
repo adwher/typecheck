@@ -5,28 +5,23 @@ import { isURL } from "./isURL.ts";
 
 const context = createContext();
 
-Deno.test("should assert formatted URLs", () => {
+Deno.test("assert formatted URLs", () => {
   const schema = pipe(string(), isURL());
 
   const correct = [
     `https://domain.com`,
     `https://sub.domain.com`,
     `https://sub.domain.com/path?param=value`,
-    `https://1234domain.com`,
+    `https://123domain.com`,
   ];
 
-  const invalid = [
-    ``,
-    `invalid`,
-    `https://`,
-    `//domain.com`,
-  ];
+  const incorrect = [``, `incorrect`, `https://`, `//domain.com`];
 
-  for (const url of correct) {
-    assertEquals(schema.check(url, context), url);
+  for (const example of correct) {
+    assertEquals(schema.check(example, context), example);
   }
 
-  for (const url of invalid) {
-    assertIsError(schema.check(url, context));
+  for (const example of incorrect) {
+    assertIsError(schema.check(example, context));
   }
 });

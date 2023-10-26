@@ -7,7 +7,7 @@ import { nullable } from "./nullable.ts";
 const context = createContext();
 const schema = nullable(boolean());
 
-Deno.test(`should pass either wrapped or "null" values`, () => {
+Deno.test(`pass either wrapped or "null" values`, () => {
   const correct = [true, false, null];
   const incorrect = ["hello", 1234, undefined, [], {}];
 
