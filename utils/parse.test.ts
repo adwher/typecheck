@@ -1,13 +1,12 @@
-import { assertEquals, assertThrows } from "std/assert/mod.ts";
+import { assertEquals, assertThrows } from "assert/mod.ts";
 
 import { string } from "../schemas/string.ts";
 import { parse } from "./parse.ts";
-import { SchemaError } from "../errors.ts";
 
-Deno.test("should thrown for non-valid values", () => {
+Deno.test("thrown for non-valid values", () => {
   const schema = string();
 
-  assertThrows(() => parse(false, schema), SchemaError);
+  assertThrows(() => parse(false, schema));
 
   assertEquals(parse("hey", schema), "hey");
   assertEquals(parse("hello", schema), "hello");

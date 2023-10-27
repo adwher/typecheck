@@ -1,19 +1,20 @@
-import { assertEquals, assertInstanceOf } from "std/assert/mod.ts";
+import { assertEquals, assertIsError } from "assert/mod.ts";
+import { createContext } from "../context.ts";
+import { string } from "./mod.ts";
 
-import { SchemaContext } from "../context.ts";
-import { string } from "./string.ts";
-import { SchemaError } from "../errors.ts";
+const context = createContext();
 
-const context: SchemaContext = { path: [] };
-
-Deno.test("should pass string values", () => {
+Deno.test("should assert with strings", () => {
   const schema = string();
 
-  assertEquals(schema.check("hello", context), "hello");
-  assertEquals(schema.check("hola", context), "hola");
+  const correct = [`hello`, `hola`];
+  const incorrect = [1234, true, false, null, [], {}];
 
-  assertInstanceOf(schema.check(1234, context), SchemaError);
-  assertInstanceOf(schema.check(false, context), SchemaError);
-  assertInstanceOf(schema.check(null, context), SchemaError);
-  assertInstanceOf(schema.check([], context), SchemaError);
+  for (const received of correct) {
+    assertEquals(schema.check(received, context), received);
+  }
+
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
+  }
 });

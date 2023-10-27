@@ -1,4 +1,4 @@
-import { SchemaContext } from "../context.ts";
+import { createContext } from "../context.ts";
 import { SchemaError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 
@@ -17,7 +17,7 @@ export function hasError<T>(
   value: unknown,
   schema: Schema<T>,
 ): value is SchemaError {
-  const context: SchemaContext = { path: [] };
+  const context = createContext();
 
   const data = schema.check(value, context);
   const hasError = data instanceof SchemaError;

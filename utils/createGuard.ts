@@ -1,4 +1,4 @@
-import { SchemaContext } from "../context.ts";
+import { createContext } from "../context.ts";
 import { SchemaError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 
@@ -14,7 +14,7 @@ import { Schema } from "../schema.ts";
  * ```
  */
 export function createGuard<T>(schema: Schema<T>) {
-  const context: SchemaContext = { path: [] };
+  const context = createContext();
 
   return function (value: unknown): value is T {
     const data = schema.check(value, context);

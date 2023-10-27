@@ -31,7 +31,7 @@ export class SchemaLazy<S extends Schema> extends Schema<Infer<S>> {
 /**
  * Create a new schema that can generate (lazly) the schema on parsed-time.
  * The language does not like recursive inferences, so you must define the type staticaly in recursive cases.
- * Use `SchemaDescribe` and a defined type to use `recursive` schemas.
+ * Use `Describe` and a defined type to use `recursive` schemas.
  * @returns A new `SchemaLazy` with the type of all possible schemas.
  */
 export function lazy<S extends Schema>(getter: SchemaGenerator<S>) {

@@ -1,19 +1,20 @@
-import { assertEquals, assertInstanceOf } from "std/assert/mod.ts";
+import { assertEquals, assertIsError } from "assert/mod.ts";
+import { createContext } from "../context.ts";
+import { enumerated } from "./mod.ts";
 
-import { SchemaContext } from "../context.ts";
-import { SchemaError } from "../errors.ts";
-import { enumerated } from "./enumerated.ts";
+const context = createContext();
 
-const context: SchemaContext = { path: [] };
-
-Deno.test("should pass allowed values", () => {
+Deno.test("should assert with the given options", () => {
   const schema = enumerated("hello", "hola", "hallo");
 
-  assertEquals(schema.check("hello", context), "hello");
-  assertEquals(schema.check("hola", context), "hola");
-  assertEquals(schema.check("hallo", context), "hallo");
+  const correct: unknown[] = ["hello", "hola", "hallo"];
+  const incorrect = ["bye", "adios", 1234, null, true, false, [], {}];
 
-  assertInstanceOf(schema.check("bye", context), SchemaError);
-  assertInstanceOf(schema.check("adios", context), SchemaError);
-  assertInstanceOf(schema.check("doei", context), SchemaError);
+  for (const received of correct) {
+    assertEquals(schema.check(received, context), received);
+  }
+
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
+  }
 });

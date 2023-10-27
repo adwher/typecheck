@@ -1,9 +1,9 @@
-import { assert } from "std/assert/mod.ts";
+import { assert } from "assert/mod.ts";
 
 import { string } from "../schemas/string.ts";
 import { hasError } from "./hasError.ts";
 
-Deno.test("should asserts with the right value", () => {
+Deno.test("asserts with the right value", () => {
   const schema = string();
 
   assert(hasError("", schema) === false);

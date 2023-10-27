@@ -6,24 +6,17 @@ import { isObj } from "../types.ts";
 /** Allowed types to be a key of `SchemaRecord`. */
 export type SchemaRecordKey = string | number | symbol;
 
-export class SchemaRecord<
-  K extends SchemaRecordKey,
-  V,
-> extends Schema<Record<K, V>> {
+export class SchemaRecord<V> extends Schema<Record<SchemaRecordKey, V>> {
   /**
-   * Creates a new `object` schema where all the keys are `K` and the values `V`.
-   * @param key Schema of each `key`.
+   * Creates a new `object` schema where all the values as `V`.
    * @param value Schema of each `value`.
    */
-  constructor(
-    readonly key: Schema<K>,
-    readonly value: Schema<V>,
-  ) {
+  constructor(readonly value: Schema<V>) {
     super();
   }
 
   check(value: unknown, context: SchemaContext) {
-    type R = Record<K, V>;
+    type R = Record<SchemaRecordKey, V>;
 
     if (!isObj<R>(value)) {
       return createError(context, {
@@ -34,19 +27,12 @@ export class SchemaRecord<
     const final: R = {} as R;
     const issues: SchemaIssue[] = [];
 
-    for (const index in value) {
-      const content = value[index];
+    for (const key in value) {
+      const content = value[key];
 
       const scope: SchemaContext = {
-        path: [...context.path, String(index)],
+        path: [...context.path, String(key)],
       };
-
-      const key = this.key.check(index, scope);
-
-      if (key instanceof SchemaError) {
-        issues.push(...key.issues);
-        continue;
-      }
 
       const output = this.value.check(content, scope);
 
@@ -66,10 +52,7 @@ export class SchemaRecord<
   }
 }
 
-/** Creates a new `object` schema where all the keys are `K` and the values `V`. */
-export function record<K extends SchemaRecordKey, V>(
-  key: Schema<K>,
-  value: Schema<V>,
-) {
-  return new SchemaRecord(key, value);
+/** Creates a new `object` schema where all the values as `V`. */
+export function record<V>(value: Schema<V>) {
+  return new SchemaRecord(value);
 }

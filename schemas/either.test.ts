@@ -1,30 +1,35 @@
-import { assertEquals, assertInstanceOf } from "std/assert/mod.ts";
+import { assertEquals, assertIsError } from "assert/mod.ts";
+import { createContext } from "../context.ts";
+import { boolean, either, number, string } from "./mod.ts";
 
-import { SchemaContext } from "../context.ts";
-import { SchemaError } from "../errors.ts";
-import { either } from "./either.ts";
-import { string } from "./string.ts";
-import { number } from "./number.ts";
-import { boolean } from "./boolean.ts";
+const context = createContext();
 
-const context: SchemaContext = { path: [] };
-
-Deno.test("should pass allowed values", () => {
+Deno.test("should assert with the given schemas", () => {
   const schema = either(string(), number());
 
-  assertEquals(schema.check(1234, context), 1234);
-  assertEquals(schema.check("hello", context), "hello");
+  const correct: unknown[] = ["hello", "world", 1234, 0.25];
+  const incorrect = [true, false, null, {}, []];
 
-  assertInstanceOf(schema.check(false, context), SchemaError);
-  assertInstanceOf(schema.check(null, context), SchemaError);
-  assertInstanceOf(schema.check([], context), SchemaError);
+  for (const received of correct) {
+    assertEquals(schema.check(received, context), received);
+  }
+
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
+  }
 });
 
-Deno.test("should pass nested unions", () => {
+Deno.test("should assert with nested schemas", () => {
   const schema = either(either(string(), number()), boolean());
 
-  assertEquals(schema.check(1234, context), 1234);
-  assertEquals(schema.check(true, context), true);
-  assertEquals(schema.check(false, context), false);
-  assertEquals(schema.check("hello", context), "hello");
+  const correct: unknown[] = ["hello", "world", 1234, true, false];
+  const incorrect = [null, {}, []];
+
+  for (const received of correct) {
+    assertEquals(schema.check(received, context), received);
+  }
+
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
+  }
 });

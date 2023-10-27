@@ -1,4 +1,4 @@
-import { SchemaContext } from "../context.ts";
+import { createContext } from "../context.ts";
 import { SchemaError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 
@@ -24,7 +24,7 @@ export function safeParse<T>(
   value: unknown,
   schema: Schema<T>,
 ): SafeParse<T> {
-  const context: SchemaContext = { path: [] };
+  const context = createContext();
   const output = schema.check(value, context);
 
   if (output instanceof Error) {

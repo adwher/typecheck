@@ -1,14 +1,14 @@
 import { assertEquals, assertIsError } from "assert/mod.ts";
 import { createContext } from "../context.ts";
-import { number, pipe } from "../schemas/mod.ts";
-import { isNegative } from "./isNegative.ts";
+import { boolean, optional } from "./mod.ts";
 
 const context = createContext();
-const schema = pipe(number(), isNegative());
 
-Deno.test("should assert negative numbers", () => {
-  const correct = [-1, -10, -100_000];
-  const incorrect = [1, 10, 100_000];
+Deno.test(`should pass either wrapped or "undefined" values`, () => {
+  const schema = optional(boolean());
+
+  const correct = [true, false, undefined];
+  const incorrect = ["hello", 1234, null, [], {}];
 
   for (const received of correct) {
     assertEquals(schema.check(received, context), received);

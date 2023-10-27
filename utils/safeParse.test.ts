@@ -1,9 +1,9 @@
-import { assertObjectMatch } from "std/assert/mod.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 
 import { string } from "../schemas/string.ts";
 import { safeParse } from "./safeParse.ts";
 
-Deno.test("should return negative response for non-valid values", () => {
+Deno.test("return negative response for non-valid values", () => {
   const schema = string();
 
   assertObjectMatch(safeParse(1234, schema), { success: false });

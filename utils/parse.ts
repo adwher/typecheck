@@ -1,4 +1,4 @@
-import { SchemaContext } from "../context.ts";
+import { createContext } from "../context.ts";
 import { Schema } from "../schema.ts";
 
 /**
@@ -7,7 +7,7 @@ import { Schema } from "../schema.ts";
  * @returns Parsed `value` with the given `schema`.
  */
 export function parse<T>(value: unknown, schema: Schema<T>) {
-  const context: SchemaContext = { path: [] };
+  const context = createContext();
   const output = schema.check(value, context);
 
   if (output instanceof Error) {

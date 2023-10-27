@@ -1,4 +1,4 @@
-import { assert, assertEquals } from "std/assert/mod.ts";
+import { assert, assertEquals } from "assert/mod.ts";
 
 import { string } from "../schemas/string.ts";
 import { createGuard } from "./createGuard.ts";
@@ -6,7 +6,7 @@ import { createGuard } from "./createGuard.ts";
 const schema = string();
 const guard = createGuard(schema);
 
-Deno.test("should return a guard function", () => {
+Deno.test("return a guard function", () => {
   assert(typeof guard === "function");
 
   assertEquals(guard(""), true);

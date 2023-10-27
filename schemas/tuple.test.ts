@@ -1,41 +1,32 @@
 import {
-  assertEquals,
-  assertInstanceOf,
+  assertIsError,
   assertObjectMatch,
-} from "std/assert/mod.ts";
+  assertStrictEquals,
+} from "assert/mod.ts";
+import { createContext } from "../context.ts";
+import { number, tuple } from "./mod.ts";
 
-import { SchemaContext } from "../context.ts";
-import { number } from "./number.ts";
-import { SchemaError } from "../errors.ts";
-import { tuple } from "./tuple.ts";
+const context = createContext();
 
-const context: SchemaContext = { path: [] };
-
-Deno.test("should pass a simple tuple", () => {
-  const schema = tuple(number(), number(), number());
-
-  assertEquals(schema.check([1, 2, 3], context), [1, 2, 3]);
-  assertEquals(schema.check([2, 4, 6], context), [2, 4, 6]);
-
-  assertInstanceOf(schema.check("", context), SchemaError);
-  assertInstanceOf(schema.check(false, context), SchemaError);
-  assertInstanceOf(schema.check(null, context), SchemaError);
-  assertInstanceOf(schema.check([], context), SchemaError);
-});
-
-Deno.test("should pass a nested tuple", () => {
-  const schema = tuple(tuple(number(), number()), number());
-
-  assertEquals(schema.check([[1, 2], 2], context), [[1, 2], 2]);
-  assertEquals(schema.check([[2, 2], 4], context), [[2, 2], 4]);
-});
-
-Deno.test("should return an issue path correctly", () => {
+Deno.test("should assert with tuples", () => {
   const schema = tuple(number(), number());
 
-  const received = [false];
-  const output = schema.check(received, context);
+  const correct = [[1, 2], [3, 4]];
+  const incorrect = [[1], [1, 2, 3], false, null, [], {}];
 
-  assertInstanceOf(output, SchemaError);
+  for (const received of correct) {
+    assertStrictEquals(schema.check(received, context), received);
+  }
+
+  for (const received of incorrect) {
+    assertIsError(schema.check(received, context));
+  }
+});
+
+Deno.test("should return an issue with the right path", () => {
+  const schema = tuple(number(), number(), number());
+  const output = schema.check([true, false, 0], context);
+
+  assertIsError(output);
   assertObjectMatch(output.first(), { path: [0] });
 });
