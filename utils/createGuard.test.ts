@@ -1,4 +1,4 @@
-import { assert, assertEquals } from "std/assert/mod.ts";
+import { assert, assertEquals } from "assert/mod.ts";
 
 import { string } from "../schemas/string.ts";
 import { createGuard } from "./createGuard.ts";

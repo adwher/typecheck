@@ -1,4 +1,4 @@
-import { assertIsError, assertObjectMatch } from "std/assert/mod.ts";
+import { assertIsError, assertObjectMatch } from "assert/mod.ts";
 import { Describe } from "../schema.ts";
 import { createContext } from "../context.ts";
 import { createError } from "../errors.ts";

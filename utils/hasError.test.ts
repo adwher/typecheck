@@ -1,4 +1,4 @@
-import { assert } from "std/assert/mod.ts";
+import { assert } from "assert/mod.ts";
 
 import { string } from "../schemas/string.ts";
 import { hasError } from "./hasError.ts";

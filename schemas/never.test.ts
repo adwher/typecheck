@@ -1,4 +1,4 @@
-import { assertIsError } from "std/assert/mod.ts";
+import { assertIsError } from "assert/mod.ts";
 import { createContext } from "../context.ts";
 import { never } from "./mod.ts";
 

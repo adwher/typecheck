@@ -2,7 +2,7 @@ import {
   assertIsError,
   assertObjectMatch,
   assertStrictEquals,
-} from "std/assert/mod.ts";
+} from "assert/mod.ts";
 import { createContext } from "../context.ts";
 import { number, tuple } from "./mod.ts";
 

@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows } from "std/assert/mod.ts";
+import { assertEquals, assertThrows } from "assert/mod.ts";
 
 import { string } from "../schemas/string.ts";
 import { parse } from "./parse.ts";

@@ -1,4 +1,4 @@
-import { assertObjectMatch } from "std/assert/mod.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { number, object, pick, string } from "./mod.ts";
 
 Deno.test("should pick the given fields on the shape", () => {

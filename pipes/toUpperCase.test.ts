@@ -1,4 +1,4 @@
-import { assertEquals } from "std/assert/mod.ts";
+import { assertEquals } from "assert/mod.ts";
 import { createContext } from "../context.ts";
 import { pipe, string } from "../schemas/mod.ts";
 import { toUpperCase } from "./toUpperCase.ts";

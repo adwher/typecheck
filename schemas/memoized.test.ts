@@ -1,4 +1,4 @@
-import { assertEquals } from "std/assert/mod.ts";
+import { assertEquals } from "assert/mod.ts";
 import { createContext } from "../context.ts";
 import { memoized, unknown } from "./mod.ts";
 

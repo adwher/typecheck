@@ -1,4 +1,4 @@
-import { assertObjectMatch } from "std/assert/mod.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { object, omit, string } from "./mod.ts";
 
 Deno.test("should omit the given fields on the shape", () => {
