@@ -1,8 +1,4 @@
-import {
-  assertEquals,
-  assertIsError,
-  assertObjectMatch,
-} from "assert/mod.ts";
+import { assertEquals, assertIsError, assertObjectMatch } from "assert/mod.ts";
 import { createContext } from "../context.ts";
 import { number, object, string } from "./mod.ts";
 
