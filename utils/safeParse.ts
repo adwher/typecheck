@@ -27,7 +27,7 @@ export function safeParse<T>(
   const context = createContext();
   const output = schema.check(value, context);
 
-  if (output instanceof Error) {
+  if (output instanceof SchemaError) {
     return {
       success: false,
       error: output,

@@ -3,9 +3,6 @@ import { createError } from "../errors.ts";
 
 /**
  * Check the `value` starts with `search`.
- * @example ```ts
- * const CodeSchema = pipe(string(), startsWith("CODE-"));
- * ```
  */
 export function startsWith(
   search: string,

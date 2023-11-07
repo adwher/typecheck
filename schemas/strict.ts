@@ -7,9 +7,9 @@ import { SchemaObject } from "./object.ts";
 export class SchemaStrict<S extends SchemaObject> extends SchemaFrom<S> {
   /**
    * Create a stricted schema that wraps the original one.
-   * @param schema Wrapped schema.
+   * @param wrapped Wrapped schema.
    */
-  constructor(readonly schema: S) {
+  constructor(readonly wrapped: S) {
     super();
   }
 
@@ -23,7 +23,7 @@ export class SchemaStrict<S extends SchemaObject> extends SchemaFrom<S> {
     const issues: SchemaIssue[] = [];
 
     for (const key in value) {
-      if (key in this.schema.shape) {
+      if (key in this.wrapped.shape) {
         continue;
       }
 
@@ -31,7 +31,7 @@ export class SchemaStrict<S extends SchemaObject> extends SchemaFrom<S> {
       issues.push({ ...context, message });
     }
 
-    const output = this.schema.check(value, context);
+    const output = this.wrapped.check(value, context);
 
     if (output instanceof SchemaError) {
       issues.push(...output.issues);

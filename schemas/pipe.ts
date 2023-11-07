@@ -21,15 +21,15 @@ export type PipesFrom<S extends Schema> = Pipe<Infer<S>>[];
 export class SchemaPipe<R> extends Schema<R> {
   /**
    * Create a chain of `pipes` once the `schema` return the validated value.
-   * @param schema Wrapped schema.
+   * @param wrapped Wrapped schema.
    * @param pipes List of multiple schema pipes of the same `T`.
    */
-  constructor(readonly schema: Schema<R>, private pipes: Pipes<R>) {
+  constructor(readonly wrapped: Schema<R>, private pipes: Pipes<R>) {
     super();
   }
 
   check(value: unknown, context: SchemaContext): SchemaError | R {
-    const output = this.schema.check(value, context);
+    const output = this.wrapped.check(value, context);
 
     if (output instanceof SchemaError) {
       return output;

@@ -11,12 +11,6 @@ export type SchemaObjectMerge<A> = A extends [infer F] ? Unwrap<F>
 /**
  * Creates a new `SchemaObject` merging the `initial` schema with the `extension` fields.
  * Be careful, this also **overrides** the fields in the `initial` schema that has the same key in the `extension`.
- * @example ```ts
- * const UserSchema = object({ email: string() });
- * const PassportSchema = object({ password: string() });
- *
- * const CreateUserSchema = merge(UserSchema, PassportSchema);
- * ```
  */
 export function merge<
   S extends SchemaObject,

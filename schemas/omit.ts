@@ -8,10 +8,6 @@ export type SchemaShapeOmit<
 
 /**
  * Creates a new `SchemaObject` skipping the selected fields.
- * @example ```ts
- * const UserSchema = object({ firstname: string(), lastname: string() });
- * const CreateUserSchema = omit(UserSchema, ["lastname"]);
- * ```
  */
 export function omit<
   S extends SchemaShape,

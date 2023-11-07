@@ -9,9 +9,9 @@ export type SchemaRecordKey = string | number | symbol;
 export class SchemaRecord<V> extends Schema<Record<SchemaRecordKey, V>> {
   /**
    * Creates a new `object` schema where all the values as `V`.
-   * @param value Schema of each `value`.
+   * @param wrapped Schema of each `value`.
    */
-  constructor(readonly value: Schema<V>) {
+  constructor(readonly wrapped: Schema<V>) {
     super();
   }
 
@@ -34,7 +34,7 @@ export class SchemaRecord<V> extends Schema<Record<SchemaRecordKey, V>> {
         path: [...context.path, String(key)],
       };
 
-      const output = this.value.check(content, scope);
+      const output = this.wrapped.check(content, scope);
 
       if (output instanceof SchemaError) {
         issues.push(...output.issues);

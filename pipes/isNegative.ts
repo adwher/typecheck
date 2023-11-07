@@ -5,9 +5,6 @@ const ERROR_MESSAGE = "Must be a negative number";
 
 /**
  * Check the `value` as a negative number.
- * @example ```ts
- * const NegativeSchema = pipe(number(), isNegative());
- * ```
  */
 export function isNegative(message = ERROR_MESSAGE) {
   return function (value: number, context: SchemaContext) {

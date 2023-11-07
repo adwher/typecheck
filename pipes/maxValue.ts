@@ -3,9 +3,6 @@ import { createError } from "../errors.ts";
 
 /**
  * Create a pipe that validates the `value`.
- * @example ```ts
- * const HexSchema = pipe(number(), maxValue(255));
- * ```
  */
 export function maxValue(
   expected: number,

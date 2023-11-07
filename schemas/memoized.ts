@@ -16,9 +16,9 @@ export class SchemaMemoized<S extends Schema> extends SchemaFrom<S> {
 
   /**
    * Create a new schema that memoize the results of the previous checks.
-   * @param schema Original schema.
+   * @param wrapped Original schema.
    */
-  constructor(readonly schema: S, private options: Options) {
+  constructor(readonly wrapped: S, private options: Options) {
     super();
 
     this.cache = new Map();
@@ -37,7 +37,7 @@ export class SchemaMemoized<S extends Schema> extends SchemaFrom<S> {
       return cache;
     }
 
-    const output = this.schema.check(value, context);
+    const output = this.wrapped.check(value, context);
     this.cache.set(key, output);
 
     return output;
@@ -62,6 +62,6 @@ export class SchemaMemoized<S extends Schema> extends SchemaFrom<S> {
  * @returns Instance of `SchemaMemoized`.
  */
 export function memoized<S extends Schema>(schema: S, options?: Options) {
-  const fallback: Options = { ...options };
-  return new SchemaMemoized(schema, fallback);
+  const setup: Options = { ...options };
+  return new SchemaMemoized(schema, setup);
 }

@@ -3,9 +3,6 @@ import { createError } from "../errors.ts";
 
 /**
  * Create a pipe that validates the `length` of the given `value` to be equal to `expected`.
- * @example ```ts
- * const IdentifierSchema = pipe(string(), length(16));
- * ```
  */
 export function length<T extends string | unknown[]>(
   expected: number,

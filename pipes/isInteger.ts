@@ -5,9 +5,6 @@ const ERROR_MESSAGE = "Must be a integer number";
 
 /**
  * Check the `value` as a integer number using the `Number.isInteger` function.
- * @example ```ts
- * const CountSchema = pipe(number(), isInteger());
- * ```
  */
 export function isInteger(message = ERROR_MESSAGE) {
   return function (value: number, context: SchemaContext) {

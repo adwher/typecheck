@@ -6,9 +6,9 @@ import { isArr } from "../types.ts";
 export class SchemaArray<T> extends Schema<T[]> {
   /**
    * Creates a new schema array of `T`.
-   * @param schema Shape of the schema.
+   * @param wrapped Shape of the schema.
    */
-  constructor(readonly schema: Schema<T>) {
+  constructor(readonly wrapped: Schema<T>) {
     super();
   }
 
@@ -28,7 +28,7 @@ export class SchemaArray<T> extends Schema<T[]> {
         path: [...context.path, key],
       };
 
-      const output = this.schema.check(received, scope);
+      const output = this.wrapped.check(received, scope);
 
       if (output instanceof SchemaError) {
         issues.push(...output.issues);

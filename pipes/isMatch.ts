@@ -3,9 +3,6 @@ import { createError } from "../errors.ts";
 
 /**
  * Create a pipe that validates the `value` as the specified regular expression.
- * @example ```ts
- * const PasswordSchema = pipe(string(), isMatch(/\w{8,}/i));
- * ```
  */
 export function isMatch(
   regex: RegExp,

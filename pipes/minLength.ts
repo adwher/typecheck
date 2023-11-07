@@ -3,12 +3,6 @@ import { createError } from "../errors.ts";
 
 /**
  * Create a pipe that validates the `length` of the given `value`.
- * @example ```ts
- * const MessageSchema = pipe(string(), minLength(1));
- * ```
- * @example ```ts
- * const StackSchema = pipe(array(BlockSchema), maxLength(1));
- * ```
  */
 export function minLength<T extends string | unknown[]>(
   expected: number,

@@ -8,10 +8,6 @@ export type SchemaShapeOptional<S extends SchemaShape> = {
 
 /**
  * Creates a new `SchemaObject` transforming all the fields into `optionals` of their own type.
- * @example ```ts
- * const UserSchema = object({ firstname: string(), lastname: string() });
- * const CreateUserSchema = partial(UserSchema);
- * ```
  */
 export function partial<S extends SchemaShape>(schema: SchemaObject<S>) {
   type R = SchemaShapeOptional<S>;

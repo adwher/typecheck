@@ -1,4 +1,5 @@
 import { createContext } from "../context.ts";
+import { SchemaError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 
 /**
@@ -10,7 +11,7 @@ export function parse<T>(value: unknown, schema: Schema<T>) {
   const context = createContext();
   const output = schema.check(value, context);
 
-  if (output instanceof Error) {
+  if (output instanceof SchemaError) {
     throw output;
   }
 

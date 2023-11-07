@@ -8,10 +8,6 @@ export type SchemaShapePick<
 
 /**
  * Creates a new `SchemaObject` picking only the selected fields.
- * @example ```ts
- * const UserSchema = object({ firstname: string(), lastname: string() });
- * const CreateUserSchema = pick(UserSchema, ["firstname"]);
- * ```
  */
 export function pick<
   S extends SchemaShape,

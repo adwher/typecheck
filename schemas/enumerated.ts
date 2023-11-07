@@ -41,9 +41,6 @@ export class SchemaEnumerated<
 
 /**
  * Creates a new enumerated schema that only receives the given `options`.
- * @example ```ts
- * const RoleSchema = enumerated("Student", "Teacher", "Administrator");
- * ```
  */
 export function enumerated<E extends readonly Enumerable[]>(...options: E) {
   return new SchemaEnumerated<E>(options);
