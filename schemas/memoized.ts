@@ -1,6 +1,6 @@
 import { SchemaContext } from "../context.ts";
 import { SchemaError } from "../errors.ts";
-import { Infer, Schema } from "../schema.ts";
+import { Infer, Schema, SchemaFrom } from "../schema.ts";
 
 interface Options {
   /**
@@ -11,7 +11,7 @@ interface Options {
   serialize?(value: unknown): string;
 }
 
-export class SchemaMemoized<S extends Schema> extends Schema<Infer<S>> {
+export class SchemaMemoized<S extends Schema> extends SchemaFrom<S> {
   private cache: Map<unknown, Infer<S> | SchemaError>;
 
   /**

@@ -1,10 +1,10 @@
 import { SchemaContext } from "../context.ts";
 import { createError, SchemaError, SchemaIssue } from "../errors.ts";
-import { Infer, Schema } from "../schema.ts";
+import { Infer, Schema, SchemaFrom } from "../schema.ts";
 
 export class SchemaEither<
   S extends readonly Schema[],
-> extends Schema<Infer<S[number]>> {
+> extends SchemaFrom<S[number]> {
   /**
    * Create a new schema that receives any of the given schemas.
    * @param schemas List of all posible schemas.

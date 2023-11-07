@@ -1,10 +1,10 @@
 import { SchemaContext } from "../context.ts";
 import { createError, SchemaError, SchemaIssue } from "../errors.ts";
-import { Infer, Schema } from "../schema.ts";
+import { Infer, SchemaFrom } from "../schema.ts";
 import { isObj } from "../types.ts";
 import { SchemaObject } from "./object.ts";
 
-export class SchemaStrict<S extends SchemaObject> extends Schema<Infer<S>> {
+export class SchemaStrict<S extends SchemaObject> extends SchemaFrom<S> {
   /**
    * Create a stricted schema that wraps the original one.
    * @param schema Wrapped schema.

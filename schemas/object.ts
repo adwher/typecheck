@@ -1,6 +1,6 @@
 import { SchemaContext } from "../context.ts";
 import { createError, SchemaError, SchemaIssue } from "../errors.ts";
-import { Infer, Schema } from "../schema.ts";
+import { Infer, Schema, SchemaFrom } from "../schema.ts";
 import { isObj } from "../types.ts";
 
 /** Sets the allowed keys for a shape. */
@@ -11,7 +11,7 @@ export type SchemaShape = Record<SchemaShapeKey, Schema>;
 
 export class SchemaObject<
   S extends SchemaShape = SchemaShape,
-> extends Schema<Infer<S>> {
+> extends SchemaFrom<S> {
   /**
    * Create a new schema with the shape of an `object`.
    * @param shape Shape of the schema.

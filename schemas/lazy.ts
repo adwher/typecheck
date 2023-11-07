@@ -1,6 +1,6 @@
 import { SchemaContext } from "../context.ts";
 import { SchemaError } from "../errors.ts";
-import { Infer, Schema } from "../schema.ts";
+import { Infer, Schema, SchemaFrom } from "../schema.ts";
 
 /** Generate (lazly) the schema on parsed-time. */
 export type SchemaGenerator<S extends Schema> = (
@@ -8,7 +8,7 @@ export type SchemaGenerator<S extends Schema> = (
   context: SchemaContext,
 ) => S | SchemaError;
 
-export class SchemaLazy<S extends Schema> extends Schema<Infer<S>> {
+export class SchemaLazy<S extends Schema> extends SchemaFrom<S> {
   /**
    * Create a new schema that can generate (lazly) the schema on parsed-time.
    * @param generate Generate the right schema on-demand.

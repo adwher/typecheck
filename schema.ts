@@ -21,10 +21,13 @@ export abstract class Schema<T = any> {
   abstract check(value: unknown, context: SchemaContext): SchemaError | T;
 }
 
+/** Alias for `Schema<Infer<T>>`. */
+export abstract class SchemaFrom<T> extends Schema<Infer<T>> {}
+
 /**
  * Allow to infer the exact type of a schema.
  * @example ```ts
- * const EmailSchema = string(isEmail);
+ * const EmailSchema = pipe(string(), isEmail());
  *
  * type Email = SchemaInfer<typeof EmailSchema>;
  * ```

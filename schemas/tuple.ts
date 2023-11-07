@@ -1,11 +1,11 @@
 import { SchemaContext } from "../context.ts";
 import { createError, SchemaError, SchemaIssue } from "../errors.ts";
-import { Infer, Schema } from "../schema.ts";
+import { Infer, Schema, SchemaFrom } from "../schema.ts";
 import { isArr } from "../types.ts";
 
 export class SchemaTuple<
   S extends readonly Schema[],
-> extends Schema<Infer<S>> {
+> extends SchemaFrom<S> {
   /**
    * Creates a new schema tuple of `T`.
    * @param schema Shape of the schema.
