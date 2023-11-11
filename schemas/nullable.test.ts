@@ -1,6 +1,6 @@
 import { assertEquals, assertIsError } from "assert/mod.ts";
 import { createContext } from "../context.ts";
-import { boolean, nullable } from "./mod.ts";
+import { boolean, nullable, string } from "./mod.ts";
 
 const context = createContext();
 
@@ -17,4 +17,11 @@ Deno.test(`should pass either wrapped or "null" values`, () => {
   for (const received of incorrect) {
     assertIsError(schema.check(received, context));
   }
+});
+
+Deno.test(`should use the fallback`, () => {
+  const schema = nullable(string(), "hello");
+
+  assertEquals(schema.check(null, context), "hello");
+  assertEquals(schema.check("world", context), "world");
 });

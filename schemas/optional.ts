@@ -1,34 +1,26 @@
 import { SchemaContext } from "../context.ts";
-import { Infer, Schema } from "../schema.ts";
-import { isFn } from "../types.ts";
-
-/** Sets or generate a defaulted value for the given `schema`. */
-export type SchemaFallback<T> = { (): T } | T;
+import { Schema } from "../schema.ts";
+import { createFallback, Fallback } from "../utils/createFallback.ts";
 
 export class SchemaOptional<T> extends Schema<T | undefined> {
   /**
    * Creates a new `optional` schema allowing to have `T` or `undefined`.
-   * @param schema Original schema.
-   * @param defaulted Defaulted value.
+   * @param wrapped Original schema.
+   * @param fallback Fallback value or generator.
    */
   constructor(
-    readonly schema: Schema<T>,
-    private defaulted?: SchemaFallback<T>,
+    readonly wrapped: Schema<T>,
+    readonly fallback?: Fallback<T>,
   ) {
     super();
   }
 
   check(value: unknown, context: SchemaContext) {
     if (value === undefined) {
-      return this.fallback;
+      return createFallback(this.fallback ?? undefined);
     }
 
-    return this.schema.check(value, context);
-  }
-
-  /** Gets the fallback value for the schema. */
-  get fallback() {
-    return isFn(this.defaulted) ? this.defaulted() : this.defaulted;
+    return this.wrapped.check(value, context);
   }
 }
 
@@ -45,10 +37,10 @@ export function optional<T>(schema: Schema<T>): SchemaOptional<T>;
  */
 export function optional<T>(
   schema: Schema<T>,
-  fallback: SchemaFallback<Infer<T>>,
+  fallback: Fallback<T>,
 ): SchemaOptional<T>;
 
 /** Creates a new `optional` schema allowing to have `T` or `undefined`. */
-export function optional<T>(schema: Schema<T>, fallback?: SchemaFallback<T>) {
+export function optional<T>(schema: Schema<T>, fallback?: Fallback<T>) {
   return new SchemaOptional(schema, fallback);
 }

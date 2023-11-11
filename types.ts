@@ -17,7 +17,8 @@ export function isBool(value: unknown): value is boolean {
 }
 
 /** Check the `value` as `function`. */
-export function isFn<F extends { (): void }>(value: unknown): value is F {
+// deno-lint-ignore ban-types
+export function isFn<F extends Function>(value: unknown): value is F {
   return typeof value === "function";
 }
 
