@@ -1,26 +1,28 @@
-import { SchemaContext } from "../context.ts";
-import { createError } from "../errors.ts";
-import { Schema } from "../schema.ts";
+import { Check, failure, Schema } from "../schema.ts";
 
 /** Allowed types as literals. */
 export type Literal = string | number | bigint | boolean | null;
 
-export class SchemaLiteral<L extends Literal> extends Schema<L> {
+export const SCHEMA_LITERAL_NAME = "SCHEMA_LITERAL";
+
+export class SchemaLiteral<L extends Literal> implements Schema<L> {
+  readonly name = SCHEMA_LITERAL_NAME;
+
   /**
    * Creates a new `L` schema, where only one value is allowed.
    * @param literal One to rule-them all
    */
-  constructor(readonly literal: L) {
-    super();
-  }
+  constructor(readonly literal: L) {}
 
-  check(value: unknown, context: SchemaContext) {
+  check(value: unknown): Check<L> {
     if (value === this.literal) {
-      return value as L;
+      return undefined;
     }
 
-    return createError(context, {
-      message: `Must be "${this.literal}", got "${value}"`,
+    return failure({
+      reason: "VALIDATION",
+      expected: this.literal,
+      received: value,
     });
   }
 }

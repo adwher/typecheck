@@ -1,32 +1,28 @@
-import {
-  assertIsError,
-  assertObjectMatch,
-  assertStrictEquals,
-} from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { number, tuple } from "./mod.ts";
+import { safeParse } from "../utils/mod.ts";
 
-const context = createContext();
-
-Deno.test("should assert with tuples", () => {
+Deno.test("assert with tuples", () => {
   const schema = tuple(number(), number());
 
   const correct = [[1, 2], [3, 4]];
   const incorrect = [[1], [1, 2, 3], false, null, [], {}];
 
   for (const received of correct) {
-    assertStrictEquals(schema.check(received, context), received);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: received });
   }
 
   for (const received of incorrect) {
-    assertIsError(schema.check(received, context));
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });
 
-Deno.test("should return an issue with the right path", () => {
+Deno.test("return an issue with the right path", () => {
   const schema = tuple(number(), number(), number());
-  const output = schema.check([true, false, 0], context);
+  const commit = safeParse([1, 2, false], schema);
 
-  assertIsError(output);
-  assertObjectMatch(output.first(), { path: [0] });
+  assertObjectMatch(commit, { success: false });
+  assertObjectMatch(commit, { issues: [{ position: 2 }] });
 });

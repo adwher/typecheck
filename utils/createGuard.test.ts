@@ -8,8 +8,8 @@ const guard = createGuard(schema);
 
 Deno.test("return a guard function", () => {
   assert(typeof guard === "function");
+  assert(guard("hello"));
 
-  assertEquals(guard(""), true);
   assertEquals(guard(1234), false);
   assertEquals(guard(null), false);
 });

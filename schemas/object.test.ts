@@ -1,8 +1,6 @@
-import { assertEquals, assertIsError, assertObjectMatch } from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { number, object, string } from "./mod.ts";
-
-const context = createContext();
+import { safeParse } from "../utils/mod.ts";
 
 Deno.test("allows object values", () => {
   const schema = object({ a: string() });
@@ -11,11 +9,13 @@ Deno.test("allows object values", () => {
   const incorrect = ["hello", 1234, null, false, true, [], {}];
 
   for (const received of correct) {
-    assertEquals(schema.check(received, context), received);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: received });
   }
 
   for (const received of incorrect) {
-    assertIsError(schema.check(received, context));
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });
 
@@ -39,18 +39,19 @@ Deno.test("respect the given shape", () => {
   ];
 
   for (const received of correct) {
-    assertEquals(schema.check(received, context), received);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: received });
   }
 
   for (const received of incorrect) {
-    assertIsError(schema.check(received, context));
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });
 
 Deno.test("return an issue with the right path", () => {
   const schema = object({ a: string() });
-  const output = schema.check({ a: null }, context);
+  const commit = safeParse({ a: null }, schema);
 
-  assertIsError(output);
-  assertObjectMatch(output.first(), { path: ["a"] });
+  assertObjectMatch(commit, { success: false, issues: [{ position: "a" }] });
 });

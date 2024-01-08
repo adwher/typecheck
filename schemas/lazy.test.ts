@@ -1,22 +1,20 @@
-import { assertIsError, assertObjectMatch } from "assert/mod.ts";
-import { Describe } from "../schema.ts";
-import { createContext } from "../context.ts";
-import { createError } from "../errors.ts";
+import { assertObjectMatch } from "assert/mod.ts";
+import { Describe, failure } from "../schema.ts";
 import { array, lazy, object } from "./mod.ts";
+import { safeParse } from "../utils/mod.ts";
 
-const context = createContext();
-
-Deno.test("should forward the given error", () => {
-  const schema = lazy(() => createError(context));
+Deno.test("forward the given error", () => {
+  const schema = lazy(() => failure());
 
   const examples = ["hello", 1234, true, false, null, [], {}];
 
-  for (const example of examples) {
-    assertIsError(schema.check(example, context));
+  for (const received of examples) {
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });
 
-Deno.test("should allow recursive schemas", () => {
+Deno.test("allow recursive schemas", () => {
   type Node = { children: Node[] };
 
   const schema: Describe<Node> = lazy(() =>
@@ -32,10 +30,12 @@ Deno.test("should allow recursive schemas", () => {
   const incorrect = ["hello", 1234, true, false, null, [], {}];
 
   for (const received of correct) {
-    assertObjectMatch(schema.check(received, context), received);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: received });
   }
 
   for (const received of incorrect) {
-    assertIsError(schema.check(received, context));
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });

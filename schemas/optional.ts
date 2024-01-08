@@ -1,23 +1,27 @@
-import { SchemaContext } from "../context.ts";
-import { Schema } from "../schema.ts";
-import { createFallback, Fallback } from "../utils/createFallback.ts";
+import { Context } from "../context.ts";
+import { Check, Infer, Schema, success } from "../schema.ts";
 
-export class SchemaOptional<T> extends Schema<T | undefined> {
+export const SCHEMA_OPTIONAL_NAME = "SCHEMA_OPTIONAL";
+
+/** @internal Shortcut to the schema inference. */
+type ThisInfer<S extends Schema> = Infer<S> | undefined;
+
+/** @internal Shortcut to the schema extension. */
+type ThisFrom<S extends Schema> = Schema<ThisInfer<S>>;
+
+export class SchemaOptional<S extends Schema> implements ThisFrom<S> {
+  readonly name = SCHEMA_OPTIONAL_NAME;
+
   /**
    * Creates a new `optional` schema allowing to have `T` or `undefined`.
    * @param wrapped Original schema.
    * @param fallback Fallback value or generator.
    */
-  constructor(
-    readonly wrapped: Schema<T>,
-    readonly fallback?: Fallback<T>,
-  ) {
-    super();
-  }
+  constructor(readonly wrapped: S, readonly fallback?: Infer<S>) {}
 
-  check(value: unknown, context: SchemaContext) {
+  check(value: unknown, context: Context): Check<ThisInfer<S>> {
     if (value === undefined) {
-      return createFallback(this.fallback ?? undefined);
+      return success(this.fallback);
     }
 
     return this.wrapped.check(value, context);
@@ -28,19 +32,19 @@ export class SchemaOptional<T> extends Schema<T | undefined> {
  * Creates a new `optional` schema allowing to have `T` or `undefined`.
  * @param schema Original schema.
  */
-export function optional<T>(schema: Schema<T>): SchemaOptional<T>;
+export function optional<S extends Schema>(schema: S): SchemaOptional<S>;
 
 /**
  * Creates a new `optional` schema allowing to have `T` or use the `fallback`.
  * @param schema Original schema.
  * @param fallback Defaulted value.
  */
-export function optional<T>(
-  schema: Schema<T>,
-  fallback: Fallback<T>,
-): SchemaOptional<T>;
+export function optional<S extends Schema>(
+  schema: S,
+  fallback: Infer<S>,
+): SchemaOptional<S>;
 
 /** Creates a new `optional` schema allowing to have `T` or `undefined`. */
-export function optional<T>(schema: Schema<T>, fallback?: Fallback<T>) {
+export function optional<S extends Schema>(schema: S, fallback?: Infer<S>) {
   return new SchemaOptional(schema, fallback);
 }

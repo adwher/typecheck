@@ -13,8 +13,8 @@ export type SchemaObjectMerge<A> = A extends [infer F] ? Unwrap<F>
  * Be careful, this also **overrides** the fields in the `initial` schema that has the same key in the `extension`.
  */
 export function merge<
-  S extends SchemaObject,
-  E extends SchemaObject[],
+  S extends SchemaObject<SchemaShape>,
+  E extends SchemaObject<SchemaShape>[],
 >(initial: S, ...extensions: E) {
   type R = SchemaObjectMerge<[S, ...E]>;
 
@@ -22,6 +22,9 @@ export function merge<
   return new SchemaObject(shape as R);
 }
 
-function reduce(acc: SchemaShape, curr: SchemaObject): SchemaShape {
+function reduce(
+  acc: SchemaShape,
+  curr: SchemaObject<SchemaShape>,
+): SchemaShape {
   return { ...acc, ...curr.shape };
 }

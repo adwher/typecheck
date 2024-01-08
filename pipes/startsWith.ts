@@ -1,18 +1,14 @@
-import { SchemaContext } from "../context.ts";
-import { createError } from "../errors.ts";
+import { failure } from "../schema.ts";
 
 /**
  * Check the `value` starts with `search`.
  */
-export function startsWith(
-  search: string,
-  message = `Must start with "${search}"`,
-) {
-  return function (value: string, context: SchemaContext) {
-    if (value.startsWith(search)) {
+export function startsWith(expected: string) {
+  return function (value: string) {
+    if (value.startsWith(expected)) {
       return value;
     }
 
-    return createError(context, { message });
+    return failure({ reason: "VALIDATION", expected });
   };
 }

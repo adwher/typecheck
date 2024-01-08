@@ -1,52 +1,64 @@
-import { SchemaContext } from "../context.ts";
-import { createError, SchemaError, SchemaIssue } from "../errors.ts";
-import { Schema } from "../schema.ts";
+import { Context } from "../context.ts";
+import { Issue } from "../errors.ts";
+import { failure, Infer, Schema, SchemaFrom, success } from "../schema.ts";
 import { isArr } from "../types.ts";
 
-export class SchemaArray<T> extends Schema<T[]> {
+export const SCHEMA_ARRAY_NAME = "SCHEMA_ARRAY";
+
+const ISSUE_GENERIC = failure();
+const ISSUE_TYPE = failure({ reason: "TYPE", expected: "array" });
+
+export class SchemaArray<S extends Schema> implements SchemaFrom<S[]> {
+  readonly name = SCHEMA_ARRAY_NAME;
+
   /**
    * Creates a new schema array of `T`.
    * @param wrapped Shape of the schema.
    */
-  constructor(readonly wrapped: Schema<T>) {
-    super();
-  }
+  constructor(readonly wrapped: S) {}
 
-  check(value: unknown, context: SchemaContext) {
-    if (!isArr<T>(value)) {
-      return createError(context, { message: `Must be an "array"` });
+  check(value: unknown, context: Context) {
+    type T = Infer<S>;
+
+    if (isArr<T>(value) === false) {
+      return ISSUE_TYPE;
     }
 
-    const size = value.length;
-    const final: T[] = new Array(size);
-    const issues: SchemaIssue[] = [];
+    const final = value;
+    const issues: Issue[] = [];
 
-    for (let key = 0; key < size; key++) {
-      const received = value[key];
+    for (let index = 0; index < value.length; index++) {
+      const commit = this.wrapped.check(value[index], context);
 
-      const scope: SchemaContext = {
-        path: [...context.path, key],
-      };
-
-      const output = this.wrapped.check(received, scope);
-
-      if (output instanceof SchemaError) {
-        issues.push(...output.issues);
+      if (commit === undefined) {
         continue;
       }
 
-      final[key] = output;
+      if (commit.success === true) {
+        final[index] = commit.value;
+        continue;
+      }
+
+      if (context.verbose === false) {
+        return ISSUE_GENERIC;
+      }
+
+      issues.push({
+        reason: "VALIDATION",
+        issues: commit.issues,
+        position: index,
+      });
     }
 
-    if (issues.length > 0) {
-      return createError(context, { issues });
+    if (issues.length === 0) {
+      return success(value);
     }
 
-    return value;
+    return failure(issues);
   }
 }
 
 /** Creates a new schema array of `T`. */
-export function array<T>(schema: Schema<T>) {
+export function array<S extends Schema>(schema: S): SchemaArray<S> {
   return new SchemaArray(schema);
 }

@@ -1,67 +1,78 @@
-import { SchemaContext } from "../context.ts";
-import { createError, SchemaError, SchemaIssue } from "../errors.ts";
-import { Infer, Schema } from "../schema.ts";
+import { Context } from "../context.ts";
+import { Issue } from "../errors.ts";
+import {
+  Failure,
+  failure,
+  Infer,
+  Schema,
+  SchemaFrom,
+  success,
+} from "../schema.ts";
+import { isFailure } from "../utils/mod.ts";
 
 /**
  * Allow to transform the initial `value` and add extra validations with more details to the schemas.
  * @param value Given value of the schema.
  * @param context Context of the current step.
  */
-export type Pipe<T> = (
-  value: T,
-  context: SchemaContext,
-) => T | SchemaError;
+export type Pipe<T> = (value: T, context: Context) => T | Failure;
 
 /** List of multiple schema pipes of the same `T`. */
 export type Pipes<T> = Pipe<T>[];
 
-/** List of multiple schema pipes of the same `Infer<S>`.  */
-export type PipesFrom<S extends Schema> = Pipe<Infer<S>>[];
+/** @internal Shortcut to the schema inference. */
+type ThisFrom<S extends Schema, R = Infer<S>> = Pipes<R>;
 
-export class SchemaPipe<R> extends Schema<R> {
+export const SCHEMA_PIPE_NAME = "SCHEMA_PIPE";
+
+const ISSUE_GENERIC = failure();
+
+export class SchemaPipe<S extends Schema> implements SchemaFrom<S> {
+  readonly name = SCHEMA_PIPE_NAME;
+
   /**
    * Create a chain of `pipes` once the `schema` return the validated value.
    * @param wrapped Wrapped schema.
    * @param pipes List of multiple schema pipes of the same `T`.
    */
-  constructor(readonly wrapped: Schema<R>, private pipes: Pipes<R>) {
-    super();
-  }
+  constructor(readonly wrapped: S, private pipes: ThisFrom<S>) {}
 
-  check(value: unknown, context: SchemaContext): SchemaError | R {
-    const output = this.wrapped.check(value, context);
+  check(value: unknown, context: Context) {
+    const commit = this.wrapped.check(value, context);
 
-    if (output instanceof SchemaError) {
-      return output;
+    if (isFailure(commit)) {
+      return commit;
     }
 
-    let final: R = output;
-    const issues: SchemaIssue[] = [];
+    let final = commit?.value ?? value;
+    const issues: Issue[] = [];
 
     for (const pipe of this.pipes) {
-      const output = pipe(final, context);
+      const commit = pipe(final, context);
 
-      if (output instanceof SchemaError) {
-        issues.push(...output.issues);
+      if (isFailure(commit) === false) {
+        final = commit;
         continue;
       }
 
-      final = output;
+      if (context.verbose === false) {
+        return ISSUE_GENERIC;
+      }
+
+      issues.push({ reason: "VALIDATION", issues: commit.issues });
     }
 
     if (issues.length === 0) {
-      return final;
+      return success(final);
     }
 
-    return createError(context, { issues });
+    return failure(issues);
   }
 }
 
-export function pipe<S extends Schema>(schema: S, ...pipes: PipesFrom<S>): S;
-
 /** Create a chain of `pipes` once the `schema` return the validated value. */
-export function pipe<S extends Schema>(schema: S, ...pipes: PipesFrom<S>) {
-  return new SchemaPipe(schema, pipes);
+export function pipe<S extends Schema>(schema: S, ...pipes: ThisFrom<S>) {
+  return new SchemaPipe<S>(schema, pipes);
 }
 
 /** Alias of `pipe`. */

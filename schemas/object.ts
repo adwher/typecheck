@@ -1,6 +1,6 @@
-import { SchemaContext } from "../context.ts";
-import { createError, SchemaError, SchemaIssue } from "../errors.ts";
-import { Infer, Schema, SchemaFrom } from "../schema.ts";
+import { Context } from "../context.ts";
+import { Issue } from "../errors.ts";
+import { failure, Infer, Schema, SchemaFrom, success } from "../schema.ts";
 import { isObj } from "../types.ts";
 
 /** Sets the allowed keys for a shape. */
@@ -9,54 +9,65 @@ export type SchemaShapeKey = string | number | symbol;
 /** Defines an record of `keys` and their schemas, useful for objects. */
 export type SchemaShape = Record<SchemaShapeKey, Schema>;
 
-export class SchemaObject<
-  S extends SchemaShape = SchemaShape,
-> extends SchemaFrom<S> {
+export const SCHEMA_OBJECT_NAME = "SCHEMA_OBJECT";
+
+const ISSUE_GENERIC = failure();
+const ISSUE_TYPE = failure({ reason: "TYPE", expected: "object" });
+
+export class SchemaObject<S extends SchemaShape> implements SchemaFrom<S> {
+  readonly name = SCHEMA_OBJECT_NAME;
+
   /**
    * Create a new schema with the shape of an `object`.
    * @param shape Shape of the schema.
+   * @param rest Schema for the rest of the fields.
    */
-  constructor(readonly shape: S) {
-    super();
-  }
+  constructor(readonly shape: S) {}
 
-  check(value: unknown, context: SchemaContext) {
+  check(value: unknown, context: Context) {
     type R = Infer<S>;
 
-    if (!isObj<R>(value)) {
-      return createError(context, { message: `Must be an "object"` });
+    if (isObj<R>(value) === false) {
+      return ISSUE_TYPE;
     }
 
-    const final = {} as R;
-    const issues: SchemaIssue[] = [];
+    const final = value;
+    const issues: Issue[] = [];
 
     for (const key in this.shape) {
-      const received = value[key];
-      const schema: Schema | undefined = this.shape[key];
-
-      const scope: SchemaContext = {
-        path: [...context.path, key],
-      };
+      const schema = this.shape[key];
 
       if (!schema) {
         continue;
       }
 
-      const output = schema.check(received, scope);
+      const commit = schema.check(value[key], context);
 
-      if (output instanceof SchemaError) {
-        issues.push(...output.issues);
+      if (commit === undefined) {
         continue;
       }
 
-      final[key as keyof R] = output;
+      if (commit.success) {
+        final[key] = commit.value;
+        continue;
+      }
+
+      if (context.verbose === false) {
+        return ISSUE_GENERIC;
+      }
+
+      issues.push({
+        reason: "VALIDATION",
+        issues: commit.issues,
+        position: key,
+      });
     }
 
-    if (issues.length > 0) {
-      return createError(context, { issues });
+    if (issues.length === 0) {
+      return success(final);
     }
 
-    return final as R;
+    return failure(issues);
   }
 }
 

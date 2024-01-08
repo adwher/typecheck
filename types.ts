@@ -8,7 +8,7 @@ export function isStr(value: unknown): value is string {
 
 /** Check the `value` as `number`. */
 export function isNum(value: unknown): value is number {
-  return typeof value === "number" && !isNaN(value);
+  return typeof value === "number";
 }
 
 /** Check the `value` as `boolean`. */

@@ -52,6 +52,9 @@ export type CheckOption<T> = Success<T> | Failure;
  */
 export type Check<T> = CheckOption<T> | undefined;
 
+/** Alias for `Check<Infer<T>>`. */
+export type CheckFrom<T> = Check<Infer<T>>;
+
 // deno-lint-ignore no-explicit-any
 export interface Schema<T = any> {
   name: string;

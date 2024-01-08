@@ -1,8 +1,12 @@
-import { Schema } from "../schema.ts";
+import { Schema, success } from "../schema.ts";
 
-export class SchemaUnknown extends Schema<unknown> {
+export const SCHEMA_UNKNOWN_NAME = "SCHEMA_UNKNOWN";
+
+export class SchemaUnknown implements Schema<unknown> {
+  readonly name = SCHEMA_UNKNOWN_NAME;
+
   check(value: unknown) {
-    return value;
+    return success(value);
   }
 }
 

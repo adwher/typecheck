@@ -1,5 +1,3 @@
-import { createContext } from "../context.ts";
-import { SchemaError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 
 /**
@@ -7,12 +5,8 @@ import { Schema } from "../schema.ts";
  * @returns A function guard that checks the `value` as `schema`.
  */
 export function createGuard<T>(schema: Schema<T>) {
-  const context = createContext();
-
   return function (value: unknown): value is T {
-    const data = schema.check(value, context);
-    const hasError = data instanceof SchemaError;
-
-    return !hasError;
+    const commit = schema.check(value, { verbose: false });
+    return commit === undefined || commit.success;
   };
 }

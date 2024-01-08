@@ -1,11 +1,14 @@
-import { SchemaContext } from "../context.ts";
-import { createError } from "../errors.ts";
-import { Schema } from "../schema.ts";
+import { Check, failure, Schema } from "../schema.ts";
 
-export class SchemaNever extends Schema<never> {
-  check(value: unknown, context: SchemaContext) {
-    const message = `Must be "never", got "${typeof value}"`;
-    return createError(context, { message });
+export const SCHEMA_NEVER_NAME = "SCHEMA_NEVER";
+
+const ISSUE_GENERIC = failure({ reason: "PRESENT" });
+
+export class SchemaNever implements Schema<never> {
+  readonly name = SCHEMA_NEVER_NAME;
+
+  check(): Check<never> {
+    return ISSUE_GENERIC;
   }
 }
 

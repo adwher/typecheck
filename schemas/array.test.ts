@@ -1,26 +1,26 @@
-import { assertEquals, assertIsError, assertObjectMatch } from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { array, number } from "./mod.ts";
+import { safeParse } from "../utils/mod.ts";
 
-const context = createContext();
 const schema = array(number());
 
-Deno.test("should assert with arrays", () => {
+Deno.test("assert with arrays", () => {
   const correct = [[1, 2], [10_000, 20_000]];
   const incorrect = [[1, false], [true, false], ["hello", "world"]];
 
   for (const received of correct) {
-    assertEquals(schema.check(received, context), received);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: received });
   }
 
   for (const received of incorrect) {
-    assertIsError(schema.check(received, context));
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });
 
-Deno.test("should return an issue with the right path", () => {
-  const output = schema.check([1, 2, false], context);
+Deno.test("return an issue with the right path", () => {
+  const commit = safeParse([1, 2, false], schema);
 
-  assertIsError(output);
-  assertObjectMatch(output.first(), { path: [2] });
+  assertObjectMatch(commit, { success: false, issues: [{ position: 2 }] });
 });

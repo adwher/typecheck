@@ -1,14 +1,13 @@
-import { assertIsError } from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { never } from "./mod.ts";
+import { safeParse } from "../utils/mod.ts";
 
-const context = createContext();
-
-Deno.test("should always return an error", () => {
+Deno.test("always return an error", () => {
   const schema = never();
-  const examples = ["hello", 1234, null, true, false, [], {}];
+  const examples: unknown[] = ["hello", 1234, null, true, false, [], {}];
 
-  for (const example of examples) {
-    assertIsError(schema.check(example, context));
+  for (const received of examples) {
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });

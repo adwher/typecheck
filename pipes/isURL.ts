@@ -1,17 +1,18 @@
-import { SchemaContext } from "../context.ts";
-import { createError } from "../errors.ts";
-
-const ERROR_MESSAGE = "Must be a valid URL";
+import { failure } from "../schema.ts";
 
 /**
  * Check the `value` using the `URL` APIs.
  */
-export function isURL(message = ERROR_MESSAGE) {
-  return function (value: string, context: SchemaContext) {
+export function isURL() {
+  return function (value: string) {
     if (URL.canParse(value)) {
       return value;
     }
 
-    return createError(context, { message });
+    return failure({
+      reason: "VALIDATION",
+      expected: "URL",
+      received: value,
+    });
   };
 }

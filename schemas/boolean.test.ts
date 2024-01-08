@@ -1,19 +1,20 @@
-import { assertEquals, assertIsError } from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { boolean } from "./mod.ts";
+import { safeParse } from "../utils/mod.ts";
 
-const context = createContext();
 const schema = boolean();
 
-Deno.test("should assert with booleans", () => {
+Deno.test("assert with booleans", () => {
   const correct = [true, false];
   const incorrect = ["hello", 1234, null, [], {}];
 
   for (const received of correct) {
-    assertEquals(schema.check(received, context), received);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: received });
   }
 
   for (const received of incorrect) {
-    assertIsError(schema.check(received, context));
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });

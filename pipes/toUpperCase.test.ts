@@ -1,12 +1,11 @@
-import { assertEquals } from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { pipe, string } from "../schemas/mod.ts";
 import { toUpperCase } from "./toUpperCase.ts";
+import { safeParse } from "../utils/mod.ts";
 
-const context = createContext();
 const schema = pipe(string(), toUpperCase());
 
-Deno.test("should replace with upper case", () => {
+Deno.test("replace with upper case", () => {
   const cases = [
     ["BYE", "BYE"],
     ["hello", "HELLO"],
@@ -16,6 +15,7 @@ Deno.test("should replace with upper case", () => {
   ];
 
   for (const [received, expected] of cases) {
-    assertEquals(schema.check(received, context), expected);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: expected });
   }
 });

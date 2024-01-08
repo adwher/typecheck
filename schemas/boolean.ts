@@ -1,16 +1,14 @@
-import { SchemaContext } from "../context.ts";
-import { createError } from "../errors.ts";
-import { Schema } from "../schema.ts";
-import { isBool } from "../types.ts";
+import { Check, failure, Schema } from "../schema.ts";
 
-export class SchemaBoolean extends Schema<boolean> {
-  check(value: unknown, context: SchemaContext) {
-    if (isBool(value)) {
-      return value;
-    }
+export const SCHEMA_BOOLEAN_NAME = "SCHEMA_BOOLEAN";
 
-    const message = `Must be a "boolean", got "${typeof value}"`;
-    return createError(context, { message });
+const ISSUE_TYPE = failure({ reason: "TYPE", expected: "boolean" });
+
+export class SchemaBoolean implements Schema<boolean> {
+  readonly name = SCHEMA_BOOLEAN_NAME;
+
+  check(value: unknown): Check<boolean> {
+    return typeof value === "boolean" ? undefined : ISSUE_TYPE;
   }
 }
 

@@ -1,36 +1,38 @@
-import { SchemaContext } from "../context.ts";
-import { createError, SchemaError } from "../errors.ts";
-import { Schema } from "../schema.ts";
+import { Context } from "../context.ts";
+import { Check, Failure, failure, Schema } from "../schema.ts";
+import { isFailure } from "../utils/mod.ts";
 
 /** Function that validates the satisfaction of the given `value` as the given schema. */
 export type SchemaValidation = (
   value: unknown,
-  context: SchemaContext,
-) => SchemaError | boolean;
+  context: Context,
+) => boolean | Failure;
 
-export class SchemaCustom<T> extends Schema<T> {
+export const SCHEMA_CUSTOM_NAME = "SCHEMA_CUSTOM";
+
+const ISSUE_VALIDATION = failure({ reason: "VALIDATION" });
+
+export class SchemaCustom<T> implements Schema<T> {
+  readonly name = SCHEMA_CUSTOM_NAME;
+
   /**
    * Create a new `SchemaCustom` that only accepts values that satisfies the `validation`.
    * @param canParse Checks the given `value` is allowed as `T`.
    */
-  constructor(readonly canParse: SchemaValidation) {
-    super();
-  }
+  constructor(readonly canParse: SchemaValidation) {}
 
-  check(value: unknown, context: SchemaContext) {
+  check(value: unknown, context: Context): Check<T> {
     const output = this.canParse(value, context);
 
-    if (output instanceof SchemaError) {
+    if (output === true) {
+      return undefined;
+    }
+
+    if (isFailure(output)) {
       return output;
     }
 
-    if (output === true) {
-      return value as T;
-    }
-
-    return createError(context, {
-      message: "Must satisfies the given validation",
-    });
+    return ISSUE_VALIDATION;
   }
 }
 

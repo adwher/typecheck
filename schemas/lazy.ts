@@ -1,30 +1,32 @@
-import { SchemaContext } from "../context.ts";
-import { SchemaError } from "../errors.ts";
-import { Infer, Schema, SchemaFrom } from "../schema.ts";
+import { Context } from "../context.ts";
+import { Failure, Schema, SchemaFrom } from "../schema.ts";
+import { isFailure } from "../utils/mod.ts";
+
+export const SCHEMA_LAZY_NAME = "SCHEMA_LAZY";
 
 /** Generate (lazly) the schema on parsed-time. */
 export type SchemaGenerator<S extends Schema> = (
   value: unknown,
-  context: SchemaContext,
-) => S | SchemaError;
+  context: Context,
+) => S | Failure;
 
-export class SchemaLazy<S extends Schema> extends SchemaFrom<S> {
+export class SchemaLazy<S extends Schema> implements SchemaFrom<S> {
+  readonly name = SCHEMA_LAZY_NAME;
+
   /**
    * Create a new schema that can generate (lazly) the schema on parsed-time.
    * @param generate Generate the right schema on-demand.
    */
-  constructor(readonly generate: SchemaGenerator<S>) {
-    super();
-  }
+  constructor(readonly generate: SchemaGenerator<S>) {}
 
-  check(value: unknown, context: SchemaContext): SchemaError | Infer<S> {
-    const output = this.generate(value, context);
+  check(value: unknown, context: Context) {
+    const commit = this.generate(value, context);
 
-    if (output instanceof SchemaError) {
-      return output;
+    if (isFailure(commit)) {
+      return commit;
     }
 
-    return output.check(value, context);
+    return commit.check(value, context);
   }
 }
 

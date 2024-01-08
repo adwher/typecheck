@@ -1,27 +1,34 @@
-import { assertEquals, assertIsError } from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { boolean, optional, string } from "./mod.ts";
+import { safeParse } from "../utils/mod.ts";
 
-const context = createContext();
-
-Deno.test(`should pass either wrapped or "undefined" values`, () => {
+Deno.test(`pass either wrapped or "undefined" values`, () => {
   const schema = optional(boolean());
 
   const correct = [true, false, undefined];
   const incorrect = ["hello", 1234, null, [], {}];
 
   for (const received of correct) {
-    assertEquals(schema.check(received, context), received);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: received });
   }
 
   for (const received of incorrect) {
-    assertIsError(schema.check(received, context));
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });
 
-Deno.test(`should use the fallback`, () => {
+Deno.test(`use the fallback`, () => {
   const schema = optional(string(), "hello");
 
-  assertEquals(schema.check(undefined, context), "hello");
-  assertEquals(schema.check("world", context), "world");
+  assertObjectMatch(safeParse(undefined, schema), {
+    success: true,
+    value: "hello",
+  });
+
+  assertObjectMatch(safeParse("world", schema), {
+    success: true,
+    value: "world",
+  });
 });

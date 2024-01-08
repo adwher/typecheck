@@ -1,23 +1,27 @@
-import { SchemaContext } from "../context.ts";
-import { Schema } from "../schema.ts";
-import { createFallback, Fallback } from "../utils/createFallback.ts";
+import { Context } from "../context.ts";
+import { Check, Infer, Schema, success } from "../schema.ts";
 
-export class SchemaNullable<T> extends Schema<T | null> {
+export const SCHEMA_NULLABLE_NAME = "SCHEMA_NULLABLE";
+
+/** @internal Shortcut to the schema inference. */
+type ThisInfer<S extends Schema> = Infer<S> | null;
+
+/** @internal Shortcut to the schema extension. */
+type ThisFrom<S extends Schema> = Schema<ThisInfer<S>>;
+
+export class SchemaNullable<S extends Schema> implements ThisFrom<S> {
+  readonly name = SCHEMA_NULLABLE_NAME;
+
   /**
    * Creates a new `nullable` schema allowing to have `T` or `null`.
    * @param wrapped Original schema.
    * @param fallback Fallback value or generator.
    */
-  constructor(
-    readonly wrapped: Schema<T>,
-    readonly fallback?: Fallback<T>,
-  ) {
-    super();
-  }
+  constructor(readonly wrapped: S, readonly fallback?: Infer<S>) {}
 
-  check(value: unknown, context: SchemaContext) {
+  check(value: unknown, context: Context): Check<ThisInfer<S>> {
     if (value === null) {
-      return createFallback(this.fallback ?? null);
+      return success(this.fallback ?? null);
     }
 
     return this.wrapped.check(value, context);
@@ -28,19 +32,19 @@ export class SchemaNullable<T> extends Schema<T | null> {
  * Creates a new `nullable` schema allowing to have `T` or `null`.
  * @param schema Original schema.
  */
-export function nullable<T>(schema: Schema<T>): SchemaNullable<T>;
+export function nullable<S extends Schema>(schema: S): SchemaNullable<S>;
 
 /**
  * Creates a new `nullable` schema allowing to have `T` or use the `fallback`.
  * @param schema Original schema.
  * @param fallback Defaulted value.
  */
-export function nullable<T>(
-  schema: Schema<T>,
-  fallback: Fallback<T>,
-): SchemaNullable<T>;
+export function nullable<S extends Schema>(
+  schema: S,
+  fallback: Infer<S>,
+): SchemaNullable<S>;
 
 /** Creates a new `nullable` schema allowing to have `T` or `null`. */
-export function nullable<T>(schema: Schema<T>, fallback?: Fallback<T>) {
-  return new SchemaNullable(schema, fallback);
+export function nullable<S extends Schema>(schema: S, fallback?: Infer<S>) {
+  return new SchemaNullable<S>(schema, fallback);
 }
