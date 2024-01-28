@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Andres Celis. MIT license.
+// Copyright (c) 2024 Andres Celis. MIT license.
 
 /**
  * Standard steps to use with `pipe`.

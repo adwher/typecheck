@@ -1,16 +1,14 @@
-import { SchemaContext } from "../context.ts";
-import { createError } from "../errors.ts";
-import { Schema } from "../schema.ts";
-import { isStr } from "../types.ts";
+import { Check, failure, Schema } from "../schema.ts";
 
-export class SchemaString extends Schema<string> {
-  check(value: unknown, context: SchemaContext) {
-    if (isStr(value)) {
-      return value;
-    }
+export const SCHEMA_STRING_NAME = "SCHEMA_STRING";
 
-    const message = `Must be a "string", got "${typeof value}"`;
-    return createError(context, { message });
+const ISSUE_TYPE = failure({ reason: "TYPE", expected: "string" });
+
+export class SchemaString implements Schema<string> {
+  readonly name = SCHEMA_STRING_NAME;
+
+  check(value: unknown): Check<string> {
+    return typeof value === "string" ? undefined : ISSUE_TYPE;
   }
 }
 

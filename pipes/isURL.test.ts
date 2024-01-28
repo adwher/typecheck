@@ -1,11 +1,9 @@
-import { assertEquals, assertIsError } from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { pipe, string } from "../schemas/mod.ts";
 import { isURL } from "./isURL.ts";
+import { safeParse } from "../utils/mod.ts";
 
-const context = createContext();
-
-Deno.test("should assert formatted URLs", () => {
+Deno.test("assert formatted URLs", () => {
   const schema = pipe(string(), isURL());
 
   const correct = [
@@ -18,10 +16,12 @@ Deno.test("should assert formatted URLs", () => {
   const incorrect = [``, `incorrect`, `https://`, `//domain.com`];
 
   for (const received of correct) {
-    assertEquals(schema.check(received, context), received);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: received });
   }
 
   for (const received of incorrect) {
-    assertIsError(schema.check(received, context));
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });

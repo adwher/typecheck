@@ -1,8 +1,6 @@
-import { assertEquals, assertIsError } from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { number } from "./mod.ts";
-
-const context = createContext();
+import { safeParse } from "../utils/mod.ts";
 
 Deno.test("assert number values", () => {
   const schema = number();
@@ -11,10 +9,12 @@ Deno.test("assert number values", () => {
   const incorrect = ["hello", null, true, false, [], {}];
 
   for (const received of correct) {
-    assertEquals(schema.check(received, context), received);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: received });
   }
 
   for (const received of incorrect) {
-    assertIsError(schema.check(received, context));
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });

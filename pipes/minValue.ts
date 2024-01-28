@@ -1,18 +1,18 @@
-import { SchemaContext } from "../context.ts";
-import { createError } from "../errors.ts";
+import { failure } from "../schema.ts";
 
 /**
  * Create a pipe that validates the `value`.
  */
-export function minValue(
-  expected: number,
-  message = `Must be higher than ${expected}`,
-) {
-  return function (value: number, context: SchemaContext) {
+export function minValue(expected: number) {
+  return function (value: number) {
     if (value > expected) {
       return value;
     }
 
-    return createError(context, { message });
+    return failure({
+      reason: "VALIDATION",
+      received: value,
+      expected,
+    });
   };
 }

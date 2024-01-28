@@ -1,63 +1,73 @@
-import { SchemaContext } from "../context.ts";
-import { createError, SchemaError, SchemaIssue } from "../errors.ts";
-import { Infer, Schema, SchemaFrom } from "../schema.ts";
+import { Context } from "../context.ts";
+import { Issue } from "../errors.ts";
+import { failure, Infer, Schema, SchemaFrom, success } from "../schema.ts";
 import { isArr } from "../types.ts";
 
-export class SchemaTuple<
-  S extends readonly Schema[],
-> extends SchemaFrom<S> {
+export const SCHEMA_TUPLE_NAME = "SCHEMA_TUPLE";
+
+const ISSUE_GENERIC = failure();
+const ISSUE_TYPE = failure({ reason: "TYPE", expected: "array" });
+
+export class SchemaTuple<S extends readonly Schema[]> implements SchemaFrom<S> {
+  readonly name = SCHEMA_TUPLE_NAME;
+
   /**
    * Creates a new schema tuple of `T`.
    * @param schema Shape of the schema.
    */
-  constructor(readonly schemas: S) {
-    super();
-  }
+  constructor(readonly schemas: S) {}
 
-  check(value: unknown, context: SchemaContext) {
-    if (!isArr(value)) {
-      return createError(context, {
-        message: `Must be an "tuple", got "${typeof value}"`,
-      });
+  check(value: unknown, context: Context) {
+    if (isArr(value) === false) {
+      return ISSUE_TYPE;
     }
 
+    const final = value;
     const size = this.schemas.length;
-    const final = new Array(size);
-    const issues: SchemaIssue[] = [];
+    const issues: Issue[] = [];
 
     if (value.length > size || value.length < size) {
-      return createError(context, {
-        message: `Must have ${size} elements. Got ${value.length}`,
+      return failure({
+        reason: "VALIDATION",
+        expected: size,
+        received: value.length,
       });
     }
 
-    for (let index = 0; index < size; index++) {
-      const received = value[index];
+    for (let index = 0; index < value.length; index++) {
       const schema: S[number] | undefined = this.schemas[index];
-
-      const scope: SchemaContext = {
-        path: [...context.path, index],
-      };
 
       if (!schema) {
         continue;
       }
 
-      const output = schema.check(received, scope);
+      const commit = schema.check(value[index], context);
 
-      if (output instanceof SchemaError) {
-        issues.push(...output.issues);
+      if (commit === undefined) {
         continue;
       }
 
-      final[index] = output;
+      if (commit.success) {
+        final[index] = commit.value;
+        continue;
+      }
+
+      if (context.verbose === false) {
+        return ISSUE_GENERIC;
+      }
+
+      issues.push({
+        reason: "VALIDATION",
+        issues: commit.issues,
+        position: index,
+      });
     }
 
-    if (issues.length > 0) {
-      return createError(context, { issues });
+    if (issues.length === 0) {
+      return success(value as Infer<S>);
     }
 
-    return value as Infer<S>;
+    return failure(issues);
   }
 }
 

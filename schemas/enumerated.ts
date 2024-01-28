@@ -1,41 +1,41 @@
-import { SchemaContext } from "../context.ts";
-import { createError, SchemaError } from "../errors.ts";
-import { Schema } from "../schema.ts";
-import { isNum, isStr } from "../types.ts";
+import { Context } from "../context.ts";
+import { Check, failure, Schema } from "../schema.ts";
+
+export const SCHEMA_ENUMERATED_NAME = "SCHEMA_ENUMERATED";
+
+const ISSUE_VALIDATION = failure({ reason: "VALIDATION" });
 
 /** Allowed types as enumerables. */
 export type Enumerable = string | number | boolean;
 
 export class SchemaEnumerated<
   T extends readonly Enumerable[],
-> extends Schema<T[number]> {
-  /** Allowed values of the schema. */
-  private options: Set<T[number]>;
+> implements Schema<T[number]> {
+  readonly name = SCHEMA_ENUMERATED_NAME;
 
   /**
    * Creates a new enumerated schema that only receives the given `options`.
-   * @param options Allowed values of the schema.
+   * @param allowed Allowed values of the schema.
    */
-  constructor(options: T) {
-    super();
+  constructor(private allowed: T) {}
 
-    this.options = new Set(options);
-  }
+  check(value: unknown, context: Context): Check<T[number]> {
+    const isEnumerated = this.canUse(value);
 
-  check(value: unknown, context: SchemaContext): T[number] | SchemaError {
-    const isEnumerable = isStr(value) || isNum(value);
-
-    if (!isEnumerable || !this.canUse(value)) {
-      const message = `Must be one of the given options, got "${value}"`;
-      return createError(context, { message });
+    if (isEnumerated) {
+      return undefined;
     }
 
-    return value;
+    if (context.verbose === false) {
+      return ISSUE_VALIDATION;
+    }
+
+    return failure({ reason: "VALIDATION", expected: this.allowed });
   }
 
   /** Checks `value` is allowed in the `options`. */
-  canUse(value: Enumerable) {
-    return this.options.has(value);
+  canUse(value: unknown) {
+    return isEnumerable(value) && this.allowed.includes(value);
   }
 }
 
@@ -46,5 +46,7 @@ export function enumerated<E extends readonly Enumerable[]>(...options: E) {
   return new SchemaEnumerated<E>(options);
 }
 
-/** Alias of {@link enumerated}. */
-export const options = enumerated;
+/** Check one `value` as `Enumerable`. */
+export function isEnumerable(value: unknown): value is Enumerable {
+  return typeof value === "string" || typeof value === "number";
+}

@@ -1,12 +1,11 @@
-import { assertEquals } from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { pipe, string } from "../schemas/mod.ts";
 import { toCapitalize } from "./toCapitalize.ts";
+import { safeParse } from "../utils/mod.ts";
 
-const context = createContext();
 const schema = pipe(string(), toCapitalize());
 
-Deno.test("should capitalize the given text", () => {
+Deno.test("capitalize the given text", () => {
   const cases = [
     ["hello", "Hello"],
     ["joe doe", "Joe Doe"],
@@ -15,6 +14,7 @@ Deno.test("should capitalize the given text", () => {
   ];
 
   for (const [received, expected] of cases) {
-    assertEquals(schema.check(received, context), expected);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: expected });
   }
 });

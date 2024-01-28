@@ -1,58 +1,73 @@
-import { SchemaContext } from "../context.ts";
-import { createError, SchemaError, SchemaIssue } from "../errors.ts";
-import { Schema } from "../schema.ts";
+import { Context } from "../context.ts";
+import { Issue } from "../errors.ts";
+import { Check, failure, Schema, success } from "../schema.ts";
 import { isObj } from "../types.ts";
 
 /** Allowed types to be a key of `SchemaRecord`. */
 export type SchemaRecordKey = string | number | symbol;
 
-export class SchemaRecord<V> extends Schema<Record<SchemaRecordKey, V>> {
+/** @internal Shortcut to the schema inference. */
+type ThisInfer<V extends Schema> = Record<SchemaRecordKey, V>;
+
+/** @internal Shortcut to the schema extension. */
+type ThisFrom<S extends Schema> = Schema<ThisInfer<S>>;
+
+export const SCHEMA_RECORD_NAME = "SCHEMA_RECORD";
+
+const ISSUE_GENERIC = failure();
+const ISSUE_TYPE = failure({ reason: "TYPE", expected: "object" });
+
+export class SchemaRecord<S extends Schema> implements ThisFrom<S> {
+  readonly name = SCHEMA_RECORD_NAME;
+
   /**
    * Creates a new `object` schema where all the values as `V`.
-   * @param wrapped Schema of each `value`.
+   * @param schema Schema of each `value`.
    */
-  constructor(readonly wrapped: Schema<V>) {
-    super();
-  }
+  constructor(readonly schema: S) {}
 
-  check(value: unknown, context: SchemaContext) {
-    type R = Record<SchemaRecordKey, V>;
+  check(value: unknown, context: Context): Check<ThisInfer<S>> {
+    type R = ThisInfer<S>;
 
-    if (!isObj<R>(value)) {
-      return createError(context, {
-        message: `Must be a "object", got "${typeof value}"`,
-      });
+    if (isObj<R>(value) === false) {
+      return ISSUE_TYPE;
     }
 
-    const final: R = {} as R;
-    const issues: SchemaIssue[] = [];
+    const final = value;
+    const issues: Issue[] = [];
 
     for (const key in value) {
-      const content = value[key];
+      const commit = this.schema.check(value[key], context);
 
-      const scope: SchemaContext = {
-        path: [...context.path, String(key)],
-      };
-
-      const output = this.wrapped.check(content, scope);
-
-      if (output instanceof SchemaError) {
-        issues.push(...output.issues);
+      if (commit === undefined) {
         continue;
       }
 
-      final[key] = output;
+      if (commit.success) {
+        final[key] = commit.value;
+        continue;
+      }
+
+      if (context.verbose === false) {
+        return ISSUE_GENERIC;
+      }
+
+      issues.push({
+        reason: "VALIDATION",
+        issues: commit.issues,
+        position: key,
+      });
     }
 
-    if (issues.length > 0) {
-      return createError(context, { issues });
+    if (issues.length === 0) {
+      return success(final);
     }
 
-    return final;
+    return failure(issues);
   }
 }
 
 /** Creates a new `object` schema where all the values as `V`. */
-export function record<V>(value: Schema<V>) {
-  return new SchemaRecord(value);
+export function record<V extends Schema>(value: V) {
+  return new SchemaRecord<V>(value);
 }

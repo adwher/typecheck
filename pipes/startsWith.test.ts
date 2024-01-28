@@ -1,21 +1,21 @@
-import { assertEquals, assertIsError } from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { pipe, string } from "../schemas/mod.ts";
 import { startsWith } from "./startsWith.ts";
+import { safeParse } from "../utils/mod.ts";
 
-const context = createContext();
-
-Deno.test("should starts with the specified search", () => {
+Deno.test("starts with the specified search", () => {
   const schema = pipe(string(), startsWith("abc"));
 
   const correct = [`abc`, `abc123`, `abcd`, `abcd123`];
   const incorrect = [``, `ab`, `ac`, `abC`, `ABC`, `a1234`];
 
   for (const received of correct) {
-    assertEquals(schema.check(received, context), received);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: received });
   }
 
   for (const received of incorrect) {
-    assertIsError(schema.check(received, context));
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });

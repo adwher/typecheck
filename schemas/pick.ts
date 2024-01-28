@@ -1,27 +1,20 @@
 import { SchemaObject, SchemaShape } from "./object.ts";
 
-/** Pick only the given `K` keys in the `S` object's shape. */
-export type SchemaShapePick<
-  S extends SchemaShape,
-  K extends Array<keyof S>,
-> = Pick<S, K[number]>;
-
 /**
- * Creates a new `SchemaObject` picking only the selected fields.
+ * Creates a new `SchemaObject` picking only the given `fields`.
  */
 export function pick<
   S extends SchemaShape,
-  K extends Array<keyof S>,
+  F extends Array<keyof S>,
 >(
   schema: SchemaObject<S>,
-  keys: K,
+  fields: F,
 ) {
-  type R = SchemaShapePick<S, K>;
-
+  type R = Pick<S, F[number]>;
   const shape: SchemaShape = {};
 
-  for (const key of keys) {
-    shape[key] = schema.shape[key];
+  for (const field of fields) {
+    shape[field] = schema.shape[field];
   }
 
   return new SchemaObject(shape as R);

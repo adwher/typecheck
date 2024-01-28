@@ -1,17 +1,18 @@
-import { SchemaContext } from "../context.ts";
-import { createError } from "../errors.ts";
-
-const ERROR_MESSAGE = "Must be a negative number";
+import { failure } from "../schema.ts";
 
 /**
  * Check the `value` as a negative number.
  */
-export function isNegative(message = ERROR_MESSAGE) {
-  return function (value: number, context: SchemaContext) {
+export function isNegative() {
+  return function (value: number) {
     if (value < 0) {
       return value;
     }
 
-    return createError(context, { message });
+    return failure({
+      reason: "VALIDATION",
+      expected: "negative",
+      received: value,
+    });
   };
 }

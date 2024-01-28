@@ -1,20 +1,20 @@
-import { assertEquals, assertIsError } from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { string } from "./mod.ts";
+import { safeParse } from "../utils/mod.ts";
 
-const context = createContext();
+const schema = string();
 
-Deno.test("should assert with strings", () => {
-  const schema = string();
-
+Deno.test("assert with strings", () => {
   const correct = [`hello`, `hola`];
   const incorrect = [1234, true, false, null, [], {}];
 
   for (const received of correct) {
-    assertEquals(schema.check(received, context), received);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: received });
   }
 
   for (const received of incorrect) {
-    assertIsError(schema.check(received, context));
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });

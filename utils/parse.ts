@@ -1,5 +1,3 @@
-import { createContext } from "../context.ts";
-import { SchemaError } from "../errors.ts";
 import { Schema } from "../schema.ts";
 
 /**
@@ -7,13 +5,16 @@ import { Schema } from "../schema.ts";
  * @throws An error in cases where the `value` does not satisfies the `schema`.
  * @returns Parsed `value` with the given `schema`.
  */
-export function parse<T>(value: unknown, schema: Schema<T>) {
-  const context = createContext();
-  const output = schema.check(value, context);
+export function parse<T>(value: unknown, schema: Schema<T>): T {
+  const commit = schema.check(value, { verbose: true });
 
-  if (output instanceof SchemaError) {
-    throw output;
+  if (commit === undefined) {
+    return value as T;
   }
 
-  return output;
+  if (commit.success === false) {
+    throw commit;
+  }
+
+  return commit.value;
 }

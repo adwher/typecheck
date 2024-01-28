@@ -1,11 +1,10 @@
-import { assertEquals, assertIsError } from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { isStr } from "../types.ts";
 import { custom } from "./mod.ts";
+import { safeParse } from "../mod.ts";
+import { failure } from "../schema.ts";
 
-const context = createContext();
-
-Deno.test("should assert with the given validation", () => {
+Deno.test("assert with the given validation", () => {
   type Distance = `${string}${"cm" | "m" | "km"}`;
 
   const isDistance = (value: unknown) => {
@@ -19,10 +18,19 @@ Deno.test("should assert with the given validation", () => {
   const incorrect = [1234, "1234", "km", "-cm"];
 
   for (const received of correct) {
-    assertEquals(schema.check(received, context), received);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: received });
   }
 
   for (const received of incorrect) {
-    assertIsError(schema.check(received, context));
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
+});
+
+Deno.test("return on failure", () => {
+  const schema = custom(() => failure());
+
+  const commit = safeParse(null, schema);
+  assertObjectMatch(commit, { success: false });
 });

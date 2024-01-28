@@ -8,7 +8,7 @@ export function isStr(value: unknown): value is string {
 
 /** Check the `value` as `number`. */
 export function isNum(value: unknown): value is number {
-  return typeof value === "number" && !isNaN(value);
+  return typeof value === "number";
 }
 
 /** Check the `value` as `boolean`. */
@@ -25,6 +25,16 @@ export function isFn<F extends Function>(value: unknown): value is F {
 /** Check the `value` as an `object` like `T`. */
 export function isObj<T extends object>(value: unknown): value is T {
   return Boolean(value) && typeof value === "object" && !isArr(value);
+}
+
+type Key = string | number | symbol;
+
+/** Check the `value` as an `object` like `T` having the `key`. */
+export function isProp<
+  T extends Record<K, unknown>,
+  K extends Key = keyof T,
+>(value: unknown, key: K): value is T {
+  return isObj<T>(value) && key in value;
 }
 
 /** Check the `value` as an array of `T`. */

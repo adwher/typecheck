@@ -1,59 +1,46 @@
-import { SchemaContext } from "./context.ts";
-
-/** Describes one single issue during the process of validation. */
-export interface SchemaIssue extends SchemaContext {
-  message?: string;
-  issues?: SchemaIssue[];
+interface IssueBase {
+  reason: string;
+  /** Stack of issues with more details. */
+  issues?: Issue[];
+  /** Current `index` or `key` where the issue was generated. */
+  position?: unknown;
 }
 
-/** Used to gather all the issues during the validation phase. */
-export class SchemaError extends Error {
-  readonly issues: SchemaIssue[];
+/** Received type is not the expected. */
+export const ISSUE_TYPE_REASON = "TYPE";
 
-  constructor(issue: SchemaIssue) {
-    super(issue.message);
-
-    this.issues = [issue];
-  }
-
-  /**
-   * Flatten the stack of issues by returning the non-nested ones.
-   * @returns Summarized array of issues.
-   */
-  flatten() {
-    return flatten(this.issues);
-  }
-
-  /**
-   * Flatten the stack of issues and returns the first one.
-   * @returns First issue in the flatten stack.
-   */
-  first() {
-    const [first] = this.flatten();
-    return first;
-  }
+/** Received type is not the expected. */
+export interface IssueType extends IssueBase {
+  reason: typeof ISSUE_TYPE_REASON;
+  expected: unknown;
+  received?: unknown;
 }
 
-/**
- * Creates a new `SchemaError` using the current `context` and the `descriptor`.
- * @returns Instance of `SchemaError`.
- */
-export function createError(
-  context: SchemaContext,
-  descriptor?: Omit<SchemaIssue, keyof SchemaContext>,
-) {
-  return new SchemaError({ ...context, ...descriptor });
+export const ISSUE_VALIDATION_REASON = "VALIDATION";
+
+/** Received value does not fulfill the constraint. */
+export interface IssueValidation extends IssueBase {
+  reason: typeof ISSUE_VALIDATION_REASON;
+  expected?: unknown;
+  received?: unknown;
 }
 
-/** Flatten a stack of issues by returning the non-nested ones. */
-function flatten(issues: SchemaIssue[]): SchemaIssue[] {
-  return issues.flatMap((issue) => {
-    const stack = issue.issues ?? [];
+/** Expect one value but no one was received. */
+export const ISSUE_MISSING_REASON = "MISSING";
 
-    if (stack.length > 0) {
-      return flatten(stack);
-    }
-
-    return issue;
-  });
+/** Expect one value but no one was received. */
+export interface IssueMissing extends IssueBase {
+  reason: typeof ISSUE_MISSING_REASON;
 }
+
+/** Expect no value but one was received. */
+export const ISSUE_PRESENT_REASON = "PRESENT";
+
+/** Expect no value but one was received. */
+export interface IssuePresent extends IssueBase {
+  reason: typeof ISSUE_PRESENT_REASON;
+}
+
+export type Issue = Readonly<
+  IssueType | IssueValidation | IssueMissing | IssuePresent
+>;

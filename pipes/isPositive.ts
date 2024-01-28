@@ -1,17 +1,18 @@
-import { SchemaContext } from "../context.ts";
-import { createError } from "../errors.ts";
-
-const ERROR_MESSAGE = "Must be a positive number";
+import { failure } from "../schema.ts";
 
 /**
  * Check the `value` as a positive number.
  */
-export function isPositive(message = ERROR_MESSAGE) {
-  return function (value: number, context: SchemaContext) {
+export function isPositive() {
+  return function (value: number) {
     if (value >= 0) {
       return value;
     }
 
-    return createError(context, { message });
+    return failure({
+      reason: "VALIDATION",
+      expected: "positive",
+      received: value,
+    });
   };
 }

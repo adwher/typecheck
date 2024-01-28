@@ -1,13 +1,11 @@
-import { assertEquals, assertIsError } from "assert/mod.ts";
-import { createContext } from "../context.ts";
+import { assertObjectMatch } from "assert/mod.ts";
 import { pipe, string } from "../schemas/mod.ts";
 import { isEmail } from "./isEmail.ts";
+import { safeParse } from "../utils/mod.ts";
 
-const context = createContext();
+const schema = pipe(string(), isEmail());
 
-Deno.test("should assert formatted emails", () => {
-  const schema = pipe(string(), isEmail());
-
+Deno.test("assert formatted emails", () => {
   const correct = [
     `name@domain.com`,
     `name@sub.domain.com`,
@@ -34,10 +32,12 @@ Deno.test("should assert formatted emails", () => {
   ];
 
   for (const received of correct) {
-    assertEquals(schema.check(received, context), received);
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: true, value: received });
   }
 
   for (const received of incorrect) {
-    assertIsError(schema.check(received, context));
+    const commit = safeParse(received, schema);
+    assertObjectMatch(commit, { success: false });
   }
 });

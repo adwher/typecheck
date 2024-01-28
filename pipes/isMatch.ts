@@ -1,18 +1,18 @@
-import { SchemaContext } from "../context.ts";
-import { createError } from "../errors.ts";
+import { failure } from "../schema.ts";
 
 /**
  * Create a pipe that validates the `value` as the specified regular expression.
  */
-export function isMatch(
-  regex: RegExp,
-  message = `Must match with "${regex}" expression`,
-) {
-  return function (value: string, context: SchemaContext) {
+export function isMatch(regex: RegExp) {
+  return function (value: string) {
     if (regex.test(value)) {
       return value;
     }
 
-    return createError(context, { message });
+    return failure({
+      reason: "VALIDATION",
+      expected: regex,
+      received: value,
+    });
   };
 }
