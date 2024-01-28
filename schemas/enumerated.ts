@@ -1,11 +1,12 @@
+import { Context } from "../context.ts";
 import { Check, failure, Schema } from "../schema.ts";
 
 export const SCHEMA_ENUMERATED_NAME = "SCHEMA_ENUMERATED";
 
+const ISSUE_VALIDATION = failure({ reason: "VALIDATION" });
+
 /** Allowed types as enumerables. */
 export type Enumerable = string | number | boolean;
-
-const ISSUE_VALIDATION = failure({ reason: "VALIDATION" });
 
 export class SchemaEnumerated<
   T extends readonly Enumerable[],
@@ -18,14 +19,18 @@ export class SchemaEnumerated<
    */
   constructor(private allowed: T) {}
 
-  check(value: unknown): Check<T[number]> {
+  check(value: unknown, context: Context): Check<T[number]> {
     const isEnumerated = this.canUse(value);
 
-    if (isEnumerated === false) {
+    if (isEnumerated) {
+      return undefined;
+    }
+
+    if (context.verbose === false) {
       return ISSUE_VALIDATION;
     }
 
-    return undefined;
+    return failure({ reason: "VALIDATION", expected: this.allowed });
   }
 
   /** Checks `value` is allowed in the `options`. */
@@ -40,9 +45,6 @@ export class SchemaEnumerated<
 export function enumerated<E extends readonly Enumerable[]>(...options: E) {
   return new SchemaEnumerated<E>(options);
 }
-
-/** Alias of {@link enumerated}. */
-export const options = enumerated;
 
 /** Check one `value` as `Enumerable`. */
 export function isEnumerable(value: unknown): value is Enumerable {

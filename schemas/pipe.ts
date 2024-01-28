@@ -1,13 +1,6 @@
 import { Context } from "../context.ts";
 import { Issue } from "../errors.ts";
-import {
-  Failure,
-  failure,
-  Infer,
-  Schema,
-  SchemaFrom,
-  success,
-} from "../schema.ts";
+import { Failure, failure, Schema, SchemaFrom, success } from "../schema.ts";
 import { isFailure } from "../utils/mod.ts";
 
 /**
@@ -18,10 +11,7 @@ import { isFailure } from "../utils/mod.ts";
 export type Pipe<T> = (value: T, context: Context) => T | Failure;
 
 /** List of multiple schema pipes of the same `T`. */
-export type Pipes<T> = Pipe<T>[];
-
-/** @internal Shortcut to the schema inference. */
-type ThisFrom<S extends Schema, R = Infer<S>> = Pipes<R>;
+export type Pipes<T> = Pipe<T extends Schema<infer R> ? R : T>[];
 
 export const SCHEMA_PIPE_NAME = "SCHEMA_PIPE";
 
@@ -35,7 +25,7 @@ export class SchemaPipe<S extends Schema> implements SchemaFrom<S> {
    * @param wrapped Wrapped schema.
    * @param pipes List of multiple schema pipes of the same `T`.
    */
-  constructor(readonly wrapped: S, private pipes: ThisFrom<S>) {}
+  constructor(readonly wrapped: S, private pipes: Pipes<S>) {}
 
   check(value: unknown, context: Context) {
     const commit = this.wrapped.check(value, context);
@@ -71,9 +61,6 @@ export class SchemaPipe<S extends Schema> implements SchemaFrom<S> {
 }
 
 /** Create a chain of `pipes` once the `schema` return the validated value. */
-export function pipe<S extends Schema>(schema: S, ...pipes: ThisFrom<S>) {
+export function pipe<S extends Schema>(schema: S, ...pipes: Pipes<S>) {
   return new SchemaPipe<S>(schema, pipes);
 }
-
-/** Alias of `pipe`. */
-export const refine = pipe;

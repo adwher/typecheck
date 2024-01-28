@@ -2,6 +2,7 @@ import { assertObjectMatch } from "assert/mod.ts";
 import { isStr } from "../types.ts";
 import { custom } from "./mod.ts";
 import { safeParse } from "../mod.ts";
+import { failure } from "../schema.ts";
 
 Deno.test("assert with the given validation", () => {
   type Distance = `${string}${"cm" | "m" | "km"}`;
@@ -25,4 +26,11 @@ Deno.test("assert with the given validation", () => {
     const commit = safeParse(received, schema);
     assertObjectMatch(commit, { success: false });
   }
+});
+
+Deno.test("return on failure", () => {
+  const schema = custom(() => failure());
+
+  const commit = safeParse(null, schema);
+  assertObjectMatch(commit, { success: false });
 });

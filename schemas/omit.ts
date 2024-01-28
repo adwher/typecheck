@@ -1,31 +1,20 @@
 import { SchemaObject, SchemaShape } from "./object.ts";
 
-/** Omit the given `K` keys in the `S` object's shape. */
-export type SchemaShapeOmit<
-  S extends SchemaShape,
-  K extends Array<keyof S>,
-> = Omit<S, K[number]>;
-
 /**
- * Creates a new `SchemaObject` skipping the selected fields.
+ * Creates a new `SchemaObject` skipping the given `fields`.
  */
 export function omit<
   S extends SchemaShape,
-  K extends Array<keyof S>,
+  F extends Array<keyof S>,
 >(
   schema: SchemaObject<S>,
-  keys: K,
+  fields: F,
 ) {
-  type R = SchemaShapeOmit<S, K>;
+  type R = Omit<S, F[number]>;
+  const shape: SchemaShape = { ...schema.shape };
 
-  const shape: SchemaShape = {};
-
-  for (const key in schema.shape) {
-    if (keys.includes(key)) {
-      continue;
-    }
-
-    shape[key] = schema.shape[key];
+  for (const field of fields) {
+    delete shape[field];
   }
 
   return new SchemaObject(shape as R);

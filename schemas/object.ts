@@ -75,9 +75,3 @@ export class SchemaObject<S extends SchemaShape> implements SchemaFrom<S> {
 export function object<S extends SchemaShape>(shape: S) {
   return new SchemaObject(shape);
 }
-
-/** Alias of {@link object}. */
-export const struct = object;
-
-/** Alias of {@link object}. */
-export const shape = object;

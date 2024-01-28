@@ -1,4 +1,5 @@
 import { Context } from "../context.ts";
+import { Issue } from "../errors.ts";
 import { Check, failure, Infer, Schema } from "../schema.ts";
 
 export const SCHEMA_EITHER_NAME = "SCHEMA_EITHER";
@@ -21,6 +22,7 @@ export class SchemaEither<S extends readonly Schema[]> implements ThisFrom<S> {
   constructor(readonly schemas: S) {}
 
   check(value: unknown, context: Context): Check<ThisInfer<S>> {
+    const issues: Issue[] = [];
     const schemas = this.flatten();
 
     for (const schema of schemas) {
@@ -33,9 +35,18 @@ export class SchemaEither<S extends readonly Schema[]> implements ThisFrom<S> {
       if (commit.success === true) {
         return commit;
       }
+
+      if (context.verbose === false) {
+        return ISSUE_VALIDATION;
+      }
+
+      issues.push({
+        reason: "VALIDATION",
+        issues: commit.issues,
+      });
     }
 
-    return ISSUE_VALIDATION;
+    return failure(issues);
   }
 
   /** Transform the array of schemas applying the `flatten` strategy. */
@@ -61,6 +72,3 @@ export function either<
   const schemas: [A, ...B] = [first, ...other];
   return new SchemaEither(schemas);
 }
-
-/** Alias of `either`. */
-export const or = either;

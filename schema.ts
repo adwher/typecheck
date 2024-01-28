@@ -59,10 +59,7 @@ export type CheckFrom<T> = Check<Infer<T>>;
 export interface Schema<T = any> {
   name: string;
 
-  /**
-   * Check the given `value` using the strategy of the schema.
-   * @internal **DO NOT USE OUTSIDE**.
-   */
+  /** Check the given `value` using the strategy of the schema. */
   check(value: unknown, context: Context): Check<T>;
 }
 

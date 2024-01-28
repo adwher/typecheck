@@ -1,5 +1,5 @@
 import { Context } from "../context.ts";
-import { Failure, Schema, SchemaFrom } from "../schema.ts";
+import { CheckFrom, Failure, Schema, SchemaFrom } from "../schema.ts";
 import { isFailure } from "../utils/mod.ts";
 
 export const SCHEMA_LAZY_NAME = "SCHEMA_LAZY";
@@ -19,7 +19,7 @@ export class SchemaLazy<S extends Schema> implements SchemaFrom<S> {
    */
   constructor(readonly generate: SchemaGenerator<S>) {}
 
-  check(value: unknown, context: Context) {
+  check(value: unknown, context: Context): CheckFrom<S> {
     const commit = this.generate(value, context);
 
     if (isFailure(commit)) {
@@ -39,6 +39,3 @@ export class SchemaLazy<S extends Schema> implements SchemaFrom<S> {
 export function lazy<S extends Schema>(getter: SchemaGenerator<S>) {
   return new SchemaLazy(getter);
 }
-
-/** Alias of {@link lazy}. */
-export const recursive = lazy;

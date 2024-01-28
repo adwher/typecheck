@@ -15,9 +15,12 @@ export class SchemaOptional<S extends Schema> implements ThisFrom<S> {
   /**
    * Creates a new `optional` schema allowing to have `T` or `undefined`.
    * @param wrapped Original schema.
-   * @param fallback Fallback value or generator.
+   * @param fallback Value returned in case of `undefined`.
    */
-  constructor(readonly wrapped: S, readonly fallback?: Infer<S>) {}
+  constructor(
+    readonly wrapped: S,
+    readonly fallback: ThisInfer<S> = undefined,
+  ) {}
 
   check(value: unknown, context: Context): Check<ThisInfer<S>> {
     if (value === undefined) {
@@ -42,9 +45,8 @@ export function optional<S extends Schema>(schema: S): SchemaOptional<S>;
 export function optional<S extends Schema>(
   schema: S,
   fallback: Infer<S>,
-): SchemaOptional<S>;
+): S;
 
-/** Creates a new `optional` schema allowing to have `T` or `undefined`. */
 export function optional<S extends Schema>(schema: S, fallback?: Infer<S>) {
   return new SchemaOptional(schema, fallback);
 }

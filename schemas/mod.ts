@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Andres Celis. MIT license.
+// Copyright (c) 2024 Andres Celis. MIT license.
 
 /**
  * Built-in collection of schemas and their modifiers.

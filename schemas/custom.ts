@@ -43,6 +43,3 @@ export class SchemaCustom<T> implements Schema<T> {
 export function custom<T>(validation: SchemaValidation) {
   return new SchemaCustom<T>(validation);
 }
-
-/** Alias of {@link custom}. */
-export const special = custom;

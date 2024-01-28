@@ -15,13 +15,16 @@ export class SchemaNullable<S extends Schema> implements ThisFrom<S> {
   /**
    * Creates a new `nullable` schema allowing to have `T` or `null`.
    * @param wrapped Original schema.
-   * @param fallback Fallback value or generator.
+   * @param fallback Value returned in case of `null`.
    */
-  constructor(readonly wrapped: S, readonly fallback?: Infer<S>) {}
+  constructor(
+    readonly wrapped: S,
+    readonly fallback: ThisInfer<S> = null,
+  ) {}
 
   check(value: unknown, context: Context): Check<ThisInfer<S>> {
     if (value === null) {
-      return success(this.fallback ?? null);
+      return success(this.fallback);
     }
 
     return this.wrapped.check(value, context);
