@@ -1,7 +1,13 @@
 {
   "name": "@adwher/typecheck",
   "version": "0.0.3",
-  "exports": "./mod.ts",
+  "exports": {
+    ".": "./mod.ts",
+    "./types": "./types.ts",
+    "./utils": "./utils.ts",
+    "./pipes": "./pipes.ts",
+    "./schemas": "./schemas.ts"
+  },
   "tasks": {
     "ci:format": "deno fmt --check",
     "ci:types": "deno check **/*.ts",
@@ -10,12 +16,17 @@
     "ok": "deno task ci:format && deno task ci:types && deno task ci:lint && deno task ci:unit"
   },
   "publish": {
-    "exclude": ["*.test.ts", "*.bench.ts", ".github", ".vscode"],
     "include": [
       "deno.json",
       "README.md",
       "LICENSE",
       "**/*.ts"
+    ],
+    "exclude": [
+      "**/*.test.ts",
+      "**/*.bench.ts",
+      ".github",
+      ".vscode"
     ]
   },
   "imports": {

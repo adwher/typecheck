@@ -8,7 +8,7 @@ import {
   type SchemaFrom,
   success,
 } from "../schema.ts";
-import { isFailure } from "../utils/mod.ts";
+import { isFailure } from "../utils.ts";
 
 /**
  * Allow to transform the initial `value` and add extra validations with more details to the schemas.

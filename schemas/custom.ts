@@ -1,6 +1,6 @@
 import type { Context } from "../context.ts";
 import { type Check, type Failure, failure, type Schema } from "../schema.ts";
-import { isFailure } from "../utils/mod.ts";
+import { isFailure } from "../utils.ts";
 
 /** Function that validates the satisfaction of the given `value` as the given schema. */
 export type SchemaValidation = (
