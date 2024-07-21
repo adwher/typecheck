@@ -1,0 +1,31 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  jsr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # The OIDC ID token is used for authentication with JSR.    
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup "Deno v1"
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: 1.x
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          key: ${{ hashFiles('deno.lock') }}
+          path: |
+            ~/.deno
+            ~/.cache/deno
+
+      - name: Publish to JSR
+        run: deno publish
