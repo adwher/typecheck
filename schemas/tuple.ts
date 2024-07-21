@@ -3,6 +3,7 @@ import type { Issue } from "../errors.ts";
 import {
   type CheckFrom,
   failure,
+  GENERIC_FAILURE,
   type Infer,
   type Schema,
   type SchemaFrom,
@@ -12,7 +13,6 @@ import { isArr } from "../types.ts";
 
 export const SCHEMA_TUPLE_NAME = "SCHEMA_TUPLE";
 
-const ISSUE_GENERIC = failure();
 const ISSUE_TYPE = failure({ reason: "TYPE", expected: "array" });
 
 export class SchemaTuple<S extends readonly Schema[]> implements SchemaFrom<S> {
@@ -60,7 +60,7 @@ export class SchemaTuple<S extends readonly Schema[]> implements SchemaFrom<S> {
       }
 
       if (context.verbose === false) {
-        return ISSUE_GENERIC;
+        return GENERIC_FAILURE;
       }
 
       issues.push({

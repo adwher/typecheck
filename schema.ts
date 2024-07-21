@@ -9,7 +9,7 @@ export interface Success<T> {
   value: T;
 }
 
-/** Creates a new `Success<T>` instance for the given `value as T`. */
+/** Creates a new {@linkcode Success} instance for the given `value as T`. */
 export function success<T>(value: T): Success<T> {
   return {
     success: true,
@@ -23,7 +23,7 @@ export interface Failure {
   issues: Issue[];
 }
 
-/** Creates a new `Failure<T>` instance for the given `issues`. */
+/** Creates a new {@linkcode Failure} instance for the given `issues`. */
 export function failure(reason?: Issue | Issue[]): Failure {
   if (reason === undefined) {
     return { success: false, issues: [] };
@@ -34,6 +34,9 @@ export function failure(reason?: Issue | Issue[]): Failure {
     issues: isArr(reason) ? reason : [reason],
   };
 }
+
+/** Lazy enough to create a specific failure? */
+export const GENERIC_FAILURE: Failure = failure();
 
 /**
  * Represents the possible result for the given check on a schema.

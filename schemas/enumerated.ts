@@ -12,12 +12,16 @@ export class SchemaEnumerated<
   T extends readonly Enumerable[],
 > implements Schema<T[number]> {
   readonly name = SCHEMA_ENUMERATED_NAME;
+  /** Allowed values of the schema. */
+  #allowed: T;
 
   /**
    * Creates a new enumerated schema that only receives the given `options`.
    * @param allowed Allowed values of the schema.
    */
-  constructor(private allowed: T) {}
+  constructor(allowed: T) {
+    this.#allowed = allowed;
+  }
 
   check(value: unknown, context: Context): Check<T[number]> {
     const isEnumerated = this.canUse(value);
@@ -30,12 +34,12 @@ export class SchemaEnumerated<
       return ISSUE_VALIDATION;
     }
 
-    return failure({ reason: "VALIDATION", expected: this.allowed });
+    return failure({ reason: "VALIDATION", expected: this.#allowed });
   }
 
   /** Checks `value` is allowed in the `options`. */
   canUse(value: unknown): value is T[number] {
-    return isEnumerable(value) && this.allowed.includes(value);
+    return isEnumerable(value) && this.#allowed.includes(value);
   }
 }
 

@@ -4,6 +4,7 @@ import {
   type CheckFrom,
   type Failure,
   failure,
+  GENERIC_FAILURE,
   type Schema,
   type SchemaFrom,
   success,
@@ -22,17 +23,19 @@ export type Pipes<T> = Pipe<T extends Schema<infer R> ? R : T>[];
 
 export const SCHEMA_PIPE_NAME = "SCHEMA_PIPE";
 
-const ISSUE_GENERIC = failure();
-
 export class SchemaPipe<S extends Schema> implements SchemaFrom<S> {
   readonly name = SCHEMA_PIPE_NAME;
+  /** List of multiple schema pipes of the same `T`. */
+  #pipes: Pipes<S>;
 
   /**
    * Create a chain of `pipes` once the `schema` return the validated value.
    * @param wrapped Wrapped schema.
    * @param pipes List of multiple schema pipes of the same `T`.
    */
-  constructor(readonly wrapped: S, private pipes: Pipes<S>) {}
+  constructor(readonly wrapped: S, pipes: Pipes<S>) {
+    this.#pipes = pipes;
+  }
 
   check(value: unknown, context: Context): CheckFrom<S> {
     const commit = this.wrapped.check(value, context);
@@ -44,7 +47,7 @@ export class SchemaPipe<S extends Schema> implements SchemaFrom<S> {
     let final = commit?.value ?? value;
     const issues: Issue[] = [];
 
-    for (const pipe of this.pipes) {
+    for (const pipe of this.#pipes) {
       const commit = pipe(final, context);
 
       if (isFailure(commit) === false) {
@@ -53,7 +56,7 @@ export class SchemaPipe<S extends Schema> implements SchemaFrom<S> {
       }
 
       if (context.verbose === false) {
-        return ISSUE_GENERIC;
+        return GENERIC_FAILURE;
       }
 
       for (const issue of commit.issues) {
