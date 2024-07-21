@@ -15,7 +15,9 @@ An awesome, tiny and extensible runtime types validation library.
 ## Example
 
 ```ts
-import {} from "https://deno.land/x/typecheck";
+import * as k from "https://deno.land/x/typecheck";
+
+const EmailSchema = k.pipe(k.string(), k.isEmail(), k.minLength(5));
 ```
 
 ## License

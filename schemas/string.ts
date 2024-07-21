@@ -1,4 +1,4 @@
-import { Check, failure, Schema } from "../schema.ts";
+import { type Check, failure, type Schema } from "../schema.ts";
 
 export const SCHEMA_STRING_NAME = "SCHEMA_STRING";
 
@@ -13,6 +13,6 @@ export class SchemaString implements Schema<string> {
 }
 
 /** Creates a new `string` schema. */
-export function string() {
+export function string(): SchemaString {
   return new SchemaString();
 }

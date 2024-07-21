@@ -15,10 +15,12 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
+
       - name: Setup "Deno v1"
         uses: denoland/setup-deno@v1
         with:
           deno-version: 1.x
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
@@ -26,9 +28,18 @@ jobs:
           path: |
             ~/.deno
             ~/.cache/deno
+
       - name: Run formatting checks
-        run: deno fmt --check
+        run: deno task ci:format
+
+      - name: Check for spelling
+        uses: crate-ci/typos@v1.23.2
+
+      - name: Run typing checks
+        run: deno task ci:types
+
       - name: Run linting checks
-        run: deno lint
+        run: deno task ci:lint
+
       - name: Run unit-test cases
-        run: deno test --parallel --reporter=dot
+        run: deno task ci:unit

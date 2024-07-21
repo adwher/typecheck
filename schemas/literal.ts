@@ -1,4 +1,4 @@
-import { Check, failure, Schema } from "../schema.ts";
+import { type Check, failure, type Schema } from "../schema.ts";
 
 /** Allowed types as literals. */
 export type Literal = string | number | bigint | boolean | null;
@@ -28,6 +28,6 @@ export class SchemaLiteral<L extends Literal> implements Schema<L> {
 }
 
 /** Creates a new `L` schema, where only one value is allowed. */
-export function literal<L extends Literal>(literal: L) {
+export function literal<L extends Literal>(literal: L): SchemaLiteral<L> {
   return new SchemaLiteral(literal);
 }

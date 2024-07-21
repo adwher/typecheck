@@ -1,6 +1,6 @@
-import { Context } from "../context.ts";
-import { Issue } from "../errors.ts";
-import { Check, failure, Infer, Schema } from "../schema.ts";
+import type { Context } from "../context.ts";
+import type { Issue } from "../errors.ts";
+import { type Check, failure, type Infer, type Schema } from "../schema.ts";
 
 export const SCHEMA_EITHER_NAME = "SCHEMA_EITHER";
 
@@ -17,7 +17,7 @@ export class SchemaEither<S extends readonly Schema[]> implements ThisFrom<S> {
 
   /**
    * Create a new schema that receives any of the given schemas.
-   * @param schemas List of all posible schemas.
+   * @param schemas List of all possible schemas.
    */
   constructor(readonly schemas: S) {}
 
@@ -68,7 +68,7 @@ export class SchemaEither<S extends readonly Schema[]> implements ThisFrom<S> {
 export function either<
   A extends Schema,
   B extends Schema[],
->(first: A, ...other: B) {
+>(first: A, ...other: B): SchemaEither<[A, ...B]> {
   const schemas: [A, ...B] = [first, ...other];
   return new SchemaEither(schemas);
 }

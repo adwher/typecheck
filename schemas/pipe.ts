@@ -1,6 +1,13 @@
-import { Context } from "../context.ts";
-import { Issue } from "../errors.ts";
-import { Failure, failure, Schema, SchemaFrom, success } from "../schema.ts";
+import type { Context } from "../context.ts";
+import type { Issue } from "../errors.ts";
+import {
+  type CheckFrom,
+  type Failure,
+  failure,
+  type Schema,
+  type SchemaFrom,
+  success,
+} from "../schema.ts";
 import { isFailure } from "../utils/mod.ts";
 
 /**
@@ -27,7 +34,7 @@ export class SchemaPipe<S extends Schema> implements SchemaFrom<S> {
    */
   constructor(readonly wrapped: S, private pipes: Pipes<S>) {}
 
-  check(value: unknown, context: Context) {
+  check(value: unknown, context: Context): CheckFrom<S> {
     const commit = this.wrapped.check(value, context);
 
     if (isFailure(commit)) {
@@ -49,7 +56,9 @@ export class SchemaPipe<S extends Schema> implements SchemaFrom<S> {
         return ISSUE_GENERIC;
       }
 
-      issues.push({ reason: "VALIDATION", issues: commit.issues });
+      for (const issue of commit.issues) {
+        issues.push(issue);
+      }
     }
 
     if (issues.length === 0) {
@@ -61,6 +70,9 @@ export class SchemaPipe<S extends Schema> implements SchemaFrom<S> {
 }
 
 /** Create a chain of `pipes` once the `schema` return the validated value. */
-export function pipe<S extends Schema>(schema: S, ...pipes: Pipes<S>) {
-  return new SchemaPipe<S>(schema, pipes);
+export function pipe<S extends Schema>(
+  schema: S,
+  ...pipes: Pipes<S>
+): SchemaPipe<S> {
+  return new SchemaPipe(schema, pipes);
 }

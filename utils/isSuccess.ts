@@ -1,4 +1,4 @@
-import { Success } from "../schema.ts";
+import type { Success } from "../schema.ts";
 import { isProp } from "../types.ts";
 
 /** Checks `value` as `Success`. */

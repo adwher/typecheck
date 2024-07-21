@@ -1,6 +1,13 @@
-import { Context } from "../context.ts";
-import { Issue } from "../errors.ts";
-import { failure, Infer, Schema, SchemaFrom, success } from "../schema.ts";
+import type { Context } from "../context.ts";
+import type { Issue } from "../errors.ts";
+import {
+  type CheckFrom,
+  failure,
+  type Infer,
+  type Schema,
+  type SchemaFrom,
+  success,
+} from "../schema.ts";
 import { isObj } from "../types.ts";
 
 /** Sets the allowed keys for a shape. */
@@ -24,7 +31,7 @@ export class SchemaObject<S extends SchemaShape> implements SchemaFrom<S> {
    */
   constructor(readonly shape: S) {}
 
-  check(value: unknown, context: Context) {
+  check(value: unknown, context: Context): CheckFrom<S> {
     type R = Infer<S>;
 
     if (isObj<R>(value) === false) {
@@ -72,6 +79,6 @@ export class SchemaObject<S extends SchemaShape> implements SchemaFrom<S> {
 }
 
 /** Creates a new `object` schema using a `ObjectShape`. */
-export function object<S extends SchemaShape>(shape: S) {
+export function object<S extends SchemaShape>(shape: S): SchemaObject<S> {
   return new SchemaObject(shape);
 }

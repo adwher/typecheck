@@ -1,6 +1,13 @@
-import { Context } from "../context.ts";
-import { Issue } from "../errors.ts";
-import { failure, Infer, Schema, SchemaFrom, success } from "../schema.ts";
+import type { Context } from "../context.ts";
+import type { Issue } from "../errors.ts";
+import {
+  type CheckFrom,
+  failure,
+  type Infer,
+  type Schema,
+  type SchemaFrom,
+  success,
+} from "../schema.ts";
 import { isArr } from "../types.ts";
 
 export const SCHEMA_ARRAY_NAME = "SCHEMA_ARRAY";
@@ -17,7 +24,7 @@ export class SchemaArray<S extends Schema> implements SchemaFrom<S[]> {
    */
   constructor(readonly wrapped: S) {}
 
-  check(value: unknown, context: Context) {
+  check(value: unknown, context: Context): CheckFrom<S[]> {
     type T = Infer<S>;
 
     if (isArr<T>(value) === false) {

@@ -1,5 +1,5 @@
-import { Context } from "../context.ts";
-import { CheckFrom, Failure, Schema, SchemaFrom } from "../schema.ts";
+import type { Context } from "../context.ts";
+import type { CheckFrom, Failure, Schema, SchemaFrom } from "../schema.ts";
 import { isFailure } from "../utils/mod.ts";
 
 export const SCHEMA_LAZY_NAME = "SCHEMA_LAZY";
@@ -36,6 +36,8 @@ export class SchemaLazy<S extends Schema> implements SchemaFrom<S> {
  * Use `Describe` and a defined type to use `recursive` schemas.
  * @returns A new `SchemaLazy` with the type of all possible schemas.
  */
-export function lazy<S extends Schema>(getter: SchemaGenerator<S>) {
+export function lazy<S extends Schema>(
+  getter: SchemaGenerator<S>,
+): SchemaLazy<S> {
   return new SchemaLazy(getter);
 }

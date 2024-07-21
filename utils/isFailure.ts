@@ -1,4 +1,4 @@
-import { Failure } from "../schema.ts";
+import type { Failure } from "../schema.ts";
 import { isProp } from "../types.ts";
 
 /** Checks `value` as `Failure`. */

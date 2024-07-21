@@ -1,5 +1,5 @@
-import { Context } from "../context.ts";
-import { Check, failure, Schema } from "../schema.ts";
+import type { Context } from "../context.ts";
+import { type Check, failure, type Schema } from "../schema.ts";
 
 export const SCHEMA_ENUMERATED_NAME = "SCHEMA_ENUMERATED";
 
@@ -34,7 +34,7 @@ export class SchemaEnumerated<
   }
 
   /** Checks `value` is allowed in the `options`. */
-  canUse(value: unknown) {
+  canUse(value: unknown): value is T[number] {
     return isEnumerable(value) && this.allowed.includes(value);
   }
 }
@@ -42,8 +42,10 @@ export class SchemaEnumerated<
 /**
  * Creates a new enumerated schema that only receives the given `options`.
  */
-export function enumerated<E extends readonly Enumerable[]>(...options: E) {
-  return new SchemaEnumerated<E>(options);
+export function enumerated<E extends readonly Enumerable[]>(
+  ...options: E
+): SchemaEnumerated<E> {
+  return new SchemaEnumerated(options);
 }
 
 /** Check one `value` as `Enumerable`. */

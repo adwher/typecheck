@@ -1,4 +1,4 @@
-import { Check, failure, Schema } from "../schema.ts";
+import { type Check, failure, type Schema } from "../schema.ts";
 
 export const SCHEMA_NEVER_NAME = "SCHEMA_NEVER";
 
@@ -13,6 +13,6 @@ export class SchemaNever implements Schema<never> {
 }
 
 /** Creates a new `never` schema. */
-export function never() {
+export function never(): SchemaNever {
   return new SchemaNever();
 }

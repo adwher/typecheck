@@ -1,6 +1,6 @@
-import { Context } from "../context.ts";
-import { Issue } from "../errors.ts";
-import { Check, failure, Schema, success } from "../schema.ts";
+import type { Context } from "../context.ts";
+import type { Issue } from "../errors.ts";
+import { type Check, failure, type Schema, success } from "../schema.ts";
 import { isObj } from "../types.ts";
 
 /** Allowed types to be a key of `SchemaRecord`. */
@@ -67,7 +67,7 @@ export class SchemaRecord<S extends Schema> implements ThisFrom<S> {
   }
 }
 
-/** Creates a new `object` schema where all the values as `V`. */
-export function record<V extends Schema>(value: V) {
+/** Creates a new `object` schema where all the values as `V` like `Record<unknown, V>`. */
+export function record<V extends Schema>(value: V): SchemaRecord<V> {
   return new SchemaRecord<V>(value);
 }

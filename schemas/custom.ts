@@ -1,5 +1,5 @@
-import { Context } from "../context.ts";
-import { Check, Failure, failure, Schema } from "../schema.ts";
+import type { Context } from "../context.ts";
+import { type Check, type Failure, failure, type Schema } from "../schema.ts";
 import { isFailure } from "../utils/mod.ts";
 
 /** Function that validates the satisfaction of the given `value` as the given schema. */
@@ -40,6 +40,6 @@ export class SchemaCustom<T> implements Schema<T> {
  * Create a new `SchemaCustom` that only accepts values that satisfies the `validation`.
  * @param validation Checks the given `value`.
  */
-export function custom<T>(validation: SchemaValidation) {
+export function custom<T>(validation: SchemaValidation): SchemaCustom<T> {
   return new SchemaCustom<T>(validation);
 }

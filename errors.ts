@@ -12,7 +12,9 @@ export const ISSUE_TYPE_REASON = "TYPE";
 /** Received type is not the expected. */
 export interface IssueType extends IssueBase {
   reason: typeof ISSUE_TYPE_REASON;
+  /** The expected type. */
   expected: unknown;
+  /** The received type. */
   received?: unknown;
 }
 
@@ -21,7 +23,11 @@ export const ISSUE_VALIDATION_REASON = "VALIDATION";
 /** Received value does not fulfill the constraint. */
 export interface IssueValidation extends IssueBase {
   reason: typeof ISSUE_VALIDATION_REASON;
+  /** The validation that was not fulfilled. */
+  validation?: string;
+  /** The expected value. */
   expected?: unknown;
+  /** The received value. */
   received?: unknown;
 }
 

@@ -1,5 +1,11 @@
-import { SchemaObject, SchemaShape } from "./object.ts";
-import { Override } from "../types.ts";
+import { SchemaObject, type SchemaShape } from "./object.ts";
+import type { Override } from "../types.ts";
+
+export type SchemaShapeMerge<S extends SchemaShape, E extends SchemaShape> =
+  Override<S, E>;
+
+export type SchemaObjectMerge<S extends SchemaShape, E extends SchemaShape> =
+  SchemaObject<SchemaShapeMerge<S, E>>;
 
 /**
  * Creates a new `SchemaObject` merging the `initial` schema with the `extension` fields.
@@ -11,7 +17,6 @@ export function merge<
 >(
   initial: SchemaObject<S>,
   extension: SchemaObject<E>,
-) {
-  const shape: Override<S, E> = { ...initial.shape, ...extension.shape };
-  return new SchemaObject(shape);
+): SchemaObjectMerge<S, E> {
+  return new SchemaObject({ ...initial.shape, ...extension.shape });
 }

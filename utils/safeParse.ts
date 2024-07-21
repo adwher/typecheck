@@ -1,4 +1,4 @@
-import { CheckOption, Schema, success } from "../schema.ts";
+import { type CheckOption, type Schema, success } from "../schema.ts";
 
 /**
  * Check the `value` with the given `schema` and return the result.

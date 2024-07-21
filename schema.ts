@@ -1,8 +1,8 @@
-import { Context } from "./context.ts";
-import { Issue } from "./errors.ts";
+import type { Context } from "./context.ts";
+import type { Issue } from "./errors.ts";
 import { isArr } from "./types.ts";
 
-/** Use when the `value` satifies the `schema`. */
+/** Use when the `value` satisfies the `schema`. */
 export interface Success<T> {
   success: true;
   /** Output after validation of the schema. */
@@ -17,7 +17,7 @@ export function success<T>(value: T): Success<T> {
   };
 }
 
-/** Use when the `value` not satifies the `schema`. */
+/** Use when the `value` not satisfies the `schema`. */
 export interface Failure {
   success: false;
   issues: Issue[];
@@ -39,7 +39,7 @@ export function failure(reason?: Issue | Issue[]): Failure {
  * Represents the possible result for the given check on a schema.
  * Every `Check` can return either `Success<T>` or `Failure`.
  * @returns `Success<T>` when the given `value` was correct.
- * @returns `Failure` when the given `value` does not satifies the schema.
+ * @returns `Failure` when the given `value` does not satisfies the schema.
  */
 export type CheckOption<T> = Success<T> | Failure;
 
@@ -47,7 +47,7 @@ export type CheckOption<T> = Success<T> | Failure;
  * Represents the possible result for the given check on a schema.
  * Every `Check` can return either `Success<T>`, `Failure` or `undefined`.
  * @returns `Success<T>` when the given `value` was correct and was transformed.
- * @returns `Failure` when the given `value` does not satifies the schema.
+ * @returns `Failure` when the given `value` does not satisfies the schema.
  * @returns `undefined` when the given `value` was correct as it is.
  */
 export type Check<T> = CheckOption<T> | undefined;

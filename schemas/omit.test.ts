@@ -3,7 +3,7 @@ import { object, omit, string } from "./mod.ts";
 
 Deno.test("omit the given fields on the shape", () => {
   const schema = object({ a: string(), b: string(), c: string() });
-  const omited = omit(schema, ["a", "b"]);
+  const omitted = omit(schema, ["a", "b"]);
 
-  assertObjectMatch(omited.shape, { c: string() });
+  assertObjectMatch(omitted.shape, { c: string() });
 });

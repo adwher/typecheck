@@ -1,4 +1,4 @@
-import { Check, failure, Schema } from "../schema.ts";
+import { type Check, failure, type Schema } from "../schema.ts";
 
 export const SCHEMA_NUMBER_NAME = "SCHEMA_NUMBER";
 

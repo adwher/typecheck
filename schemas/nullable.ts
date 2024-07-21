@@ -1,5 +1,5 @@
-import { Context } from "../context.ts";
-import { Check, Infer, Schema, success } from "../schema.ts";
+import type { Context } from "../context.ts";
+import { type Check, type Infer, type Schema, success } from "../schema.ts";
 
 export const SCHEMA_NULLABLE_NAME = "SCHEMA_NULLABLE";
 

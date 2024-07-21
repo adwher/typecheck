@@ -1,4 +1,4 @@
-import { Schema } from "../schema.ts";
+import type { Schema } from "../schema.ts";
 
 /**
  * Checks the `value` with the given `schema`.

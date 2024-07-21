@@ -1,4 +1,4 @@
-import { Check, failure, Schema } from "../schema.ts";
+import { type Check, failure, type Schema } from "../schema.ts";
 
 export const SCHEMA_BOOLEAN_NAME = "SCHEMA_BOOLEAN";
 
@@ -13,6 +13,6 @@ export class SchemaBoolean implements Schema<boolean> {
 }
 
 /** Creates a new `boolean` schema. */
-export function boolean() {
+export function boolean(): SchemaBoolean {
   return new SchemaBoolean();
 }
