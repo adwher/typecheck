@@ -1,6 +1,6 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { string } from "./mod.ts";
-import { safeParse } from "../utils/mod.ts";
+import { string } from "../schemas.ts";
+import { safeParse } from "../utils.ts";
 
 const schema = string();
 

@@ -1,6 +1,6 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { boolean, optional, string } from "./mod.ts";
-import { safeParse } from "../utils/mod.ts";
+import { boolean, optional, string } from "../schemas.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test(`pass either wrapped or "undefined" values`, () => {
   const schema = optional(boolean());

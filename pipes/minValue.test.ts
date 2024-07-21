@@ -1,5 +1,5 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { number, pipe } from "../schemas/mod.ts";
+import { number, pipe } from "../schemas.ts";
 import { minValue } from "./minValue.ts";
 import { safeParse } from "../mod.ts";
 

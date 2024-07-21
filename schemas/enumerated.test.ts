@@ -1,6 +1,6 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { enumerated } from "./mod.ts";
-import { safeParse } from "../utils/mod.ts";
+import { enumerated } from "../schemas.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("assert with the given options", () => {
   const schema = enumerated("hello", "hola", "hallo");

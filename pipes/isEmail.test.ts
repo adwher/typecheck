@@ -1,7 +1,7 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { pipe, string } from "../schemas/mod.ts";
+import { pipe, string } from "../schemas.ts";
 import { isEmail } from "./isEmail.ts";
-import { safeParse } from "../utils/mod.ts";
+import { safeParse } from "../utils.ts";
 
 const schema = pipe(string(), isEmail());
 

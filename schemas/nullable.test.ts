@@ -1,6 +1,6 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { boolean, nullable, string } from "./mod.ts";
-import { safeParse } from "../utils/mod.ts";
+import { boolean, nullable, string } from "../schemas.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test(`pass either wrapped or "null" values`, () => {
   const schema = nullable(boolean());

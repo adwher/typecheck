@@ -1,6 +1,6 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { number } from "./mod.ts";
-import { safeParse } from "../utils/mod.ts";
+import { number } from "../schemas.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("assert number values", () => {
   const schema = number();

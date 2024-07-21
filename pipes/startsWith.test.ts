@@ -1,7 +1,7 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { pipe, string } from "../schemas/mod.ts";
+import { pipe, string } from "../schemas.ts";
 import { startsWith } from "./startsWith.ts";
-import { safeParse } from "../utils/mod.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("starts with the specified search", () => {
   const schema = pipe(string(), startsWith("abc"));

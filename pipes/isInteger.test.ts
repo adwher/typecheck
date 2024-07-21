@@ -1,7 +1,7 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { number, pipe } from "../schemas/mod.ts";
+import { number, pipe } from "../schemas.ts";
 import { isInteger } from "./isInteger.ts";
-import { safeParse } from "../utils/mod.ts";
+import { safeParse } from "../utils.ts";
 
 const schema = pipe(number(), isInteger());
 

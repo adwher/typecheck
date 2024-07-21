@@ -1,8 +1,8 @@
 import { assertSpyCall, spy } from "testing/mock.ts";
 import { assertObjectMatch } from "assert/mod.ts";
-import { pipe, string } from "./mod.ts";
+import { pipe, string } from "../schemas.ts";
 import { failure } from "../schema.ts";
-import { safeParse } from "../utils/mod.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("execute all the steps", () => {
   const firstSpy = spy((value: string) => value.toUpperCase());

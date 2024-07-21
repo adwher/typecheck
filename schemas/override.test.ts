@@ -1,5 +1,5 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { number, object, override, string } from "./mod.ts";
+import { number, object, override, string } from "../schemas.ts";
 
 Deno.test("override with the same key", () => {
   const initial = object({ a: string() });

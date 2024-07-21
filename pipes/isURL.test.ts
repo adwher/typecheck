@@ -1,7 +1,7 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { pipe, string } from "../schemas/mod.ts";
+import { pipe, string } from "../schemas.ts";
 import { isURL } from "./isURL.ts";
-import { safeParse } from "../utils/mod.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("assert formatted URLs", () => {
   const schema = pipe(string(), isURL());
