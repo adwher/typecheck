@@ -1,13 +1,13 @@
 import { assertObjectMatch } from "assert/mod.ts";
 import { pipe, string } from "../schemas.ts";
-import { startsWith } from "./startsWith.ts";
+import { endsWith } from "./endsWith.ts";
 import { safeParse } from "../utils.ts";
 
-Deno.test("starts with the specified search", () => {
-  const schema = pipe(string(), startsWith("abc"));
+Deno.test("ends with the specified search", () => {
+  const schema = pipe(string(), endsWith("abc"));
 
-  const correct = ["abc", "abc123", "abcd", "abcd123"];
-  const incorrect = ["", "ab", "ac", "abC", "ABC", "a1234"];
+  const correct = ["abc", "123abc", "dabc", "123dabc"];
+  const incorrect = ["", "ab", "ac", "abC", "ABC", "1234a"];
 
   for (const received of correct) {
     const commit = safeParse(received, schema);
