@@ -12,9 +12,9 @@
  * ```
  */
 
+export * from "./pipes/isDateTime.ts";
 export * from "./pipes/isEmail.ts";
 export * from "./pipes/isInteger.ts";
-export * from "./pipes/isISO8601.ts";
 export * from "./pipes/isMatch.ts";
 export * from "./pipes/isNegative.ts";
 export * from "./pipes/isPositive.ts";
