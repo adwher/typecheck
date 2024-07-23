@@ -1,7 +1,7 @@
 // Copyright (c) 2024 Andres Celis. MIT license.
 
 /**
- * An awesome, tiny and extensible runtime types validation library.
+ * An extensible library for runtime type validation.
  * @module
  */
 

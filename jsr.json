@@ -1,0 +1,26 @@
+{
+  "$schema": "https://jsr.io/schema/config-file.v1.json",
+  "name": "@adwher/typecheck",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./mod.ts",
+    "./types": "./types.ts",
+    "./utils": "./utils.ts",
+    "./pipes": "./pipes.ts",
+    "./schemas": "./schemas.ts"
+  },
+  "publish": {
+    "include": [
+      "deno.json",
+      "README.md",
+      "LICENSE",
+      "**/*.ts"
+    ],
+    "exclude": [
+      "**/*.test.ts",
+      "**/*.bench.ts",
+      ".github",
+      ".vscode"
+    ]
+  }
+}
