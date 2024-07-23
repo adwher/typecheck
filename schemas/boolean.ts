@@ -4,6 +4,7 @@ export const SCHEMA_BOOLEAN_NAME = "SCHEMA_BOOLEAN";
 
 const ISSUE_TYPE = failure({ reason: "TYPE", expected: "boolean" });
 
+/** Creates a new `boolean` schema. */
 export class SchemaBoolean implements Schema<boolean> {
   readonly name = SCHEMA_BOOLEAN_NAME;
 

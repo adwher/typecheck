@@ -9,6 +9,9 @@ type ThisInfer<S extends Schema> = Infer<S> | undefined;
 /** @internal Shortcut to the schema extension. */
 type ThisFrom<S extends Schema> = Schema<ThisInfer<S>>;
 
+/**
+ * Creates a new `optional` schema allowing to have `T` or `undefined`.
+ */
 export class SchemaOptional<S extends Schema> implements ThisFrom<S> {
   readonly name = SCHEMA_OPTIONAL_NAME;
 

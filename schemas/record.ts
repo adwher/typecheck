@@ -22,6 +22,7 @@ export const SCHEMA_RECORD_NAME = "SCHEMA_RECORD";
 
 const ISSUE_TYPE = failure({ reason: "TYPE", expected: "object" });
 
+/** Creates a new `object` schema where all the values as `V` like `Record<unknown, V>`. */
 export class SchemaRecord<S extends Schema> implements ThisFrom<S> {
   readonly name = SCHEMA_RECORD_NAME;
 

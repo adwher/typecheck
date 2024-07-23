@@ -4,6 +4,7 @@ import { isDate } from "../types.ts";
 
 export const SCHEMA_DATE_NAME = "SCHEMA_DATE";
 
+/** Creates a new {@linkcode Date} schema. */
 export class SchemaDate implements Schema<Date> {
   readonly name = SCHEMA_DATE_NAME;
 

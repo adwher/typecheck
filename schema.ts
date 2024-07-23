@@ -20,6 +20,7 @@ export function success<T>(value: T): Success<T> {
 /** Use when the `value` not satisfies the `schema`. */
 export interface Failure {
   success: false;
+  /** List of issues found after validation of the schema. */
   issues: Issue[];
 }
 
@@ -58,6 +59,12 @@ export type Check<T> = CheckOption<T> | undefined;
 /** Alias for `Check<Infer<T>>`. */
 export type CheckFrom<T> = Check<Infer<T>>;
 
+/**
+ * Represents a schema that can be checked against a given `value`.
+ * Every schema should have a `name` and a `check` method.
+ * @param `name` is the name of the schema.
+ * @param `check` is the method that checks the given `value`.
+ */
 // deno-lint-ignore no-explicit-any
 export interface Schema<T = any> {
   name: string;
@@ -75,5 +82,5 @@ export type Infer<T> = T extends Schema<infer U> ? U
   : T extends (infer U)[] ? Infer<U>
   : never;
 
-/** Resctrict the schema definition with a given type. */
+/** Resctrict the schema definition with a given type `T`. */
 export type Describe<T> = Schema<T>;

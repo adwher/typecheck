@@ -5,6 +5,9 @@ export type Literal = string | number | bigint | boolean | null;
 
 export const SCHEMA_LITERAL_NAME = "SCHEMA_LITERAL";
 
+/**
+ * Creates a new `L` schema, where only one value is allowed.
+ */
 export class SchemaLiteral<L extends Literal> implements Schema<L> {
   readonly name = SCHEMA_LITERAL_NAME;
 

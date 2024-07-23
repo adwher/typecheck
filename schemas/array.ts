@@ -15,6 +15,7 @@ export const SCHEMA_ARRAY_NAME = "SCHEMA_ARRAY";
 
 const ISSUE_TYPE = failure({ reason: "TYPE", expected: "array" });
 
+/** Creates a new schema array of `T`. */
 export class SchemaArray<S extends Schema> implements SchemaFrom<S[]> {
   readonly name = SCHEMA_ARRAY_NAME;
 

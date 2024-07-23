@@ -21,6 +21,7 @@ export const SCHEMA_OBJECT_NAME = "SCHEMA_OBJECT";
 
 const ISSUE_TYPE = failure({ reason: "TYPE", expected: "object" });
 
+/** Creates a new `object` schema using a `ObjectShape`. */
 export class SchemaObject<S extends SchemaShape> implements SchemaFrom<S> {
   readonly name = SCHEMA_OBJECT_NAME;
 

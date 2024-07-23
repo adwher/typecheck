@@ -23,6 +23,7 @@ export type Pipes<T> = Pipe<T extends Schema<infer R> ? R : T>[];
 
 export const SCHEMA_PIPE_NAME = "SCHEMA_PIPE";
 
+/** Create a chain of `pipes` once the `schema` return the validated value. */
 export class SchemaPipe<S extends Schema> implements SchemaFrom<S> {
   readonly name = SCHEMA_PIPE_NAME;
   /** List of multiple schema pipes of the same `T`. */

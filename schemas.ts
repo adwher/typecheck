@@ -1,8 +1,17 @@
 // Copyright (c) 2024 Andres Celis. MIT license.
 
 /**
- * Built-in collection of schemas and their modifiers.
  * @module
+ * Built-in collection of schemas.
+ * @example
+ * ```ts
+ * import { string, number, object, array } from "typecheck/schemas";
+ *
+ * const UserSchema = object({
+ *  name: string(),
+ *  age: number(),
+ *  friends: array(string()),
+ * });
  */
 
 export * from "./schemas/array.ts";

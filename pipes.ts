@@ -1,8 +1,15 @@
 // Copyright (c) 2024 Andres Celis. MIT license.
 
 /**
- * Standard steps to use with `pipe`.
  * @module
+ * This module exports all the pipes.
+ * @example
+ * ```ts
+ * import { string, pipe } from "typecheck/schemas";
+ * import { isEmail } from "typecheck/pipes";
+ *
+ * const schema = pipe(string(), isEmail());
+ * ```
  */
 
 export * from "./pipes/isEmail.ts";

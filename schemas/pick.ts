@@ -1,8 +1,14 @@
 import { SchemaObject, type SchemaShape } from "./object.ts";
 
+/**
+ * Pick the given fields from the `SchemaShape`.
+ */
 export type SchemaShapePick<S extends SchemaShape, F extends Array<keyof S>> =
   Pick<S, F[number]>;
 
+/**
+ * Creates a new `SchemaObject` picking only the given `fields`.
+ */
 export type SchemaObjectPick<S extends SchemaShape, F extends Array<keyof S>> =
   SchemaObject<SchemaShapePick<S, F>>;
 

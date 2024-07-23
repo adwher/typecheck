@@ -15,6 +15,7 @@ export const SCHEMA_TUPLE_NAME = "SCHEMA_TUPLE";
 
 const ISSUE_TYPE = failure({ reason: "TYPE", expected: "array" });
 
+/** Creates a new schema tuple of type `[A, B, ...C]`. */
 export class SchemaTuple<S extends readonly Schema[]> implements SchemaFrom<S> {
   readonly name = SCHEMA_TUPLE_NAME;
 

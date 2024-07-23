@@ -8,6 +8,9 @@ const ISSUE_VALIDATION = failure({ reason: "VALIDATION" });
 /** Allowed types as enumerables. */
 export type Enumerable = string | number | boolean;
 
+/**
+ * Creates a new enumerated schema that only receives the given `options`.
+ */
 export class SchemaEnumerated<
   T extends readonly Enumerable[],
 > implements Schema<T[number]> {

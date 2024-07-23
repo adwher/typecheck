@@ -4,6 +4,7 @@ export const SCHEMA_STRING_NAME = "SCHEMA_STRING";
 
 const ISSUE_TYPE = failure({ reason: "TYPE", expected: "string" });
 
+/** Creates a new `string` schema. */
 export class SchemaString implements Schema<string> {
   readonly name = SCHEMA_STRING_NAME;
 
