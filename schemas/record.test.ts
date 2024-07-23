@@ -1,6 +1,6 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { number, record } from "./mod.ts";
-import { safeParse } from "../utils/mod.ts";
+import { number, record } from "../schemas.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("allow only the given schema", () => {
   const schema = record(number());

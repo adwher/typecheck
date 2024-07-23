@@ -1,8 +1,14 @@
 import { SchemaObject, type SchemaShape } from "./object.ts";
 
+/**
+ * Omit the given fields from the `SchemaShape`.
+ */
 export type SchemaShapeOmit<S extends SchemaShape, F extends Array<keyof S>> =
   Omit<S, F[number]>;
 
+/**
+ * Creates a new `SchemaObject` skipping the given `fields`.
+ */
 export type SchemaObjectOmit<S extends SchemaShape, F extends Array<keyof S>> =
   SchemaObject<SchemaShapeOmit<S, F>>;
 

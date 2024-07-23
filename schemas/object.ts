@@ -3,6 +3,7 @@ import type { Issue } from "../errors.ts";
 import {
   type CheckFrom,
   failure,
+  GENERIC_FAILURE,
   type Infer,
   type Schema,
   type SchemaFrom,
@@ -18,9 +19,9 @@ export type SchemaShape = Record<SchemaShapeKey, Schema>;
 
 export const SCHEMA_OBJECT_NAME = "SCHEMA_OBJECT";
 
-const ISSUE_GENERIC = failure();
 const ISSUE_TYPE = failure({ reason: "TYPE", expected: "object" });
 
+/** Creates a new `object` schema using a `ObjectShape`. */
 export class SchemaObject<S extends SchemaShape> implements SchemaFrom<S> {
   readonly name = SCHEMA_OBJECT_NAME;
 
@@ -60,7 +61,7 @@ export class SchemaObject<S extends SchemaShape> implements SchemaFrom<S> {
       }
 
       if (context.verbose === false) {
-        return ISSUE_GENERIC;
+        return GENERIC_FAILURE;
       }
 
       issues.push({

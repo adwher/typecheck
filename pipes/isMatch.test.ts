@@ -1,7 +1,7 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { pipe, string } from "../schemas/mod.ts";
+import { pipe, string } from "../schemas.ts";
 import { isMatch } from "./isMatch.ts";
-import { safeParse } from "../utils/mod.ts";
+import { safeParse } from "../utils.ts";
 
 const schema = pipe(string(), isMatch(/[A-Z]{3}-\d{1,}/i));
 

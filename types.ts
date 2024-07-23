@@ -1,3 +1,17 @@
+// Copyright (c) 2024 Andres Celis. MIT license.
+
+/**
+ * @module
+ * This module exports simple type-checks.
+ * @example
+ * ```ts
+ * import { isStr } from "typecheck/types";
+ *
+ * const value = "Hello, World!";
+ *
+ * assert(isStr(value));
+ */
+
 /** Allow to merge two elements from `L` to `R`. */
 export type Override<L, R> = Omit<L, keyof R> & R;
 
@@ -45,4 +59,16 @@ export function isArr<T = unknown>(value: unknown): value is T[] {
 /** Check the `value` as an extension (or instance) of `Error`. */
 export function isErr<E extends Error = Error>(value: unknown): value is E {
   return value instanceof Error;
+}
+
+/** Check the `value` as a `Date`. */
+export function isDate(value: unknown): value is Date {
+  return value instanceof Date;
+}
+
+/** Check the `value` as `Promise` of `T`. */
+export function isPromiseLike<T = unknown>(
+  value: unknown,
+): value is Promise<T> {
+  return isObj(value) && isFn((value as Promise<T>).then);
 }

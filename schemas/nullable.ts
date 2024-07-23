@@ -9,6 +9,9 @@ type ThisInfer<S extends Schema> = Infer<S> | null;
 /** @internal Shortcut to the schema extension. */
 type ThisFrom<S extends Schema> = Schema<ThisInfer<S>>;
 
+/**
+ * Creates a new `nullable` schema allowing to have `T` or `null`.
+ */
 export class SchemaNullable<S extends Schema> implements ThisFrom<S> {
   readonly name = SCHEMA_NULLABLE_NAME;
 

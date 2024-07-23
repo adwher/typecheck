@@ -1,5 +1,11 @@
 import type { Schema } from "../schema.ts";
 
+/**
+ * Represents a type guard function.
+ * A type guard function takes an unknown value and returns a boolean indicating whether the value is of a specific type.
+ * @param value The value to be checked.
+ * @returns A boolean indicating whether the value is of type T.
+ */
 export type Guard<T> = (value: unknown) => value is T;
 
 /**

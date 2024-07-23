@@ -1,6 +1,6 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { number, object, string } from "./mod.ts";
-import { safeParse } from "../utils/mod.ts";
+import { number, object, string } from "../schemas.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("allows object values", () => {
   const schema = object({ a: string() });

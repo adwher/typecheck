@@ -1,22 +1,10 @@
 {
-  "name": "@adwher/typecheck",
-  "version": "0.0.3",
-  "exports": "./mod.ts",
   "tasks": {
     "ci:format": "deno fmt --check",
     "ci:types": "deno check **/*.ts",
     "ci:lint": "deno lint",
     "ci:unit": "deno test --coverage --parallel --reporter=dot",
     "ok": "deno task ci:format && deno task ci:types && deno task ci:lint && deno task ci:unit"
-  },
-  "publish": {
-    "exclude": ["*.test.ts", "*.bench.ts", ".github", ".vscode"],
-    "include": [
-      "deno.json",
-      "README.md",
-      "LICENSE",
-      "**/*.ts"
-    ]
   },
   "imports": {
     "assert/": "https://deno.land/std@0.204.0/assert/",

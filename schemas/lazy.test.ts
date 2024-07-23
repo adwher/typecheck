@@ -1,7 +1,7 @@
 import { assertObjectMatch } from "assert/mod.ts";
 import { type Describe, failure } from "../schema.ts";
-import { array, lazy, object } from "./mod.ts";
-import { safeParse } from "../utils/mod.ts";
+import { array, lazy, object } from "../schemas.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("forward the given error", () => {
   const schema = lazy(() => failure());

@@ -12,6 +12,9 @@ type ThisInfer<S extends readonly Schema[]> = Infer<S[number]>;
 /** @internal Shortcut to the schema extension. */
 type ThisFrom<S extends readonly Schema[]> = Schema<ThisInfer<S>>;
 
+/**
+ * Create a new schema that receives any of the given `schemas`.
+ */
 export class SchemaEither<S extends readonly Schema[]> implements ThisFrom<S> {
   readonly name = SCHEMA_EITHER_NAME;
 
@@ -19,11 +22,12 @@ export class SchemaEither<S extends readonly Schema[]> implements ThisFrom<S> {
    * Create a new schema that receives any of the given schemas.
    * @param schemas List of all possible schemas.
    */
-  constructor(readonly schemas: S) {}
+  constructor(readonly schemas: S) {
+  }
 
   check(value: unknown, context: Context): Check<ThisInfer<S>> {
     const issues: Issue[] = [];
-    const schemas = this.flatten();
+    const schemas = this.#flatten();
 
     for (const schema of schemas) {
       const commit = schema.check(value, context);
@@ -50,10 +54,10 @@ export class SchemaEither<S extends readonly Schema[]> implements ThisFrom<S> {
   }
 
   /** Transform the array of schemas applying the `flatten` strategy. */
-  private flatten(): Schema[] {
+  #flatten(): Schema[] {
     return this.schemas.flatMap((schema) => {
       if (schema instanceof SchemaEither) {
-        return schema.flatten();
+        return schema.#flatten();
       }
 
       return schema;

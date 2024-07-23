@@ -1,6 +1,6 @@
 import { assertObjectMatch } from "assert/mod.ts";
 import { isStr } from "../types.ts";
-import { custom } from "./mod.ts";
+import { custom } from "../schemas.ts";
 import { safeParse } from "../mod.ts";
 import { failure } from "../schema.ts";
 

@@ -1,6 +1,6 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { number, tuple } from "./mod.ts";
-import { safeParse } from "../utils/mod.ts";
+import { number, tuple } from "../schemas.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("assert with tuples", () => {
   const schema = tuple(number(), number());

@@ -1,6 +1,6 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { never } from "./mod.ts";
-import { safeParse } from "../utils/mod.ts";
+import { never } from "../schemas.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("always return an error", () => {
   const schema = never();

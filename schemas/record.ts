@@ -1,6 +1,12 @@
 import type { Context } from "../context.ts";
 import type { Issue } from "../errors.ts";
-import { type Check, failure, type Schema, success } from "../schema.ts";
+import {
+  type Check,
+  failure,
+  GENERIC_FAILURE,
+  type Schema,
+  success,
+} from "../schema.ts";
 import { isObj } from "../types.ts";
 
 /** Allowed types to be a key of `SchemaRecord`. */
@@ -14,9 +20,9 @@ type ThisFrom<S extends Schema> = Schema<ThisInfer<S>>;
 
 export const SCHEMA_RECORD_NAME = "SCHEMA_RECORD";
 
-const ISSUE_GENERIC = failure();
 const ISSUE_TYPE = failure({ reason: "TYPE", expected: "object" });
 
+/** Creates a new `object` schema where all the values as `V` like `Record<unknown, V>`. */
 export class SchemaRecord<S extends Schema> implements ThisFrom<S> {
   readonly name = SCHEMA_RECORD_NAME;
 
@@ -49,7 +55,7 @@ export class SchemaRecord<S extends Schema> implements ThisFrom<S> {
       }
 
       if (context.verbose === false) {
-        return ISSUE_GENERIC;
+        return GENERIC_FAILURE;
       }
 
       issues.push({

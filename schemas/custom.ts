@@ -1,6 +1,6 @@
 import type { Context } from "../context.ts";
 import { type Check, type Failure, failure, type Schema } from "../schema.ts";
-import { isFailure } from "../utils/mod.ts";
+import { isFailure } from "../utils.ts";
 
 /** Function that validates the satisfaction of the given `value` as the given schema. */
 export type SchemaValidation = (
@@ -12,6 +12,10 @@ export const SCHEMA_CUSTOM_NAME = "SCHEMA_CUSTOM";
 
 const ISSUE_VALIDATION = failure({ reason: "VALIDATION" });
 
+/**
+ * Create a new `SchemaCustom` that only accepts values that satisfies the `validation`.
+ * @param validation Checks the given `value`.
+ */
 export class SchemaCustom<T> implements Schema<T> {
   readonly name = SCHEMA_CUSTOM_NAME;
 

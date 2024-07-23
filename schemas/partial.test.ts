@@ -1,6 +1,6 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { object, partial, string } from "./mod.ts";
-import { safeParse } from "../utils/mod.ts";
+import { object, partial, string } from "../schemas.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test(`allow "undefined" the object schema`, () => {
   const schema = partial(object({ hello: string() }));

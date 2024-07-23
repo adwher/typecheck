@@ -1,7 +1,7 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { array, number, pipe, string } from "../schemas/mod.ts";
+import { array, number, pipe, string } from "../schemas.ts";
 import { maxLength } from "./maxLength.ts";
-import { safeParse } from "../utils/mod.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("assert arrays with fixed length", () => {
   const schema = pipe(array(number()), maxLength(3));

@@ -1,6 +1,6 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { boolean, either, number, string } from "./mod.ts";
-import { safeParse } from "../utils/mod.ts";
+import { boolean, either, number, string } from "../schemas.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("assert with the given schemas", () => {
   const schema = either(string(), number());

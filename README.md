@@ -1,6 +1,15 @@
 # Typecheck
 
-An awesome, tiny and extensible runtime types validation library.
+An extensible library for runtime type validation.
+
+Provides type safety with static type inference. It offers a modular and
+tree-shakable structure, allowing you to import only the components you need.
+The API and codebase are clean, readable, and declarative, making it easy to
+work with. Additionally, it includes useful utilities for parsing and modifying
+data. The library comes with a variety of common types as schemas, along with
+their modifiers. It also provides comprehensive code documentation with examples
+and variants. Designed based on real use cases, it aims to enhance the developer
+experience. The library is completely free and licensed under the MIT license.
 
 ## Features
 
@@ -15,7 +24,7 @@ An awesome, tiny and extensible runtime types validation library.
 ## Example
 
 ```ts
-import * as k from "https://deno.land/x/typecheck";
+import * as k from "jsr:@adwher/typecheck";
 
 const EmailSchema = k.pipe(k.string(), k.isEmail(), k.minLength(5));
 ```

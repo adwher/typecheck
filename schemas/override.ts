@@ -1,9 +1,15 @@
 import { SchemaObject, type SchemaShape } from "./object.ts";
 import type { Override } from "../types.ts";
 
+/**
+ * Merges two schemas shapes.
+ */
 export type SchemaShapeOverride<S extends SchemaShape, E extends SchemaShape> =
   Override<S, E>;
 
+/**
+ * Merges two {@linkcode SchemaObject} schemas.
+ */
 export type SchemaObjectOverride<S extends SchemaShape, E extends SchemaShape> =
   SchemaObject<SchemaShapeOverride<S, E>>;
 

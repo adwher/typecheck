@@ -1,6 +1,6 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { literal } from "./mod.ts";
-import { safeParse } from "../utils/mod.ts";
+import { literal } from "../schemas.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("assert with the given literal", () => {
   const schema = literal("hello");
