@@ -1,11 +1,11 @@
 {
   "name": "@adwher/typecheck",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "tasks": {
     "ok:format": "deno fmt --check",
     "ok:types": "deno check **/*.ts",
     "ok:lint": "deno lint",
-    "ok:unit": "deno test --coverage --parallel --reporter=dot",
+    "ok:unit": "deno test --parallel --reporter=dot",
     "ok:publish": "deno publish --dry-run --allow-dirty",
     "ok": "deno task ok:format && deno task ok:types && deno task ok:lint && deno task ok:unit && deno task ok:publish"
   },
