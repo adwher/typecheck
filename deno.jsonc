@@ -33,5 +33,13 @@
       ".github",
       ".vscode"
     ]
+  },
+  "fmt": {
+    "include": [
+      "pipes/**/*.ts",
+      "schemas/**/*.ts",
+      "utils/**/*.ts",
+      "*.ts"
+    ]
   }
 }

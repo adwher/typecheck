@@ -4,6 +4,12 @@
   "editor.formatOnSave": true,
   "deno.enable": true,
   "deno.lint": true,
+  "deno.enablePaths": [
+    "./pipes",
+    "./schemas",
+    "./utils",
+    "*.ts"
+  ],
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
