@@ -7,7 +7,7 @@ import type { Schema } from "../schema.ts";
 export function check<T>(
   value: unknown,
   schema: Schema<T>,
-): boolean {
+): value is T {
   const commit = schema.check(value, { verbose: false });
   return commit === undefined || commit.success;
 }
