@@ -1,5 +1,5 @@
 import { assertObjectMatch } from "assert/mod.ts";
-import { number, object, string } from "../schemas.ts";
+import { number, object, strict, string } from "../schemas.ts";
 import { safeParse } from "../utils.ts";
 
 Deno.test("allows object values", () => {
@@ -47,6 +47,16 @@ Deno.test("respect the given shape", () => {
     const commit = safeParse(received, schema);
     assertObjectMatch(commit, { success: false });
   }
+});
+
+Deno.test("thrown on strict mode", () => {
+  const schema = strict(object({ a: string() }));
+  const commit = safeParse({ a: "hello", b: "world" }, schema);
+
+  assertObjectMatch(commit, {
+    success: false,
+    issues: [{ reason: "PRESENT", position: "b" }],
+  });
 });
 
 Deno.test("return an issue with the right path", () => {

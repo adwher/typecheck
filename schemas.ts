@@ -34,6 +34,7 @@ export * from "./schemas/partial.ts";
 export * from "./schemas/pick.ts";
 export * from "./schemas/pipe.ts";
 export * from "./schemas/record.ts";
+export * from "./schemas/strict.ts";
 export * from "./schemas/string.ts";
 export * from "./schemas/transform.ts";
 export * from "./schemas/tuple.ts";

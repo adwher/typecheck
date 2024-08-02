@@ -8,6 +8,6 @@ export function check<T>(
   value: unknown,
   schema: Schema<T>,
 ): value is T {
-  const commit = schema.check(value, { verbose: false });
+  const commit = schema.check(value, { verbose: false, strict: false });
   return commit === undefined || commit.success;
 }

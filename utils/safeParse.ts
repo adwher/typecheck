@@ -8,7 +8,7 @@ export function safeParse<T>(
   value: unknown,
   schema: Schema<T>,
 ): CheckOption<T> {
-  const commit = schema.check(value, { verbose: true });
+  const commit = schema.check(value, { verbose: true, strict: false });
 
   if (commit === undefined) {
     return success(value as T);

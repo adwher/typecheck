@@ -42,10 +42,20 @@ export class SchemaObject<S extends SchemaShape> implements SchemaFrom<S> {
     const final = value;
     const issues: Issue[] = [];
 
-    for (const key in this.shape) {
+    const keys = Object.keys(this.shape).concat(Object.keys(value));
+
+    for (const key of keys) {
       const schema = this.shape[key];
 
       if (!schema) {
+        if (context.strict && !context.verbose) {
+          return GENERIC_FAILURE;
+        }
+
+        if (context.strict) {
+          issues.push({ reason: "PRESENT", position: key });
+        }
+
         continue;
       }
 
@@ -56,7 +66,7 @@ export class SchemaObject<S extends SchemaShape> implements SchemaFrom<S> {
       }
 
       if (commit.success) {
-        final[key] = commit.value;
+        final[key as keyof S] = commit.value;
         continue;
       }
 

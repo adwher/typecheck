@@ -14,7 +14,7 @@ export type Guard<T> = (value: unknown) => value is T;
  */
 export function createGuard<T>(schema: Schema<T>): Guard<T> {
   return function (value: unknown): value is T {
-    const commit = schema.check(value, { verbose: false });
+    const commit = schema.check(value, { verbose: false, strict: false });
     return commit === undefined || commit.success;
   };
 }

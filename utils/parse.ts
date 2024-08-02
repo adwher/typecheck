@@ -25,7 +25,7 @@ export class ParseError extends Error {
  * @returns Parsed `value` with the given `schema`.
  */
 export function parse<T>(value: unknown, schema: Schema<T>): T {
-  const commit = schema.check(value, { verbose: true });
+  const commit = schema.check(value, { verbose: true, strict: false });
 
   if (commit === undefined) {
     return value as T;

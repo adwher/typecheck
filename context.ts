@@ -7,4 +7,10 @@ export interface Context {
    * @default false
    */
   verbose: boolean;
+
+  /**
+   * Enable strict mode for type checking.
+   * @default false
+   */
+  strict: boolean;
 }

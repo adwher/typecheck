@@ -31,21 +31,21 @@ export class SchemaTuple<S extends readonly Schema[]> implements SchemaFrom<S> {
     }
 
     const final = value;
-    const size = this.schemas.length;
+    const size = value.length | this.schemas.length;
     const issues: Issue[] = [];
 
-    if (value.length > size || value.length < size) {
-      return failure({
-        reason: "VALIDATION",
-        expected: size,
-        received: value.length,
-      });
-    }
-
-    for (let index = 0; index < value.length; index++) {
-      const schema: S[number] | undefined = this.schemas[index];
+    for (let index = 0; index < size; index++) {
+      const schema: S[number] = this.schemas[index];
 
       if (!schema) {
+        if (context.strict && !context.verbose) {
+          return GENERIC_FAILURE;
+        }
+
+        if (context.strict) {
+          issues.push({ reason: "PRESENT", position: index });
+        }
+
         continue;
       }
 
