@@ -42,7 +42,8 @@ export class SchemaObject<S extends SchemaShape> implements SchemaFrom<S> {
     const final = value;
     const issues: Issue[] = [];
 
-    const keys = Object.keys(this.shape).concat(Object.keys(value));
+    // Merge keys from both the shape and the value.
+    const keys = new Set(Object.keys(this.shape).concat(Object.keys(value)));
 
     for (const key of keys) {
       const schema = this.shape[key];

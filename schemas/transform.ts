@@ -25,7 +25,6 @@ export const SCHEMA_TRANSFORM_NAME = "SCHEMA_TRANSFORM";
 export class SchemaTransform<G, R> {
   readonly name = SCHEMA_TRANSFORM_NAME;
 
-  #schema: Schema<G>;
   #transformer: SchemaTransformer<G, R>;
 
   /**
@@ -33,13 +32,15 @@ export class SchemaTransform<G, R> {
    * @param schema The schema to validate the input value against.
    * @param transformer The transformer function to apply to the validated value.
    */
-  constructor(schema: Schema<G>, transformer: SchemaTransformer<G, R>) {
-    this.#schema = schema;
+  constructor(
+    readonly schema: Schema<G>,
+    transformer: SchemaTransformer<G, R>,
+  ) {
     this.#transformer = transformer;
   }
 
   check(value: unknown, context: Context): Check<R> {
-    const commit = this.#schema.check(value, context);
+    const commit = this.schema.check(value, context);
 
     if (commit === undefined) {
       return success(this.#transformer(value as G, context));
