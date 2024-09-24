@@ -10,3 +10,5 @@ export * from "./context.ts";
 export * from "./errors.ts";
 export * from "./pipes.ts";
 export * from "./schemas.ts";
+
+export { check, parse, safeParse } from "./utils.ts";
