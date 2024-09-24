@@ -1,4 +1,4 @@
-import { assertObjectMatch } from "assert/mod.ts";
+import { assertObjectMatch } from "@std/assert";
 import { number, pipe } from "../schemas.ts";
 import { isNegative } from "./isNegative.ts";
 import { safeParse } from "../utils.ts";

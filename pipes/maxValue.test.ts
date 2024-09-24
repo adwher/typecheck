@@ -1,4 +1,4 @@
-import { assertObjectMatch } from "assert/mod.ts";
+import { assertObjectMatch } from "@std/assert";
 import { date, number, pipe } from "../schemas.ts";
 import { maxValue } from "./maxValue.ts";
 import { safeParse } from "../utils.ts";

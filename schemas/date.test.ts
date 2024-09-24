@@ -1,5 +1,6 @@
-import { assertObjectMatch } from "assert/mod.ts";
-import { safeParse } from "../mod.ts";
+import { assertObjectMatch } from "@std/assert";
+
+import { safeParse } from "../utils.ts";
 import { date } from "./date.ts";
 
 Deno.test("return on success", () => {

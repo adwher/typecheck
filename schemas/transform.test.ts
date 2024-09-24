@@ -1,5 +1,5 @@
-import { assertSpyCall, spy } from "testing/mock.ts";
-import { assertObjectMatch } from "assert/mod.ts";
+import { assertSpyCall, spy } from "@std/testing/mock";
+import { assertObjectMatch } from "@std/assert";
 import { string, transform } from "../schemas.ts";
 import { safeParse } from "../utils.ts";
 
@@ -19,4 +19,15 @@ Deno.test("return given errors", () => {
 
   assertObjectMatch(safeParse(null, schema), { success: false });
   assertObjectMatch(safeParse(1234, schema), { success: false });
+});
+
+Deno.test("return success transformed value", () => {
+  const schema = transform(
+    // Transform the string to its length.
+    transform(string(), (value) => value.length),
+    // Transform the number into a string.
+    (value) => String(value),
+  );
+
+  assertObjectMatch(safeParse("HELLO", schema), { success: true, value: "5" });
 });

@@ -1,6 +1,6 @@
 import type { Context } from "../context.ts";
 import type { CheckFrom, Failure, Schema, SchemaFrom } from "../schema.ts";
-import { isFailure } from "../utils.ts";
+import { isFailure } from "../utils/isFailure.ts";
 
 export const SCHEMA_LAZY_NAME = "SCHEMA_LAZY";
 

@@ -1,4 +1,4 @@
-import { assertObjectMatch } from "assert/mod.ts";
+import { assertObjectMatch } from "@std/assert";
 import { merge, number, object, string } from "../schemas.ts";
 
 Deno.test("merge object schemas", () => {

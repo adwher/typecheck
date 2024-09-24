@@ -1,5 +1,5 @@
-import { assertSpyCall, spy } from "testing/mock.ts";
-import { assertObjectMatch } from "assert/mod.ts";
+import { assertSpyCall, spy } from "@std/testing/mock";
+import { assertObjectMatch } from "@std/assert";
 import { pipe, string } from "../schemas.ts";
 import { failure } from "../schema.ts";
 import { safeParse } from "../utils.ts";

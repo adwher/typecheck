@@ -1,4 +1,4 @@
-import { assertEquals } from "assert/mod.ts";
+import { assertEquals } from "@std/assert";
 import { check } from "./check.ts";
 import { number } from "../mod.ts";
 

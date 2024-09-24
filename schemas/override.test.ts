@@ -1,4 +1,4 @@
-import { assertObjectMatch } from "assert/mod.ts";
+import { assertObjectMatch } from "@std/assert";
 import { number, object, override, string } from "../schemas.ts";
 
 Deno.test("override with the same key", () => {

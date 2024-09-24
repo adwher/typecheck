@@ -1,4 +1,4 @@
-import { assert } from "assert/mod.ts";
+import { assert } from "@std/assert";
 import { isSuccess } from "./isSuccess.ts";
 
 Deno.test("should return true for a valid success object", () => {

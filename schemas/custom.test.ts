@@ -1,8 +1,9 @@
-import { assertObjectMatch } from "assert/mod.ts";
+import { assertObjectMatch } from "@std/assert";
+
 import { isStr } from "../types.ts";
 import { custom } from "../schemas.ts";
-import { safeParse } from "../mod.ts";
 import { failure } from "../schema.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("assert with the given validation", () => {
   type Distance = `${string}${"cm" | "m" | "km"}`;

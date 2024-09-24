@@ -1,4 +1,4 @@
-import { assertObjectMatch } from "assert/mod.ts";
+import { assertObjectMatch } from "@std/assert";
 import { string } from "../schemas/string.ts";
 import { safeParse } from "./safeParse.ts";
 

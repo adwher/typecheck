@@ -1,7 +1,8 @@
-import { assertObjectMatch } from "assert/mod.ts";
-import { number, pipe } from "../schemas.ts";
+import { assertObjectMatch } from "@std/assert";
+
+import { date, number, pipe } from "../schemas.ts";
 import { minValue } from "./minValue.ts";
-import { date, safeParse } from "../mod.ts";
+import { safeParse } from "../utils.ts";
 
 Deno.test("restrict the allowed numbers", () => {
   const schema = pipe(number(), minValue(2));

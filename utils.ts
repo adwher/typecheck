@@ -20,6 +20,7 @@
 
 export * from "./utils/check.ts";
 export * from "./utils/createGuard.ts";
+export * from "./utils/createJSONSchema.ts";
 export * from "./utils/isFailure.ts";
 export * from "./utils/isSuccess.ts";
 export * from "./utils/parse.ts";

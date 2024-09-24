@@ -10,4 +10,3 @@ export * from "./context.ts";
 export * from "./errors.ts";
 export * from "./pipes.ts";
 export * from "./schemas.ts";
-export * from "./utils.ts";
