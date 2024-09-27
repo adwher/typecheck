@@ -67,7 +67,11 @@ export type CheckFrom<T> = Check<Infer<T>>;
  */
 // deno-lint-ignore no-explicit-any
 export interface Schema<T = any> {
-  name: string;
+  /** Name of the schema. */
+  readonly name: string;
+
+  /** Optional description for the schema. */
+  description?: string;
 
   /** Check the given `value` using the strategy of the schema. */
   check(value: unknown, context: Context): Check<T>;

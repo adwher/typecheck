@@ -142,6 +142,7 @@ function extractSchemaType(schema: Schema): JSONSchemaType | JSONSchemaType[] {
 export function createJSONSchema(schema: Schema): JSONSchema {
   const base: JSONSchema = {
     type: extractSchemaType(schema),
+    description: schema.description,
   };
 
   if (schema instanceof SchemaArray) {

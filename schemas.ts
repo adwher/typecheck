@@ -18,6 +18,7 @@ export * from "./schemas/array.ts";
 export * from "./schemas/boolean.ts";
 export * from "./schemas/custom.ts";
 export * from "./schemas/date.ts";
+export * from "./schemas/describe.ts";
 export * from "./schemas/either.ts";
 export * from "./schemas/enumerated.ts";
 export * from "./schemas/lazy.ts";

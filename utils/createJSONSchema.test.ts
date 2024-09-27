@@ -1,4 +1,4 @@
-import { assertEquals } from "@std/assert";
+import { assertObjectMatch } from "@std/assert";
 
 import {
   array,
@@ -27,21 +27,21 @@ Deno.test("string should generate JSON JSON schema", () => {
   const schema = string();
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, { type: JSONSchemaType.STRING });
+  assertObjectMatch(jsonSchema, { type: JSONSchemaType.STRING });
 });
 
 Deno.test("number should generate JSON schema", () => {
   const schema = number();
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, { type: JSONSchemaType.NUMBER });
+  assertObjectMatch(jsonSchema, { type: JSONSchemaType.NUMBER });
 });
 
 Deno.test("array should generate JSON schema", () => {
   const schema = array(string());
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, {
+  assertObjectMatch(jsonSchema, {
     type: JSONSchemaType.ARRAY,
     items: { type: JSONSchemaType.STRING },
   });
@@ -51,7 +51,7 @@ Deno.test("date should generate JSON schema", () => {
   const schema = date();
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, {
+  assertObjectMatch(jsonSchema, {
     type: JSONSchemaType.STRING,
     format: JSONSchemaFormat.DATETIME,
   });
@@ -61,7 +61,7 @@ Deno.test("enumerated should generate JSON schema", () => {
   const schema = enumerated("value1", "value2");
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, {
+  assertObjectMatch(jsonSchema, {
     type: [
       JSONSchemaType.STRING,
       JSONSchemaType.NUMBER,
@@ -75,7 +75,7 @@ Deno.test("enumerated should generate JSON schema", () => {
   const schema = either(string(), number());
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, {
+  assertObjectMatch(jsonSchema, {
     type: [
       JSONSchemaType.STRING,
       JSONSchemaType.NUMBER,
@@ -87,7 +87,7 @@ Deno.test("literal should generate JSON schema", () => {
   const schema = literal("literalValue");
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, {
+  assertObjectMatch(jsonSchema, {
     type: [
       JSONSchemaType.STRING,
       JSONSchemaType.NUMBER,
@@ -101,7 +101,7 @@ Deno.test("optional should generate JSON schema", () => {
   const schema = optional(string());
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, { type: JSONSchemaType.STRING });
+  assertObjectMatch(jsonSchema, { type: JSONSchemaType.STRING });
 });
 
 Deno.test("object should generate JSON schema", () => {
@@ -112,7 +112,7 @@ Deno.test("object should generate JSON schema", () => {
 
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, {
+  assertObjectMatch(jsonSchema, {
     type: JSONSchemaType.OBJECT,
     properties: {
       key1: { type: JSONSchemaType.STRING },
@@ -126,7 +126,7 @@ Deno.test("record should generate JSON schema", () => {
   const schema = record(string());
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, {
+  assertObjectMatch(jsonSchema, {
     type: JSONSchemaType.OBJECT,
     additionalProperties: { type: JSONSchemaType.STRING },
   });
@@ -136,7 +136,7 @@ Deno.test("tuple should generate JSON schema", () => {
   const schema = tuple(string(), number());
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, {
+  assertObjectMatch(jsonSchema, {
     type: JSONSchemaType.ARRAY,
     prefixItems: [{ type: JSONSchemaType.STRING }, {
       type: JSONSchemaType.NUMBER,
@@ -148,7 +148,7 @@ Deno.test("nullable should generate JSON schema", () => {
   const schema = nullable(string());
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, {
+  assertObjectMatch(jsonSchema, {
     type: [JSONSchemaType.NULL, JSONSchemaType.STRING],
   });
 });
@@ -157,12 +157,12 @@ Deno.test("pipe should return wrapped JSON schema", () => {
   const schema = pipe(string());
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, { type: JSONSchemaType.STRING });
+  assertObjectMatch(jsonSchema, { type: JSONSchemaType.STRING });
 });
 
 Deno.test("transform should return wrapped JSON schema", () => {
   const schema = transform(string(), (value) => value.length);
   const jsonSchema = createJSONSchema(schema);
 
-  assertEquals(jsonSchema, { type: JSONSchemaType.STRING });
+  assertObjectMatch(jsonSchema, { type: JSONSchemaType.STRING });
 });
