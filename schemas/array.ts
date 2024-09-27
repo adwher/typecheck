@@ -15,15 +15,14 @@ export const SCHEMA_ARRAY_NAME = "SCHEMA_ARRAY";
 
 const ISSUE_TYPE = failure({ reason: "TYPE", expected: "array" });
 
-/** Creates a new schema array of `T`. */
 export class SchemaArray<S extends Schema> implements SchemaFrom<S[]> {
   readonly name = SCHEMA_ARRAY_NAME;
 
   /**
    * Creates a new schema array of `T`.
-   * @param wrapped Shape of the schema.
+   * @param schema Shape of the schema.
    */
-  constructor(readonly wrapped: S) {}
+  constructor(readonly schema: S) {}
 
   check(value: unknown, context: Context): CheckFrom<S[]> {
     type T = Infer<S>;
@@ -36,7 +35,7 @@ export class SchemaArray<S extends Schema> implements SchemaFrom<S[]> {
     const issues: Issue[] = [];
 
     for (let index = 0; index < value.length; index++) {
-      const commit = this.wrapped.check(value[index], context);
+      const commit = this.schema.check(value[index], context);
 
       if (commit === undefined) {
         continue;
@@ -66,7 +65,10 @@ export class SchemaArray<S extends Schema> implements SchemaFrom<S[]> {
   }
 }
 
-/** Creates a new schema array of `T`. */
+/**
+ * Creates a new schema array of `T`.
+ * @param schema Shape of the schema.
+ */
 export function array<S extends Schema>(schema: S): SchemaArray<S> {
   return new SchemaArray(schema);
 }

@@ -17,11 +17,11 @@ export class SchemaOptional<S extends Schema> implements ThisFrom<S> {
 
   /**
    * Creates a new `optional` schema allowing to have `T` or `undefined`.
-   * @param wrapped Original schema.
+   * @param schema Original schema.
    * @param fallback Value returned in case of `undefined`.
    */
   constructor(
-    readonly wrapped: S,
+    readonly schema: S,
     readonly fallback: ThisInfer<S> = undefined,
   ) {}
 
@@ -30,7 +30,7 @@ export class SchemaOptional<S extends Schema> implements ThisFrom<S> {
       return success(this.fallback);
     }
 
-    return this.wrapped.check(value, context);
+    return this.schema.check(value, context);
   }
 }
 

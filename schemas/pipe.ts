@@ -31,15 +31,15 @@ export class SchemaPipe<S extends Schema> implements SchemaFrom<S> {
 
   /**
    * Create a chain of `pipes` once the `schema` return the validated value.
-   * @param wrapped Wrapped schema.
+   * @param schema Wrapped schema.
    * @param pipes List of multiple schema pipes of the same `T`.
    */
-  constructor(readonly wrapped: S, pipes: Pipes<S>) {
+  constructor(readonly schema: S, pipes: Pipes<S>) {
     this.#pipes = pipes;
   }
 
   check(value: unknown, context: Context): CheckFrom<S> {
-    const commit = this.wrapped.check(value, context);
+    const commit = this.schema.check(value, context);
 
     if (isFailure(commit)) {
       return commit;

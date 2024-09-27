@@ -3,7 +3,6 @@ import {
   SCHEMA_ARRAY_NAME,
   SCHEMA_BOOLEAN_NAME,
   SCHEMA_CUSTOM_NAME,
-  SCHEMA_LAZY_NAME,
   SCHEMA_NEVER_NAME,
   SCHEMA_NUMBER_NAME,
   SCHEMA_OBJECT_NAME,
@@ -15,12 +14,14 @@ import {
   SchemaDate,
   SchemaEither,
   SchemaEnumerated,
+  SchemaLazy,
   SchemaLiteral,
   SchemaNullable,
   SchemaObject,
   SchemaOptional,
   SchemaPipe,
   SchemaRecord,
+  SchemaStrict,
   SchemaTransform,
   SchemaTuple,
 } from "../schemas.ts";
@@ -126,14 +127,12 @@ function extractSchemaType(schema: Schema): JSONSchemaType | JSONSchemaType[] {
   if (schema instanceof SchemaNullable) {
     return [
       JSONSchemaType.NULL,
-      extractSchemaType(schema.wrapped) as JSONSchemaType,
+      extractSchemaType(schema.schema) as JSONSchemaType,
     ];
   }
 
   return SCHEMA_NAME_TYPE[schema.name] ?? JSONSchemaType.NULL;
 }
-
-const EMPTY_SCHEMA: JSONSchema = {};
 
 /**
  * Converts a given schema object to a [JSON Schema](https://json-schema.org) structure.
@@ -146,16 +145,14 @@ export function createJSONSchema(schema: Schema): JSONSchema {
   };
 
   if (schema instanceof SchemaArray) {
-    base.items = createJSONSchema(schema.wrapped);
+    base.items = createJSONSchema(schema.schema);
   }
 
   if (
     schema.name === SCHEMA_CUSTOM_NAME ||
-    schema.name === SCHEMA_LAZY_NAME ||
     schema.name === SCHEMA_UNKNOWN_NAME
   ) {
-    // Definitions are unknown at compile time.
-    return EMPTY_SCHEMA;
+    throw new Error("Schema is unknown at compile time schema.");
   }
 
   if (schema instanceof SchemaDate) {
@@ -167,14 +164,18 @@ export function createJSONSchema(schema: Schema): JSONSchema {
     base.enum = schema.allowed;
   }
 
-  if (schema instanceof SchemaLiteral) {
-    base.enum = [schema.literal];
+  if (schema instanceof SchemaLazy) {
+    const generated = schema.generate(undefined, {
+      strict: false,
+      verbose: false,
+    });
+
+    // Generate a JSON schema for the lazy schema.
+    return createJSONSchema(generated);
   }
 
-  if (schema instanceof SchemaOptional) {
-    // Optionals are not part of the JSON Schema standard.
-    // Should be added within the `required` field.
-    return createJSONSchema(schema.wrapped);
+  if (schema instanceof SchemaLiteral) {
+    base.enum = [schema.literal];
   }
 
   if (schema instanceof SchemaObject) {
@@ -199,18 +200,19 @@ export function createJSONSchema(schema: Schema): JSONSchema {
     base.required = required;
   }
 
-  if (schema instanceof SchemaPipe) {
-    // Pipes are not part of the JSON Schema standard.
+  if (
+    schema instanceof SchemaOptional ||
+    schema instanceof SchemaPipe ||
+    schema instanceof SchemaStrict ||
+    schema instanceof SchemaTransform
+  ) {
+    // Instance is not part of the JSON Schema standard.
     // Should be added within the `oneOf` field.
-    return createJSONSchema(schema.wrapped);
+    return createJSONSchema(schema.schema);
   }
 
   if (schema instanceof SchemaRecord) {
     base.additionalProperties = createJSONSchema(schema.schema);
-  }
-
-  if (schema instanceof SchemaTransform) {
-    return createJSONSchema(schema.schema);
   }
 
   if (schema instanceof SchemaTuple) {
