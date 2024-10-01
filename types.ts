@@ -1,7 +1,7 @@
 // Copyright (c) 2024 Andres Celis. MIT license.
 
 /**
- * @module
+ * @module types
  * This module exports simple type-checks.
  * @example
  * ```ts
@@ -64,6 +64,20 @@ export function isErr<E extends Error = Error>(value: unknown): value is E {
 /** Check the `value` as a `Date`. */
 export function isDate(value: unknown): value is Date {
   return value instanceof Date;
+}
+
+/**
+ * Checks if a value is an instance of a specified type.
+ * @param value - The value to check.
+ * @param type - The constructor function of the type.
+ * @returns A boolean indicating whether the value is an instance of the specified type.
+ */
+export function instanceOf<T>(
+  value: unknown,
+  // deno-lint-ignore no-explicit-any
+  type: new (...args: any[]) => T,
+): value is T {
+  return value instanceof type;
 }
 
 /** Check the `value` as `Promise` of `T`. */

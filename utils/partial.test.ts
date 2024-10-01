@@ -1,6 +1,7 @@
-import { assertObjectMatch } from "@std/assert";
-import { object, partial, string } from "../schemas.ts";
-import { safeParse } from "../utils.ts";
+import { assertObjectMatch, assertThrows } from "@std/assert";
+import type { Schema } from "../schema.ts";
+import { object, string } from "../schemas.ts";
+import { partial, safeParse } from "../utils.ts";
 
 Deno.test(`allow "undefined" the object schema`, () => {
   const schema = partial(object({ hello: string() }));
@@ -17,4 +18,8 @@ Deno.test(`allow "undefined" the object schema`, () => {
     const commit = safeParse(received, schema);
     assertObjectMatch(commit, { success: false });
   }
+});
+
+Deno.test("throws when the given schema is not an instance of 'SchemaObject'", () => {
+  assertThrows(() => partial(string() as Schema<object>));
 });

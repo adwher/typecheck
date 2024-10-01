@@ -1,5 +1,7 @@
-import { assertObjectMatch } from "@std/assert";
-import { merge, number, object, string } from "../schemas.ts";
+import { assertObjectMatch, assertThrows } from "@std/assert";
+import type { Schema } from "../schema.ts";
+import { number, object, string } from "../schemas.ts";
+import { merge } from "./merge.ts";
 
 Deno.test("merge object schemas", () => {
   const schema = merge(
@@ -17,4 +19,9 @@ Deno.test("override with the last schema", () => {
   );
 
   assertObjectMatch(schema.shape, { a: number() });
+});
+
+Deno.test("throws when the given schema is not an instance of 'SchemaObject'", () => {
+  const schema = string() as Schema<object>;
+  assertThrows(() => merge(schema, schema));
 });

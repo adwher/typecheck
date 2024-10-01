@@ -1,7 +1,7 @@
 // Copyright (c) 2024 Andres Celis. MIT license.
 
 /**
- * @module
+ * @module pipes
  * This module exports all the pipes.
  * @example
  * ```ts

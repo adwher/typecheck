@@ -15,7 +15,17 @@ import { isObj } from "../types.ts";
 export type SchemaShapeKey = string | number | symbol;
 
 /** Defines an record of `keys` and their schemas, useful for objects. */
-export type SchemaShape = Record<SchemaShapeKey, Schema>;
+export type SchemaShape = { [key: SchemaShapeKey]: Schema };
+
+/** Extracts the shape from a `Schema`. */
+export type SchemaInferShape<S extends Schema> = S extends Schema<infer T>
+  ? { [K in keyof T]: Schema<T[K]> }
+  : never;
+
+/** Extracts the keys from a `Schema`. */
+export type SchemaKeys<S extends Schema> = S extends
+  Schema<infer T extends object> ? keyof T
+  : never;
 
 export const SCHEMA_OBJECT_NAME = "SCHEMA_OBJECT";
 
