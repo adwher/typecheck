@@ -21,6 +21,7 @@ export * from "./pipes/isMatch.ts";
 export * from "./pipes/isNegative.ts";
 export * from "./pipes/isPositive.ts";
 export * from "./pipes/isTime.ts";
+export * from "./pipes/isULID.ts";
 export * from "./pipes/isURL.ts";
 export * from "./pipes/length.ts";
 export * from "./pipes/maxLength.ts";
