@@ -60,7 +60,7 @@ export class SchemaTuple<S extends readonly Schema[]> implements SchemaFrom<S> {
         continue;
       }
 
-      if (context.verbose === false) {
+      if (!context.verbose) {
         return GENERIC_FAILURE;
       }
 
@@ -72,7 +72,7 @@ export class SchemaTuple<S extends readonly Schema[]> implements SchemaFrom<S> {
     }
 
     if (issues.length === 0) {
-      return success(value as Infer<S>);
+      return success(final as Infer<S>);
     }
 
     return failure(issues);

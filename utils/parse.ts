@@ -5,7 +5,6 @@ import type { Schema } from "../schema.ts";
  * Represents an error that occurs when parsing a value.
  */
 export class ParseError extends Error {
-  readonly name = "ParseError";
   readonly issues: Issue[];
 
   /**
@@ -15,6 +14,7 @@ export class ParseError extends Error {
   constructor(issues: Issue[]) {
     super("Failed to parse the value.");
 
+    this.name = "ParseError";
     this.issues = issues;
   }
 }

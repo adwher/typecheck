@@ -3,7 +3,7 @@ import type { Schema } from "../schema.ts";
 import { number, object, string } from "../schemas.ts";
 import { merge } from "./merge.ts";
 
-Deno.test("merge object schemas", () => {
+Deno.test("merge object schemas with different keys", () => {
   const schema = merge(
     object({ a: string() }),
     object({ b: string() }),
@@ -12,7 +12,7 @@ Deno.test("merge object schemas", () => {
   assertObjectMatch(schema.shape, { a: string(), b: string() });
 });
 
-Deno.test("override with the last schema", () => {
+Deno.test("merge object schemas with overlapping keys", () => {
   const schema = merge(
     object({ a: string() }),
     object({ a: number() }),
@@ -21,7 +21,16 @@ Deno.test("override with the last schema", () => {
   assertObjectMatch(schema.shape, { a: number() });
 });
 
-Deno.test("throws when the given schema is not an instance of 'SchemaObject'", () => {
-  const schema = string() as Schema<object>;
-  assertThrows(() => merge(schema, schema));
+Deno.test("throws when initial schema is not an instance of 'SchemaObject'", () => {
+  const a = string() as Schema<object>;
+  const b = object({ a: string() });
+
+  assertThrows(() => merge(a, b));
+});
+
+Deno.test("throws when extension schema is not an instance of 'SchemaObject'", () => {
+  const a = object({ a: string() });
+  const b = string() as Schema<object>;
+
+  assertThrows(() => merge(a, b));
 });
